@@ -1,0 +1,50 @@
+{
+  "holes": [
+    {
+      "hole_number": 1,
+      "par_number": 3,
+      "hole_location": "430,45",
+      "description": "Welcome to Robert Trent. Enjoy golfing today. The hole has a lake to the southwest.",
+      "terrain": [
+        {
+          "name": "tree",
+          "location": "4,7",
+          "size": "small"
+        },
+        {
+          "name": "tree",
+          "location": "6,7",
+          "size": "small"
+        },
+        {
+          "name": "lake",
+          "location": "60,30",
+          "size": "large"
+        }
+      ]
+    },
+    {
+      "hole_number": 2,
+      "par_number": 4,
+      "hole_location": "530,65",
+      "description": "This hole is a long drive. Get ready to swing!",
+      "terrain": [
+        {
+          "name": "sand",
+          "location": "4,7",
+          "size": "medium"
+        },
+        {
+          "name": "tree",
+          "location": "6,7",
+          "size": "small"
+        },
+        {
+          "name": "lake",
+          "location": "60,30",
+          "size": "large"
+        }
+      ]
+    }
+  ]
+}
