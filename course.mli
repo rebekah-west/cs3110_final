@@ -1,3 +1,42 @@
 (*********************************************************************)
     (** Rebekah *)
 (*********************************************************************)
+
+(** 
+   Representation of static course data.
+
+   This module represents the data stored in course files, including
+   the holes and terrain.  It handles loading of that data from JSON as well
+   as querying the data.
+*)
+
+(** The abstract type of values representing courses. *)
+type t
+
+(** The type of hole identifiers. *)
+type hole_number = int
+
+(** The type of terrain obstacles *)
+type terrain
+
+(** Raised when an unknown hole is encountered. *)
+exception UnknownHole of hole_number
+
+
+(** [from_json j] is the golf course that [j] represents.
+    Requires: [j] is a valid JSON golf course representation. *)
+val from_json : Yojson.Basic.t -> t
+
+
+(** [start_hole c] is the identifier of the starting hole in course [c]. *)
+val start_hole : t -> hole_number
+
+(** [num_holes c] is the number of holes in the course [c]. *)
+val num_holes : t -> int
+
+(** [difficulty c] is a representation of how difficult course [c] is. *)
+val difficulty : t -> string
+
+(** [description c h] is the description of hole [h] in course [c]. 
+    Raises [UnknownHole h] if [h] is not a hole identifier in [c]. *)
+val description : t -> hole_number -> string
