@@ -53,3 +53,12 @@ type handicap = int
     Requires: j is a valid json representation of a list of players*)
 val read_players : Yojson.Basic.t list -> t list
 
+(** *)
+val get_player_name : t -> string
+
+val get_player_power_multiplier : t -> float
+
+val get_player_accuracy_multiplier : t -> float
+
+val get_player_handicap : t -> int 
+

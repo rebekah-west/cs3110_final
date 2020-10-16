@@ -32,3 +32,18 @@ let update_location player =
   with a hole-by-hole scorecard?)
   let update_score player =
   failwith "Unimplemented" *)
+
+let get_player_name t = 
+  t.player_name
+
+let get_player_power_multiplier t = 
+  t.power_multiplier
+
+let get_player_accuracy_multiplier t = 
+  t.accuracy_multiplier
+
+let get_player_handicap t = 
+  t.handicap
+
+let get_player_location t = 
+  t.location

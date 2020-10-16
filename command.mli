@@ -1,9 +1,9 @@
 (*********************************************************************)
-    (** How much should we place in .mli versus .ml ? *)
-    (** When a function takes user input in the body, should it take type unit? *)
+(** How much should we place in .mli versus .ml ? *)
+(** When a function takes user input in the body, should it take type unit? *)
 (*********************************************************************)
-  
-  
+
+
 (**
    Parsing of player commands.
 *)
@@ -15,26 +15,27 @@ type t
 type club = 
   | Driver
   | NineIron
+  | EightIron
   | Putter
+  | PitchingWedge
+  | SandWedge
 
 (** The type [power] represents how hard the golf ball is hit. *)
 type power
 
 (** The type [angle] represents the vertical angle from the ground the ball 
-  will travel *)
+    will travel *)
 type angle
 
 (** The type [alignment] represents the number of degrees away from facing the hole *)
 type alignment =
-| Left of float
-| Right of float
+  | Left of float
+  | Right of float
 
 (** The type [command] *)
 type command =
-| Swing of t
-| None
-
-
+  | Swing of t
+  | None
 
 (** Raised when an empty command is parsed. *)
 exception Empty
@@ -53,6 +54,6 @@ val parse_angle : float -> angle
     Examples:
     Requires:
     Raises:
-    *)
+*)
 val parse_input : unit -> t
 
