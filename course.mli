@@ -19,6 +19,9 @@ type hole_number = int
 (** The type of terrain obstacles *)
 type terrain
 
+(** The type of wind representing the strength and direction *)
+type wind = int * float
+
 (** Raised when an unknown hole is encountered. *)
 exception UnknownHole of hole_number
 
@@ -40,3 +43,6 @@ val difficulty : t -> string
 (** [description c h] is the description of hole [h] in course [c]. 
     Raises [UnknownHole h] if [h] is not a hole identifier in [c]. *)
 val description : t -> hole_number -> string
+
+(** [weather] randomly generates the current wind *)
+val wind : unit -> wind
