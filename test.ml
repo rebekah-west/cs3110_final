@@ -20,3 +20,32 @@ let pp_list pp_elt lst =
         else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
+
+
+
+  
+let command_tests =
+  [
+  ]
+
+let course_tests =
+  [
+  ]
+
+let game_tests =
+  [
+  ]
+
+let player_tests =
+  [
+  ]
+
+let suite =
+  "test suite for final project"  >::: List.flatten [
+    command_tests;
+    course_tests;
+    game_tests;
+    player_tests;
+  ]
+
+let _ = run_test_tt_main suite
