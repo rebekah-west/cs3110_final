@@ -2,7 +2,7 @@
 #require "yojson";;
 #require "ANSITerminal";;
 #directory "_build";;
-#load "course.cmo";;
 #load "command.cmo";;
+#load "course.cmo";;
 #load "game.cmo";;
 #load "player.cmo";;
