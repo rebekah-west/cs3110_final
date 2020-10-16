@@ -1,7 +1,21 @@
 (** AF:
     RI:
  *)
-type t = list
+type t = {
+  holes: hole list;
+  difficulty: difficulty
+}
+
+(** AF:
+    RI:
+ *)
+type hole = {
+  hole_number: hole_number;
+  par_number: int;
+  hole_location: int * int;
+  description: string;
+  terrain: terrain list
+}
 
 (** AF:
     RI:

@@ -10,7 +10,7 @@
    as querying the data.
 *)
 
-(** The abstract type of values representing courses. *)
+(** The abstract type of values representing the course. *)
 type t
 
 (** The type of hole identifiers. *)
@@ -29,7 +29,6 @@ exception UnknownHole of hole_number
 (** [from_json j] is the golf course that [j] represents.
     Requires: [j] is a valid JSON golf course representation. *)
 val from_json : Yojson.Basic.t -> t
-
 
 (** [start_hole c] is the identifier of the starting hole in course [c]. *)
 val start_hole : t -> hole_number
