@@ -10,7 +10,7 @@ type hole_score = {
   hole_score: int;
 }
 
-type scorecard = hole_score list;
+type scorecard = hole_score list list;
 
 type t = {
   roster: Player.t list;
