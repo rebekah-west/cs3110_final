@@ -29,7 +29,7 @@ let command_tests =
 let robert_trent = Course.from_json (Yojson.Basic.from_file "RobertTrent.json")
 
 (* course testing helper functions  *)
-let start_hole_test (name: string) (course:Course.t) (output:hole_number) = 
+let start_hole_test (name: string) (course:Course.t) (output:Course.hole_number) = 
   name >:: (fun _ -> assert_equal output (start_hole course))
 
 let num_holes_test (name: string) (course:Course.t) (output:int) = 
@@ -38,12 +38,12 @@ let num_holes_test (name: string) (course:Course.t) (output:int) =
 let difficulty_test (name: string) (course:Course.t) (output:string) = 
   name >:: (fun _ -> assert_equal output (difficulty course))
 
-let description_test (name: string) (course:Course.t) (num:hole_num) 
+let description_test (name: string) (course:Course.t) (num:Course.hole_number) 
     (output:string) = 
   name >:: (fun _ -> assert_equal output (description course num))
 
-let description_exceptions_test (name: string) (course:Course.t) (num:hole_num) 
-    (output:string) = 
+let description_exceptions_test (name: string) (course:Course.t) (num:Course.hole_number) 
+    (output:exn) = 
   name >:: (fun _ -> assert_raises output (fun _ ->  description course num))
 
 (* course test suite *)
@@ -85,7 +85,7 @@ let pl_handicap_test (name : string) (input : Player.t) (exp_output : int) :
   test = name >:: (fun _ -> assert_equal exp_output 
                       (Player.get_player_handicap input) ~printer:string_of_int)
 
-let players = Player.read_players from_json(Yojson.Basic.from_file("Players.json"))
+let players = Player.read_players(Yojson.Basic.from_file("Players.json"))
 let jenna = List.hd players
 let gian = List.nth players 2
 
