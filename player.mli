@@ -20,8 +20,8 @@ itself, this multiplier will allow the player to hit the ball farther (for a
 stronger player) or less far (for a weaker player) given the same 
 representation of power. 
 
- Representation Invariant: The power_multiplier must be between 0.5 and 1.5 
- inclusive. *)
+Representation Invariant: The power_multiplier must be between 0.5 and 1.5 
+inclusive. *)
 
 type power_multiplier = float
 (* 
@@ -51,7 +51,7 @@ type handicap = int
 (** [read_players j] produces the list of players enumerated in 
     json j which contains player information. 
     Requires: j is a valid json representation of a list of players*)
-val read_players : Yojson.Basic.t list -> t list
+val read_players : Yojson.Basic.t -> t list
 
 (** *)
 val get_player_name : t -> string
