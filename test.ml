@@ -416,7 +416,6 @@ let course_tests =
     current_turn_test "Ensure the game starts the 1st hole with the
     player who was first in the lineup"
       (current_turn initialized_game) first_player
-
   ]
 
 
