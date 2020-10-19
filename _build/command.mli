@@ -101,7 +101,7 @@ val parse_alignment : float -> alignment
 *)
 val parse_input : unit -> command
 
-(* [get_command comm] is the state t contained within [res] if 
+(* [get_command comm] is the command t contained within [comm] if 
    the result is legal and throws a "Not_Legal" exception otherwise.*)
 val get_command : command -> t
 

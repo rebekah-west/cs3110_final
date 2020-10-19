@@ -1,8 +1,8 @@
 open OUnit2
-open Player
 open Command
-open Game
 open Course
+open Game
+open Player
 
 
 (** [pp_string s] pretty-prints string [s]. *)
