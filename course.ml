@@ -1,14 +1,20 @@
 (** AF:
     RI:
- *)
-type t = {
-  holes: hole list;
-  difficulty: difficulty
-}
+*)
+type hole_number = int
+
 
 (** AF:
     RI:
- *)
+*)
+type terrain =
+  | Lake
+  | Tree
+  | Sand
+
+(** AF:
+    RI:
+*)
 type hole = {
   hole_number: hole_number;
   par_number: int;
@@ -17,18 +23,20 @@ type hole = {
   terrain: terrain list
 }
 
+type difficulty = {
+  (*A placeholder*)
+  diff : int;
+}
 (** AF:
     RI:
- *)
-type hole_number = int
+*)
+type t = {
+  holes: hole list;
+  difficulty: difficulty;
+}
 
-(** AF:
-    RI:
- *)
-type terrain =
-| Lake
-| Tree
-| Sand
+(** The type of wind representing the strength and direction *)
+type wind = int * float
 
 
 exception UnknownHole of hole_number
