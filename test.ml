@@ -59,6 +59,7 @@ let course_tests =
     description_exceptions_test "Robert Trent not there" robert_trent
     76 (UnknownHole 76);
     (* can i even test wind?? not really i think? *)
+    (* test that wind is an int *)
 
   ]
 
