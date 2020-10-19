@@ -67,8 +67,6 @@ let game_tests =
   [
   ]
 
-
-
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
   test = name >:: (fun _ -> 
     assert_equal exp_output (Player.get_player_name input) ~printer:pp_string)
