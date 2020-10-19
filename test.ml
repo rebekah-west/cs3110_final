@@ -1,8 +1,8 @@
 open OUnit2
-open Player
 open Command
-open Game
 open Course
+open Game
+open Player
 
 
 (** [pp_string s] pretty-prints string [s]. *)
@@ -39,11 +39,11 @@ let difficulty_test (name: string) (course:Course.t) (output:string) =
   name >:: (fun _ -> assert_equal output (difficulty course))
 
 let description_test (name: string) (course:Course.t) (num:hole_num) 
-(output:string) = 
+    (output:string) = 
   name >:: (fun _ -> assert_equal output (description course num))
 
 let description_exceptions_test (name: string) (course:Course.t) (num:hole_num) 
-(output:string) = 
+    (output:string) = 
   name >:: (fun _ -> assert_raises output (fun _ ->  description course num))
 
 (* course test suite *)
@@ -53,11 +53,11 @@ let course_tests =
     num_holes_test "Robert Trent num_holes" robert_trent 2;
     difficulty_test "Robert Trend difficulty" robert_trent "easy";
     description_test "Robert Trend hole 1 desc" robert_trent 1 
-    "Welcome to Robert Trent. Enjoy golfing today. The hole has a lake to the southwest.";
+      "Welcome to Robert Trent. Enjoy golfing today. The hole has a lake to the southwest.";
     description_test "Robert Trend hole 2 desc" robert_trent 2 
-    "This hole is a long drive. Get ready to swing!";
+      "This hole is a long drive. Get ready to swing!";
     description_exceptions_test "Robert Trent not there" robert_trent
-    76 (UnknownHole 76);
+      76 (UnknownHole 76);
     (* can i even test wind?? not really i think? *)
     (* test that wind is an int *)
 

@@ -20,8 +20,8 @@ itself, this multiplier will allow the player to hit the ball farther (for a
 stronger player) or less far (for a weaker player) given the same 
 representation of power. 
 
- Representation Invariant: The power_multiplier must be between 0.5 and 1.5 
- inclusive. *)
+Representation Invariant: The power_multiplier must be between 0.5 and 1.5 
+inclusive. *)
 
 type power_multiplier = float
 (* 
