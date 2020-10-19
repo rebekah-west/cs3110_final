@@ -21,15 +21,46 @@ let pp_list pp_elt lst =
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
 
-
-
-
 let command_tests =
   [
   ]
 
+(* make the course t object *)
+let robert_trent = Course.from_json (Yojson.Basic.from_file "RobertTrent.json")
+
+(* course testing helper functions  *)
+let start_hole_test (name: string) (course:Course.t) (output:hole_number) = 
+  name >:: (fun _ -> assert_equal output (start_hole course))
+
+let num_holes_test (name: string) (course:Course.t) (output:int) = 
+  name >:: (fun _ -> assert_equal output (num_holes course))
+
+let difficulty_test (name: string) (course:Course.t) (output:string) = 
+  name >:: (fun _ -> assert_equal output (difficulty course))
+
+let description_test (name: string) (course:Course.t) (num:hole_num) 
+(output:string) = 
+  name >:: (fun _ -> assert_equal output (description course num))
+
+let description_exceptions_test (name: string) (course:Course.t) (num:hole_num) 
+(output:string) = 
+  name >:: (fun _ -> assert_raises output (fun _ ->  description course num))
+
+(* course test suite *)
 let course_tests =
   [
+    start_hole_test "Robert Trent start hole" robert_trent 1;
+    num_holes_test "Robert Trent num_holes" robert_trent 2;
+    difficulty_test "Robert Trend difficulty" robert_trent "easy";
+    description_test "Robert Trend hole 1 desc" robert_trent 1 
+    "Welcome to Robert Trent. Enjoy golfing today. The hole has a lake to the southwest.";
+    description_test "Robert Trend hole 2 desc" robert_trent 2 
+    "This hole is a long drive. Get ready to swing!";
+    description_exceptions_test "Robert Trent not there" robert_trent
+    76 (UnknownHole 76);
+    (* can i even test wind?? not really i think? *)
+    (* test that wind is an int *)
+
   ]
 
 let game_tests =
