@@ -48,6 +48,10 @@ with each other.  *)
 type handicap = int
 
 
+(**  [init_players] produces an array of players based on input from stdin 
+     Raises: Invalid_argument if input is not one of the accepted forms *)
+val init_players : unit -> t array
+
 (** [read_players j] produces the list of players enumerated in 
     json j which contains player information. 
     Requires: j is a valid json representation of a list of players*)
