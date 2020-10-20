@@ -31,14 +31,6 @@ type power
 *)
 type angle
 
-(** The type [alignment] represents the number of degrees away from facing the 
-    hole 
-    Requires: A float between -90 and positive 90
-    Note: 0 is classified as Right
-*)
-type alignment =
-  | Left of int
-  | Right of int
 
 (** The type [command] *)
 type command =
@@ -66,32 +58,6 @@ exception ValueOutOfRange
 *) 
 val parse_club : string -> club
 
-(* [parse_power pow] evaluates the power a player wishes to use on their 
-   turn represented by int [pow]
-   Requires: A valid input, an int between 0 and 100
-   Raises: An [InvalidInput] exception if the passed argument is not a number 
-   between 0 and 100 or an [Empty] exception if no argument is passed
-*)
-val parse_power : int -> power
-
-(* [parse_angle ang] evaluates the angle a player wishes to use on their 
-   turn represented by int [ang]
-   Requires: A valid input, an int between 0 and 90
-   Raises: An [InvalidInput] exception if the passed argument is not a number 
-   between 0 and 90 or an [Empty] exception if no argument is passed
-*)
-val parse_angle : int -> angle
-
-(* [parse_alignment deg] evaluates the angle a player wishes to use 
-   to offset themselves from the initial positioning of being
-   directly pointed at the hole. Takes in int [deg] and outputs the
-   corresponding alignment
-   Requires: A valid input, an int between -90 and 90
-   Raises: An [InvalidInput] exception if the passed argument is not a number 
-   between -90 and 90 or an [Empty] exception if no argument is passed
-*)
-val parse_alignment : int -> alignment
-
 (** [parse_input] prompts the users for various inputs (which club they want
     to use, how much power they want to swing with, the vertical angle, and the 
     alignment) and creates a type t for the program to use going forward 
@@ -99,7 +65,7 @@ val parse_alignment : int -> alignment
     Requires:
     Raises:
 *)
-val parse_input : unit -> command
+val parse_swing : unit -> command
 
 (* [get_command comm] is the command t contained within [comm] if 
    the result is legal and throws a "Not_Legal" exception otherwise.*)
