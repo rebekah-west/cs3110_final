@@ -4,7 +4,6 @@ open Course
 open Game
 open Player
 
-
 (** [pp_string s] pretty-prints string [s]. *)
 let pp_string s = "\"" ^ s ^ "\""
 
