@@ -37,8 +37,8 @@ type angle
     Note: 0 is classified as Right
 *)
 type alignment =
-  | Left of float
-  | Right of float
+  | Left of int
+  | Right of int
 
 (** The type [command] *)
 type command =

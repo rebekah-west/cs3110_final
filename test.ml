@@ -21,231 +21,181 @@ let pp_list pp_elt lst =
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
 
-
+(* A helper function to test parse_club by comparing expected output to 
+   actual output*)
 let club_parser_helper
-    (name : string)
-    (input_club : string)
+    (name : string) (input_club : string)
     (expected_output : club) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_club input_club))
+  name >:: (fun _ -> assert_equal expected_output (parse_club input_club))
 
-let club_parser_exn_helper
-    (name : string)
-    (input_club : string)
+(* A helper function to test parse_club by seeing if proper exceptions are
+   thrown at run time*)
+let club_parser_exn_helper (name : string) (input_club : string)
     (expected_output : exn) : test = 
-  name >:: (fun _ -> assert_raises ~printer:(pp_list pp_string)
-               expected_output (fun () -> parse_club input_club))
+  name >:: (fun _ -> assert_raises expected_output 
+               (fun () -> parse_club input_club))
 
-let angle_parser_helper
-    (name : string)
-    (input_angle : float)
+(* A helper function to test parse_angle by comparing expected output to 
+   actual output*)
+let angle_parser_helper (name : string) (input_angle : int)
     (expected_output : angle) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_angle input_angle))
+  name >:: (fun _ -> assert_equal expected_output (parse_angle input_angle))
 
-let angle_parser_exn_helper
-    (name : string)
-    (input_angle : float)
+(* A helper function to test parse_angle by seeing if proper exceptions are
+   thrown at run time*)
+let angle_parser_exn_helper (name : string) (input_angle : int)
     (expected_output : exn) : test = 
-  name >:: (fun _ -> assert_raises ~printer:(pp_list pp_string)
-               expected_output (fun () -> parse_angle input_angle))
+  name >:: (fun _ -> assert_raises expected_output 
+               (fun () -> parse_angle input_angle))
 
-let power_parser_helper
-    (name : string)
-    (input_power : float)
+(* A helper function to test parse_power by comparing expected output to 
+   actual output*)
+let power_parser_helper (name : string) (input_power : int)
     (expected_output : power) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_power input_power))
+  name >:: (fun _ -> assert_equal expected_output (parse_power input_power))
 
+(* A helper function to test parse_power by seeing if proper exceptions are
+   thrown at run time*)
 let power_parser_exn_helper
-    (name : string)
-    (input_power : float)
-    (expected_output : exn) : test = 
-  name >:: (fun _ -> assert_raises ~printer:(pp_list pp_string)
-               expected_output (fun () -> parse_power input_power))
+    (name : string) (input_power : int) (expected_output : exn) : test = 
+  name >:: (fun _ -> assert_raises expected_output 
+               (fun () -> parse_power input_power))
 
-let alignment_parser_helper
-    (name : string)
-    (input_alignment : float)
+(* A helper function to test parse_alignment by comparing expected output to 
+   actual output*)
+let alignment_parser_helper (name : string) (input_alignment : int)
     (expected_output : alignment) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_power input_power))
+  name >:: (fun _ -> assert_equal expected_output 
+               (parse_alignment input_alignment))
 
-let alignment_parser_exn_helper
-    (name : string)
-    (input_alignment : float)
+(* A helper function to test parse_alignment by seeing if proper exceptions are
+   thrown at run time*)
+let alignment_parser_exn_helper (name : string) (input_alignment : int)
     (expected_output : exn) : test = 
-  name >:: (fun _ -> assert_raises ~printer:(pp_list pp_string)
-               expected_output (fun () -> parse_alignment input_alignment))
+  name >:: (fun _ -> assert_raises expected_output 
+               (fun () -> parse_alignment input_alignment))
 
 let command_tests =
   [
-    club_parser_helper 
-      "Testing to ensure that driver will be parsed to a Driver club"
-      (parse_club "driver") Driver;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that Driver will be 
-    parsed to a Driver club"
-      (parse_club "Driver") Driver;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that DriVEr will be 
-    parsed to a Driver club"
-      (parse_club "DriVEr") Driver;
+    club_parser_helper "Testing to ensure that driver will be parsed to a 
+      Driver club" (parse_club "driver") Driver;
+    club_parser_helper  "Capitalization shouldn't matter, Testing to ensure 
+      that Driver will be parsed to a Driver club" (parse_club "Driver") Driver;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that
+      DriVEr will be parsed to a Driver club" (parse_club "DriVEr") Driver;
 
-    club_parser_helper 
-      "Testing to ensure that nine iron will be parsed to a NineIron club"
-      (parse_club "nine iron") NineIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, testing to ensure that Nine iron will 
-      be parsed to a NineIron club"
-      (parse_club "Nine iron") NineIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that nine Iron will 
-      be parsed to a NineIron club"
-      (parse_club "nine Iron") NineIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that Nine Iron will 
-      be parsed to a NineIron club"
-      (parse_club "Nine Iron") NineIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that NiNE IrOn will 
-      be parsed to a NineIron club"
-      (parse_club "NiNE IrOn") NineIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that NINE IRON will 
-      be parsed to a NineIron club"
-      (parse_club "NINE IRON") NineIron;
+    club_parser_helper "Testing to ensure that nine iron will be parsed to a 
+      NineIron club" (parse_club "nine iron") NineIron;
+    club_parser_helper "Capitalization shouldn't matter, testing to ensure that 
+      Nine iron parses to a NineIron club" (parse_club "Nine iron") NineIron;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      nine Iron parses to NineIron club" (parse_club "nine Iron") NineIron;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that
+     Nine Iron parses to a NineIron club" (parse_club "Nine Iron") NineIron;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      NiNE IrOn parses to a NineIron club" (parse_club "NiNE IrOn") NineIron;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that
+     NINE IRON parses to a NineIron club"(parse_club "NINE IRON") NineIron;
 
-    club_parser_helper 
-      "Testing to ensure that eight iron will be parsed to a EightIron club"
-      (parse_club "eight iron") EightIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, testing to ensure that Eight iron will 
-      be parsed to a Eight Iron club"
+    club_parser_helper "Testing to ensure that eight iron will be parsed to an
+      EightIron club" (parse_club "eight iron") EightIron;
+    club_parser_helper "Capitalization shouldn't matter, testing to ensure that
+      Eight iron will be parsed to an Eight Iron club"
       (parse_club "Eight iron") EightIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that eight Iron will 
-      be parsed to a EightIron club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      eight Iron will be parsed to a EightIron club"
       (parse_club "eight Iron") EightIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that Eight Iron will 
-      be parsed to a EightIron club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      Eight Iron will be parsed to a EightIron club"
       (parse_club "Eight Iron") EightIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that EighT IrOn will 
-      be parsed to a EightIron club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      EighT IrOn will be parsed to a EightIron club"
       (parse_club "EighT IrOn") EightIron;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that EIGHT IRON will 
-      be parsed to a EightIron club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      EIGHT IRON will be parsed to a EightIron club"
       (parse_club "EIGHT IRON") EightIron;
 
-    club_parser_helper 
-      "Testing to ensure that putter will be parsed to a Putter club"
-      (parse_club "putter") Putter;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that Putter will be 
-    parsed to a Putter club"
-      (parse_club "Putter") Putter;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that PuTTeR will be 
-    parsed to a Putter club"
-      (parse_club "PuTTeR") Putter;
+    club_parser_helper "Testing to ensure that putter will be parsed to a 
+      Putter club" (parse_club "putter") Putter;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      Putter will be parsed to a Putter club" (parse_club "Putter") Putter;
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      PuTTeR will be parsed to a Putter club" (parse_club "PuTTeR") Putter;
 
-    club_parser_helper 
-      "Testing to ensure that pitching wedge will be parsed to a 
-      PitchingWedge club"
-      (parse_club "pitching wedge") PitchingWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, testing to ensure that 
+    club_parser_helper "Testing to ensure that pitching wedge will be parsed to 
+      a PitchingWedge club" (parse_club "pitching wedge") PitchingWedge;
+    club_parser_helper "Capitalization shouldn't matter, testing to ensure that 
       Pitching wedge will be parsed to a PitchingWedge club"
       (parse_club "Pitching wedge") PitchingWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
       pitching Wedge will be parsed to a PitchingWedge club"
       (parse_club "pitching Wedge") PitchingWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
       Pitching Wedge will be parsed to a PitchingWedge club"
       (parse_club "Pitching Wedge") PitchingWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
-    PitCHiNg weDGe will be parsed to a PitchingWedge club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      PitCHiNg weDGe will be parsed to a PitchingWedge club"
       (parse_club "PitCHiNg weDGe") PitchingWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
-    PITCHING WEDGE will be parsed to a PitchingWedge club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      PITCHING WEDGE will be parsed to a PitchingWedge club"
       (parse_club "PITCHING WEDGE") PitchingWedge;
 
-    club_parser_helper 
-      "Testing to ensure that sand wedge will be parsed to a 
-      SandWedge club"
-      (parse_club "sand wedge") SandWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, testing to ensure that 
+    club_parser_helper "Testing to ensure that sand wedge will be parsed to a 
+      SandWedge club" (parse_club "sand wedge") SandWedge;
+    club_parser_helper "Capitalization shouldn't matter, testing to ensure that 
       Sand wedge will be parsed to a SandWedge club"
       (parse_club "Sand wedge") SandWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
       sand Wedge will be parsed to a SandWedge club"
       (parse_club "sand Wedge") SandWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
       Sand Wedge will be parsed to a SandWedge club"
       (parse_club "Sand Wedge") SandWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
-    sAnD weDGe will be parsed to a SandWedge club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      sAnD weDGe will be parsed to a SandWedge club"
       (parse_club "sAnD weDGe") SandWedge;
-    club_parser_helper 
-      "Capitalization shouldn't matter, Testing to ensure that 
-    PITCHING WEDGE will be parsed to a SandWedge club"
+    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
+      PITCHING WEDGE will be parsed to a SandWedge club"
       (parse_club "SAND WEDGE") SandWedge;
 
     club_parser_exn_helper "Testing that if an empty string is given an
-    [Empty] exception is thrown" 
-      (parse_club "") Empty;
+      [Empty] exception is thrown" (parse_club "") Empty;
 
     club_parser_exn_helper "Testing that if a mispelled club is given, a 
-    [Malformed] exception is thrown"
-      (parse_club "Drvier") Malformed;
+      [Malformed] exception is thrown" (parse_club "Drvier") Malformed;
 
     club_parser_exn_helper "Testing that if something other than a string is
       given, an [InvalidArgument] exception is thrown"
-      (parse_club 27) Invalid_argument
+      (parse_club 27) Invalid_argument;
 
-      power_parser_helper "Testing to ensure a valid float input for power
-     parses correctly"
-      (parse_power 50.0) 50.0;
-    power_parser_helper "Testing to ensure a valid float input for power
-     parses correctly, edge case"
-      (parse_power 0.0) 0.0;
-    power_parser_helper "Testing to ensure a valid float input for power
-     parses correctly, edge case"
-      (parse_power 1.0) 1.0;
-    power_parser_helper "Testing to ensure a valid float input for power
-     parses correctly, edge case"
-      (parse_power 99.0) 99.0;
-    power_parser_helper "Testing to ensure a valid float input for power
-     parses correctly, edge case"
-      (parse_power 100.0) 100.0;
-    power_parser_helper "Testing to ensure a valid float input for power
-     parses correctly, atypical input"
-      (parse_power 21.387) 21.387;
+
+    power_parser_helper "Testing to ensure a valid int input of 50 for power
+     parses correctly" (parse_power 50) 50;
+    power_parser_helper "Testing to ensure a valid int input of 21 for power
+      parses correctly"
+      (parse_power 21) 21;
+    power_parser_helper "Testing to ensure a valid int input of 0 for power
+     parses correctly, an edge case"(parse_power 0) 0;
+    power_parser_helper "Testing to ensure a valid int input of 1 for power
+      parses correctly, edge case"
+      (parse_power 1) 1;
+    power_parser_helper "Testing to ensure a valid int input of 99 for power
+     parses correctly, edge case" (parse_power 99) 99;
+    power_parser_helper "Testing to ensure a valid int input for power
+     parses correctly, edge case" (parse_power 100) 100;
 
     power_parser_exn_helper "Testing to ensure an [Empty] exception is thrown
-     if no argument is given"
+      if no argument is given to [parse_power pow]"
       (parse_power ) Empty;
     power_parser_exn_helper "Testing to ensure an [InvalidArgument] exception 
-     is thrown if the incorrect type is given"
+      is thrown if the incorrect type is given to [parse_power pow]"
       (parse_power "five") InvalidArgument;
     power_parser_exn_helper "Testing to ensure a [ValueOutOfRange] exception
-      is thrown if the user gives a value outside of the acceptable range"
+      is thrown if the user gives a value above the acceptable range"
       (parse_power 150.0) ValueOutOfRange;
     power_parser_exn_helper "Testing to ensure a [ValueOutOfRange] exception
-      is thrown if the user gives a value outside of the acceptable range"
+      is thrown if the user gives a value below the acceptable range"
       (parse_power -50.0) ValueOutOfRange;
-
 
     angle_parser_helper "Testing to ensure a valid float input for angle
      parses correctly"
