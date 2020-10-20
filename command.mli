@@ -58,39 +58,39 @@ exception InvalidInput
    acceptable values*)
 exception ValueOutOfRange
 
-(* [parse_club club] evaluates the type of club a player wishes to use on their 
-   turn represented by string [club]
+(* [parse_club clb] evaluates the type of club a player wishes to use on their 
+   turn represented by string [clb]
    Requires: A valid input string which represents a club
    Raises: A Malformed exception if the string passed is not a valid
    representation of a club or an [Empty] exception if no argument is passed
 *) 
 val parse_club : string -> club
 
-(* [parse_power power] evaluates the power a player wishes to use on their 
-   turn represented by float [club]
-   Requires: A valid input, a float
+(* [parse_power pow] evaluates the power a player wishes to use on their 
+   turn represented by int [pow]
+   Requires: A valid input, an int between 0 and 100
    Raises: An [InvalidInput] exception if the passed argument is not a number 
    between 0 and 100 or an [Empty] exception if no argument is passed
 *)
-val parse_power : float -> power
+val parse_power : int -> power
 
-(* [parse_angle angle] evaluates the angle a player wishes to use on their 
-   turn represented by float [power]
-   Requires: A valid input, a float
+(* [parse_angle ang] evaluates the angle a player wishes to use on their 
+   turn represented by int [ang]
+   Requires: A valid input, an int between 0 and 90
    Raises: An [InvalidInput] exception if the passed argument is not a number 
    between 0 and 90 or an [Empty] exception if no argument is passed
 *)
-val parse_angle : float -> angle
+val parse_angle : int -> angle
 
-(* [parse_alignment degrees] evaluates the angle a player wishes to use 
+(* [parse_alignment deg] evaluates the angle a player wishes to use 
    to offset themselves from the initial positioning of being
-   directly pointed at the hole. Takes in float [degrees] and outputs the
+   directly pointed at the hole. Takes in int [deg] and outputs the
    corresponding alignment
-   Requires: A valid input, a float between -90.0 and 90.0
+   Requires: A valid input, an int between -90 and 90
    Raises: An [InvalidInput] exception if the passed argument is not a number 
-   between -90.0 and 90.0 or an [Empty] exception if no argument is passed
+   between -90 and 90 or an [Empty] exception if no argument is passed
 *)
-val parse_alignment : float -> alignment
+val parse_alignment : int -> alignment
 
 (** [parse_input] prompts the users for various inputs (which club they want
     to use, how much power they want to swing with, the vertical angle, and the 

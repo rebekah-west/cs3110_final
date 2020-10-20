@@ -21,13 +21,13 @@ type club =
   | PitchingWedge
   | SandWedge
 
-type power = float
+type power = int
 
-type angle = float
+type angle = int
 
 type alignment =
-  | Left of float
-  | Right of float
+  | Left of int
+  | Right of int
 
 type t = {
   club : club;
@@ -40,16 +40,16 @@ type command =
   | Swing of t
   | None
 
-let parse_club (club : string) = 
+let parse_club (clb : string) = 
   failwith "Unimplemented"
 
-let parse_power (power : float)=
+let parse_power (pow : int)=
   failwith "Unimplemented"
 
-let parse_angle (angle : float) = 
+let parse_angle (ang : int) = 
   failwith "Unimplemented"
 
-let parse_alignment (degrees : float) =
+let parse_alignment (deg : int) =
   failwith "Unimplemented"
 
 let parse_input () =
