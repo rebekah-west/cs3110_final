@@ -7,7 +7,7 @@ type handicap = int
 type accuracy_multiplier = float
 type power_multiplier = float
 
-type t ={
+type t = {
   player_name : string;
   power_multiplier : float;
   accuracy_multiplier : float;
@@ -18,6 +18,50 @@ type t ={
   (* current_hole : int or string ; <- to get hole location of a player
      hole_strokes : int or int list; <- to get score at every hole*)
 }
+
+(* [parse_acc_mult str] returns the accuracy multiplier based on how comfortable
+   someone indicates they are with golf
+   Raises: Invalid_argument if the string is not one of the suggested skill levels*)
+let parse_acc_mult = function
+  | "beginner" -> 0.5
+  | "intermediate" -> 1.0
+  | "advanced" -> 1.5
+  | _ -> raise (Invalid_argument "You must enter beginner, intermediate, or advanced")
+
+(* [parse_pow_mult str] returns the power multiplier based on how strong
+   someone indicates they are
+   Raises: Invalid_argument if the string is not one of the suggested strengths*)
+let parse_pow_mult = function
+  | "below average" -> 0.5
+  | "average" -> 1.0
+  | "above average" -> 1.5
+  | _ -> raise (Invalid_argument "You must enter below average, average, or above average")
+
+(* [create_player entry] prompts user for input, parses it, and returns type Player.t *)
+let create_player entry =
+  Printf.printf "\nWelcome new player. Please enter your name.\n";
+  let name = read_line () in
+  Printf.printf "For golf, are you beginner, intermediate, or advanced?\n";
+  let acc_mult = parse_acc_mult (read_line ()) in
+  Printf.printf "How strong are you? (below average, average, above average)\n";
+  let pow_mult = parse_pow_mult (read_line ()) in
+  Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
+  let handicap = int_of_string (read_line ()) in
+  Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
+  let p = {
+    player_name = name; 
+    power_multiplier = pow_mult; 
+    accuracy_multiplier = acc_mult;
+    handicap = handicap;
+    location = (0.0, 0.0);
+    overall_score = 0;
+  } in p
+
+let init_players () =
+  Printf.printf "How many players will be participating today? Enter an int \n";
+  let num_players = int_of_string (read_line ()) in
+  let player_array = Array.make num_players 0 in
+  Array.map create_player player_array
 
 
 let read_players j = 
