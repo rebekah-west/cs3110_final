@@ -159,7 +159,7 @@ let command_tests =
     power_parser_exn_helper "ValueOutOfRange] exception is thrown if value 
       above the acceptable range" 150 ValueOutOfRange;
     power_parser_exn_helper "[ValueOutOfRange] exception is thrown if value 
-      below the acceptable range" -50 ValueOutOfRange;
+      below the acceptable range" (-50) ValueOutOfRange;
 
     angle_parser_helper "int 45 to angle 45" 45 45;
     angle_parser_helper "int 21 to angle 21" 21 21;
@@ -171,83 +171,27 @@ let command_tests =
     angle_parser_exn_helper "ValueOutOfRange] exception thrown for angle 
       above acceptable range" 150 ValueOutOfRange;
     angle_parser_exn_helper "ValueOutOfRange] exception thrown for angle 
-      below acceptable range" -50 ValueOutOfRange;
+      below acceptable range" (-50) ValueOutOfRange;
 
-    alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly"
-      (parse_alignment 5.0) 5.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-        alignment parses corresctly"
-      (parse_alignment 5.0) Right;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-            alignment parses corresctly"
-      (parse_alignment -5.0) -5.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                alignment parses corresctly"
-      (parse_alignment -5.0) Left;
+    alignment_parser_helper "int 5 to alignment 5" 5 5;
+    alignment_parser_helper "int -5 to alignment -5" (-5) (-5);
 
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                    alignment parses corresctly, edge case"
-      (parse_alignment 1.0) 1.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                        alignment parses corresctly, edge case"
-      (parse_alignment 1.0) Right;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                            alignment parses corresctly, edge case"
-      (parse_alignment -1.0) -1.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                alignment parses corresctly, edge case"
-      (parse_alignment -1.0) Left;
+    alignment_parser_helper "int 1 to alignment 1, edge case" 1 1;
+    alignment_parser_helper "int -1 to alignment -1, edge case" (-1) (-1);
 
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                    alignment parses corresctly, edge case"
-      (parse_alignment 0.0) 0.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                        alignment parses corresctly, edge case"
-      (parse_alignment 0.0) Right;
+    alignment_parser_helper "int 0 to alignment 0, edge case" 0 0;
+
+    alignment_parser_helper "int 90 to alignment 90, edge case" 90 90;
+    alignment_parser_helper "int -90 to alignment -90, edge case" (-90) (-90);
+
+    alignment_parser_helper "int 89 to alignment 89" 89 89;
+    alignment_parser_helper "int -89 to alignment -89" (-89) (-89);
 
 
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                            alignment parses corresctly, edge case"
-      (parse_alignment 90.0) 90.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                alignment parses corresctly, edge case"
-      (parse_alignment 90.0) Right;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                    alignment parses corresctly, edge case"
-      (parse_alignment -90.0) -90.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                        alignment parses corresctly, edge case"
-      (parse_alignment -90.0) Left;
-
-
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                            alignment parses corresctly, edge case"
-      (parse_alignment 89.0) 89.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                                alignment parses corresctly, edge case"
-      (parse_alignment 89.0) Right;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                                    alignment parses corresctly, edge case"
-      (parse_alignment -89.0) -89.0;
-    alignment_parser_helper "Testing to ensure a valid float input for 
-                                                                        alignment parses corresctly, edge case"
-      (parse_alignment -89.0) Left;
-
-    alignment_parser_exn_helper "Testing to ensure the [Empty] exception
-  is thrown if no argument is given"
-      (parse_alignment ) Empty
-      alignment_parser_exn_helper "Testing to ensure the [InvalidInput] exception
-  is thrown if a type other than float is given"
-      (parse_alignment "left 20 degrees") InvalidArgument
-      alignment_parser_exn_helper "Testing to ensure the [ValueOutOfRange]
-exception is thrown if a value is given outside of the range of acceptable
-        values"
-      (parse_alignment -110.0) ValueOutOfRange
-      alignment_parser_exn_helper "Testing to ensure the [ValueOutOfRange]
-exception is thrown if a value is given outside of the range of acceptable
-        values"
-      (parse_alignment 110.0) ValueOutOfRange
+    alignment_parser_exn_helper "[ValueOutOfRange] thrown if a value is 
+      above 90" 110 ValueOutOfRange;
+    alignment_parser_exn_helper "[ValueOutOfRange] thrown if a value is 
+      below -90" (-110) ValueOutOfRange;
   ]
 
 (* make the course t object *)
@@ -344,8 +288,8 @@ let game_tests =
     current_turn_test "Game starts with the player who was first in the lineup"
       initialized_game first_player;
     played_test "Ensure the game starts with no holes played" 
-      initialized_game) [];
-]
+      initialized_game [];
+  ]
 
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
   test = name >:: (fun _ -> 
