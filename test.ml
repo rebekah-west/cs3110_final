@@ -76,232 +76,177 @@ let alignment_parser_exn_helper (name : string) (input_alignment : int)
 
 let command_tests =
   [
-    club_parser_helper "Testing to ensure that driver will be parsed to a 
-      Driver club" (parse_club "driver") Driver;
-    club_parser_helper  "Capitalization shouldn't matter, Testing to ensure 
-      that Driver will be parsed to a Driver club" (parse_club "Driver") Driver;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that
-      DriVEr will be parsed to a Driver club" (parse_club "DriVEr") Driver;
+    club_parser_helper "'driver' to a Driver club" "driver" Driver;
+    club_parser_helper  "'Driver' to a Driver club, first letter 
+      capitalization" "Driver" Driver;
+    club_parser_helper  "'DriVEr' to a Driver club, random 
+      capitalization" "DriVEr" Driver;
+    club_parser_helper  "'DRIVER' to a Driver club, full
+      capitalization" "DriVEr" Driver;
 
-    club_parser_helper "Testing to ensure that nine iron will be parsed to a 
-      NineIron club" (parse_club "nine iron") NineIron;
-    club_parser_helper "Capitalization shouldn't matter, testing to ensure that 
-      Nine iron parses to a NineIron club" (parse_club "Nine iron") NineIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      nine Iron parses to NineIron club" (parse_club "nine Iron") NineIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that
-     Nine Iron parses to a NineIron club" (parse_club "Nine Iron") NineIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      NiNE IrOn parses to a NineIron club" (parse_club "NiNE IrOn") NineIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that
-     NINE IRON parses to a NineIron club"(parse_club "NINE IRON") NineIron;
+    club_parser_helper " 'nine iron' to a NineIron club" "nine iron" NineIron;
+    club_parser_helper " 'Nine iron' to a NineIron club, first word 
+      capitalization" "Nine iron" NineIron;
+    club_parser_helper " 'nine Iron' to a NineIron club, second word 
+      capitalization" "nine Iron" NineIron;
+    club_parser_helper " 'Nine Iron' to a NineIron club, both words
+      capitalized" "Nine Iron" NineIron;
+    club_parser_helper " 'NiNE IrOn' to a NineIron club, random
+      capitalization" "NiNE IrOn" NineIron;
+    club_parser_helper " 'NINE IRON' to a NineIron club, all
+      capitalization" "NINE IRON" NineIron;
 
-    club_parser_helper "Testing to ensure that eight iron will be parsed to an
-      EightIron club" (parse_club "eight iron") EightIron;
-    club_parser_helper "Capitalization shouldn't matter, testing to ensure that
-      Eight iron will be parsed to an Eight Iron club"
-      (parse_club "Eight iron") EightIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      eight Iron will be parsed to a EightIron club"
-      (parse_club "eight Iron") EightIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      Eight Iron will be parsed to a EightIron club"
-      (parse_club "Eight Iron") EightIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      EighT IrOn will be parsed to a EightIron club"
-      (parse_club "EighT IrOn") EightIron;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      EIGHT IRON will be parsed to a EightIron club"
-      (parse_club "EIGHT IRON") EightIron;
+    club_parser_helper "'eight iron' to an EightIron club" 
+      "eight iron" EightIron;
+    club_parser_helper "'Eight iron' to an EightIron club, first word
+      capitalization" "Eight iron" EightIron;
+    club_parser_helper "'eight Iron' to an EightIron club, second word
+      capitalization" "eight Iron" EightIron;
+    club_parser_helper "'Eight Iron' to an EightIron club, both word
+      capitalization" "Eight Iron" EightIron;
+    club_parser_helper "'EiGHt IrOn' to an EightIron club, random
+      capitalization" "EiGHt IrOn" EightIron;
+    club_parser_helper "'EIGHT IRON' to an EightIron club, full
+      capitalization" "EIGHT IRON" EightIron;
 
-    club_parser_helper "Testing to ensure that putter will be parsed to a 
-      Putter club" (parse_club "putter") Putter;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      Putter will be parsed to a Putter club" (parse_club "Putter") Putter;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      PuTTeR will be parsed to a Putter club" (parse_club "PuTTeR") Putter;
-
-    club_parser_helper "Testing to ensure that pitching wedge will be parsed to 
-      a PitchingWedge club" (parse_club "pitching wedge") PitchingWedge;
-    club_parser_helper "Capitalization shouldn't matter, testing to ensure that 
-      Pitching wedge will be parsed to a PitchingWedge club"
-      (parse_club "Pitching wedge") PitchingWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      pitching Wedge will be parsed to a PitchingWedge club"
-      (parse_club "pitching Wedge") PitchingWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      Pitching Wedge will be parsed to a PitchingWedge club"
-      (parse_club "Pitching Wedge") PitchingWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      PitCHiNg weDGe will be parsed to a PitchingWedge club"
-      (parse_club "PitCHiNg weDGe") PitchingWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      PITCHING WEDGE will be parsed to a PitchingWedge club"
-      (parse_club "PITCHING WEDGE") PitchingWedge;
-
-    club_parser_helper "Testing to ensure that sand wedge will be parsed to a 
-      SandWedge club" (parse_club "sand wedge") SandWedge;
-    club_parser_helper "Capitalization shouldn't matter, testing to ensure that 
-      Sand wedge will be parsed to a SandWedge club"
-      (parse_club "Sand wedge") SandWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      sand Wedge will be parsed to a SandWedge club"
-      (parse_club "sand Wedge") SandWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      Sand Wedge will be parsed to a SandWedge club"
-      (parse_club "Sand Wedge") SandWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      sAnD weDGe will be parsed to a SandWedge club"
-      (parse_club "sAnD weDGe") SandWedge;
-    club_parser_helper "Capitalization shouldn't matter, Testing to ensure that 
-      PITCHING WEDGE will be parsed to a SandWedge club"
-      (parse_club "SAND WEDGE") SandWedge;
-
-    club_parser_exn_helper "Testing that if an empty string is given an
-      [Empty] exception is thrown" (parse_club "") Empty;
-
-    club_parser_exn_helper "Testing that if a mispelled club is given, a 
-      [Malformed] exception is thrown" (parse_club "Drvier") Malformed;
-
-    club_parser_exn_helper "Testing that if something other than a string is
-      given, an [InvalidArgument] exception is thrown"
-      (parse_club 27) Invalid_argument;
+    club_parser_helper "'putter' to a Putter club" "putter" Putter;
+    club_parser_helper "'Putter' to a Putter club, 1st letter capitalization" 
+      "Putter" Putter;
+    club_parser_helper "'PutTEr' to a Putter club, 1st letter capitalization" 
+      "PutTEr" Putter;
+    club_parser_helper "'PUTTER' to a Putter club, full capitalization" 
+      "PUTTER"  Putter;
 
 
-    power_parser_helper "Testing to ensure a valid int input of 50 for power
-     parses correctly" (parse_power 50) 50;
-    power_parser_helper "Testing to ensure a valid int input of 21 for power
-      parses correctly"
-      (parse_power 21) 21;
-    power_parser_helper "Testing to ensure a valid int input of 0 for power
-     parses correctly, an edge case"(parse_power 0) 0;
-    power_parser_helper "Testing to ensure a valid int input of 1 for power
-      parses correctly, edge case"
-      (parse_power 1) 1;
-    power_parser_helper "Testing to ensure a valid int input of 99 for power
-     parses correctly, edge case" (parse_power 99) 99;
-    power_parser_helper "Testing to ensure a valid int input for power
-     parses correctly, edge case" (parse_power 100) 100;
+    club_parser_helper "'pitching wedge' to a PitchingWedge club" 
+      "pitching wedge" PitchingWedge;
+    club_parser_helper "'Pitching wedge' to a PitchingWedge club, first word
+      capitalization" "Pitching wedge" PitchingWedge;
+    club_parser_helper "'pitching Wedge' to a PitchingWedge club, second word
+      capitalization" "pitching Wedge" PitchingWedge;
+    club_parser_helper "'Pitching Wedge' to a PitchingWedge club, both word
+      capitalization" "Pitching Wedge" PitchingWedge;
+    club_parser_helper "'PiTChiNg WedgE' to a PitchingWedge club, random
+      capitalization" "PiTChiNg WedgE" PitchingWedge;
+    club_parser_helper "'PITCHING WEDGE' to a PitchingWedge club, random
+      capitalization" "PITCHING WEDGE" PitchingWedge;
 
-    power_parser_exn_helper "Testing to ensure an [Empty] exception is thrown
-      if no argument is given to [parse_power pow]"
-      (parse_power ) Empty;
-    power_parser_exn_helper "Testing to ensure an [InvalidArgument] exception 
-      is thrown if the incorrect type is given to [parse_power pow]"
-      (parse_power "five") InvalidArgument;
-    power_parser_exn_helper "Testing to ensure a [ValueOutOfRange] exception
-      is thrown if the user gives a value above the acceptable range"
-      (parse_power 150.0) ValueOutOfRange;
-    power_parser_exn_helper "Testing to ensure a [ValueOutOfRange] exception
-      is thrown if the user gives a value below the acceptable range"
-      (parse_power -50.0) ValueOutOfRange;
+    club_parser_helper "'sand wedge' to a SandWedge club" "sand wedge"
+      SandWedge;
+    club_parser_helper "'Sand wedge' to a SandWedge club, first word 
+      capitalization" "Sand wedge" SandWedge;
+    club_parser_helper "'sand Wedge' to a SandWedge club, second word 
+      capitalization" "sand Wedge" SandWedge;
+    club_parser_helper "'Sand Wedge' to a SandWedge club, both word 
+      capitalization" "Sand Wedge" SandWedge;
+    club_parser_helper "'SanD wEDge' to a SandWedge club, random 
+      capitalization" "SanD wEDge" SandWedge;
+    club_parser_helper "'SAND WEDGE' to a SandWedge club, full
+      capitalization" "SAND WEDGE" SandWedge;
 
-    angle_parser_helper "Testing to ensure a valid float input for angle
-     parses correctly"
-      (parse_angle 45.0) 45.0;
-    angle_parser_helper "Testing to ensure a valid float input for angle
-     parses correctly, edge case"
-      (parse_angle 0.0) 0.0;
-    angle_parser_helper "Testing to ensure a valid float input for angle
-     parses correctly, edge case"
-      (parse_angle 1.0) 1.0;
-    angle_parser_helper "Testing to ensure a valid float input for angle
-     parses correctly, edge case"
-      (parse_angle 89.0) 89.0;
-    angle_parser_helper "Testing to ensure a valid float input for angle
-     parses correctly, edge case"
-      (parse_angle 90.0) 90.0;
-    angle_parser_helper "Testing to ensure a valid float input for angle
-     parses correctly, atypical input"
-      (parse_angle 21.387) 21.387;
+    club_parser_exn_helper "Empty string is given -> [Empty] exception is 
+      thrown" "" Empty;
+    club_parser_exn_helper "Mispelled club is given -> [Malformed] exception 
+    is thrown" "Drvier" Malformed;
 
-    angle_parser_exn_helper "Testing to ensure an [Empty] exception is thrown
-     if no argument is given"
-      (parse_angle ) Empty;
-    angle_parser_exn_helper "Testing to ensure an [InvalidArgument] exception 
-     is thrown if the incorrect type is given"
-      (parse_power "five") InvalidArgument;
-    angle_parser_exn_helper "Testing to ensure a [ValueOutOfRange] exception
-      is thrown if the user gives a value outside of the acceptable range"
-      (parse_angle 150.0) ValueOutOfRange;
-    angle_parser_exn_helper "Testing to ensure a [ValueOutOfRange] exception
-      is thrown if the user gives a value outside of the acceptable range"
-      (parse_angle -50.0) ValueOutOfRange;
+    power_parser_helper "int 50 to power 50" 50 50;
+    power_parser_helper "int 21 to power 21" 21 21;
+    power_parser_helper "int 0 to power 0, edge case" 0 0;
+    power_parser_helper " int 1 to power 1, edge case" 1 1;
+    power_parser_helper "int 99 to power 99" 99 99;
+    power_parser_helper "int 100 to power 100" 100 100;
+
+    power_parser_exn_helper "ValueOutOfRange] exception is thrown if value 
+      above the acceptable range" 150 ValueOutOfRange;
+    power_parser_exn_helper "[ValueOutOfRange] exception is thrown if value 
+      below the acceptable range" -50 ValueOutOfRange;
+
+    angle_parser_helper "int 45 to angle 45" 45 45;
+    angle_parser_helper "int 21 to angle 21" 21 21;
+    angle_parser_helper "int 0 to angle 0, edge case" 0 0;
+    angle_parser_helper "int 1 to angle 1, edge case" 1 1;
+    angle_parser_helper "int 89 to angle 89, edge case" 89 89;
+    angle_parser_helper "int 90 to angle 90, edge case" 90 90;
+
+    angle_parser_exn_helper "ValueOutOfRange] exception thrown for angle 
+      above acceptable range" 150 ValueOutOfRange;
+    angle_parser_exn_helper "ValueOutOfRange] exception thrown for angle 
+      below acceptable range" -50 ValueOutOfRange;
 
     alignment_parser_helper "Testing to ensure a valid float input for 
     alignment parses corresctly"
       (parse_alignment 5.0) 5.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly"
+        alignment parses corresctly"
       (parse_alignment 5.0) Right;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly"
+            alignment parses corresctly"
       (parse_alignment -5.0) -5.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly"
+                alignment parses corresctly"
       (parse_alignment -5.0) Left;
 
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                    alignment parses corresctly, edge case"
       (parse_alignment 1.0) 1.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                        alignment parses corresctly, edge case"
       (parse_alignment 1.0) Right;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                            alignment parses corresctly, edge case"
       (parse_alignment -1.0) -1.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                alignment parses corresctly, edge case"
       (parse_alignment -1.0) Left;
 
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                    alignment parses corresctly, edge case"
       (parse_alignment 0.0) 0.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                        alignment parses corresctly, edge case"
       (parse_alignment 0.0) Right;
 
 
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                            alignment parses corresctly, edge case"
       (parse_alignment 90.0) 90.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                alignment parses corresctly, edge case"
       (parse_alignment 90.0) Right;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                    alignment parses corresctly, edge case"
       (parse_alignment -90.0) -90.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                        alignment parses corresctly, edge case"
       (parse_alignment -90.0) Left;
 
 
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                            alignment parses corresctly, edge case"
       (parse_alignment 89.0) 89.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                                alignment parses corresctly, edge case"
       (parse_alignment 89.0) Right;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                                    alignment parses corresctly, edge case"
       (parse_alignment -89.0) -89.0;
     alignment_parser_helper "Testing to ensure a valid float input for 
-    alignment parses corresctly, edge case"
+                                                                        alignment parses corresctly, edge case"
       (parse_alignment -89.0) Left;
 
     alignment_parser_exn_helper "Testing to ensure the [Empty] exception
-    is thrown if no argument is given"
+  is thrown if no argument is given"
       (parse_alignment ) Empty
       alignment_parser_exn_helper "Testing to ensure the [InvalidInput] exception
-    is thrown if a type other than float is given"
+  is thrown if a type other than float is given"
       (parse_alignment "left 20 degrees") InvalidArgument
       alignment_parser_exn_helper "Testing to ensure the [ValueOutOfRange]
-    exception is thrown if a value is given outside of the range of acceptable
-    values"
+exception is thrown if a value is given outside of the range of acceptable
+        values"
       (parse_alignment -110.0) ValueOutOfRange
       alignment_parser_exn_helper "Testing to ensure the [ValueOutOfRange]
-    exception is thrown if a value is given outside of the range of acceptable
-    values"
+exception is thrown if a value is given outside of the range of acceptable
+        values"
       (parse_alignment 110.0) ValueOutOfRange
   ]
 
@@ -395,16 +340,12 @@ let initialized_game = init_game test_players test_course
 let game_tests =
   [
     (*tests on the initialization*)
-    current_hole_test "Ensure the game starts at hole 1"
-      (current_hole initialized_game) 1;
-
-    played_test "Ensure the game starts with no holes played"
-      (played initialized_game) [];
-
-    current_turn_test "Ensure the game starts the 1st hole with the
-    player who was first in the lineup"
-      (current_turn initialized_game) first_player
-  ]
+    current_hole_test "The game starts at hole 1" initialized_game 1;
+    current_turn_test "Game starts with the player who was first in the lineup"
+      initialized_game first_player;
+    played_test "Ensure the game starts with no holes played" 
+      initialized_game) [];
+]
 
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
   test = name >:: (fun _ -> 
