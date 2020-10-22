@@ -30,6 +30,7 @@ type command =
   | Swing of t
   | None
 
+(*remove_blanks does not work*)
 let remove_blanks = Str.global_replace (Str.regexp "  ") ""
 let parse string = string |> remove_blanks |> String.lowercase_ascii
 
@@ -44,9 +45,15 @@ let parse_club string =
   | "sandwedge" -> SandWedge
   | _ -> raise (Invalid_argument "That is not a club")
 
+let create_swing (clb: string) (pow : int) (ang : int) (align : int)= {
+  club = parse_club (clb);
+  power = pow;
+  angle = ang;
+  alignment = align;
+}
 
 let parse_swing () =
-  Printf.printf "Which club would you like to use? (Driver, NineIron, EightIron, Putter, PitchingWedge, SandWedge) \n";
+  Printf.printf "Which club would you like to use? (Driver, Nine Iron, Eight Iron, Putter, Pitching Wedge, Sand Wedge) \n";
   let club = parse_club (read_line ()) in
   Printf.printf "How hard would you like to hit the ball? Enter an int. \n";
   let power = int_of_string (read_line ()) in 
