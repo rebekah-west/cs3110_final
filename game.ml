@@ -1,8 +1,11 @@
+<<<<<<< HEAD
+=======
+open Course
+open Player
+  >>>>>>> dcf0c0a650d8d4fa327517fb82a17fb83628da7b
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
-open Course
-open Player
 
 (* only need to keep track of score per hole since Player.t
    keeps track of the overall score of a player*)
