@@ -53,3 +53,8 @@ val winner_of_hole: t -> Player.t
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
 val winner_of_game: t -> Player.t
+
+
+(** [update_location command.t game.t] computes the impact of a swing and 
+    returns the game with updated location *)
+val update_location : Command.t -> t 

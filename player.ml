@@ -1,4 +1,6 @@
 open Yojson.Basic.Util
+open Command
+open Game
 (*****************************************************)
 (* Implementations of player and it's functions*)
 (*****************************************************)
@@ -105,8 +107,7 @@ let read_players j =
 -we need to assume the player is just a point in space
 -we assume they are on their ball or a foot to the left or something
 *)
-let update_location player = 
-  failwith "Unimplemented"
+
 
 (*perhaps uses a hole score tracked separately from overall score to help
   with a hole-by-hole scorecard?)
