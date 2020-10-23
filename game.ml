@@ -55,8 +55,13 @@ let init_game players (course: Course.t) =
   let scores = game_helper players course.holes in
   let current_hole = Course.start_hole course in
   let frst_up = List.hd players in 
-  {roster=players; scores=scores; current_hole=current_hole;
-   current_turn= frst_up; holes_played=[]}
+  let game = {roster=players;
+              scores=scores; 
+              current_hole=current_hole;
+              current_turn= frst_up; 
+              holes_played=[];
+             } 
+  in game
 
 (* getter for current hole *)
 let current_hole game = game.current_hole
