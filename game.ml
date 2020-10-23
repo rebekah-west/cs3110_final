@@ -1,3 +1,5 @@
+open Course
+open Player
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
@@ -16,16 +18,21 @@ type scorecard = hole_score list list
 
 type t = {
   roster: Player.t list;
-  scores: scorecard;
+  course: Course.t;
   current_hole: Course.hole_number;
   current_turn: Player.t;
+  scores: scorecard;
   holes_played: hole_score list;
 }
 
 exception InvalidHole
 
+
+let current_hole game = game.current_hole
+
 let init_hole_score player (hole: Course.hole_number) = 
   {hole = hole; player=player; hole_score=0}
+
 
 let rec init_scorecard players hole = 
   match players with 
@@ -151,5 +158,15 @@ let rec winners_roster roster sc =
 
 (* returns a list of winners  *)
 let winner_of_game game = 
-  let best_sc = winning_score game.roster (List.hd game.roster) in 
-  winners_roster game.roster best_sc
+  failwith "Unimplemented"
+
+let best_sc = winning_score game.roster (List.hd game.roster) in 
+winners_roster game.roster best_sc
+
+let get_course game = game.course
+
+let update_location swing game = 
+  let hole_num = current_hole game in 
+  let hole_loc = Course.get_hole_loc (get_course game) hole_num in
+  let player_loc = Player.get_player_location game.current_player in
+  failwith "Unimplemented"
