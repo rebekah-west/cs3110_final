@@ -1,5 +1,3 @@
-open Course
-open Player
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
