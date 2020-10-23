@@ -183,7 +183,6 @@ let command_tests =
        above 90" 110 ValueOutOfRange;
        alignment_parser_exn_helper "[ValueOutOfRange] thrown if a value is  
        below -90" (-110) ValueOutOfRange; *)
-    swing_parser_exn_helper
   ]
 
 (* make the course t object *)
@@ -311,7 +310,7 @@ let player_tests =
     pl_pow_test "Gian has 0.8 power" gian 0.8;
     pl_acc_test "Jenna has 1.0 accuracy" jenna 1.0;
     pl_acc_test "Gian has 0.9 accuracy" gian 0.9;
-    pl_handicap_test "Jenna has -5 handicap" jenna ~-5;
+    pl_handicap_test "Jenna has -5 handicap" jenna (-5);
     pl_handicap_test "Gian has 20 handicap" gian 20;
   ]
 
