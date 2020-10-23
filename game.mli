@@ -32,7 +32,7 @@ val current_hole: t -> Course.hole_number
 
 (** [played gm] is the list of all the holes of game [gm] the players 
     have already completed*)
-val played: t -> Course.hole_number list
+val played: t -> hole_score list
 
 (** [current_turn gm] is the player who is currently up to swing.  *)
 val current_turn: t -> Player.t 
@@ -52,7 +52,7 @@ val update_turn: t -> t
 
 (** [winner_of_hole gm] returns  the player who won the hole just 
     played, If it is a tie, all players with lowest score listed *)
-val winner_of_hole: t -> Course.hole_number -> Player.t list
+val winner_of_hole: t -> Course.hole_number -> hole_score list
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
 val winner_of_game: t -> Player.t
@@ -60,4 +60,4 @@ val winner_of_game: t -> Player.t
 
 (** [update_location command.t game.t] computes the impact of a swing and 
     returns the game with updated location *)
-val update_location : Command.t -> t 
+(* val update_location : Command.t -> t  *)

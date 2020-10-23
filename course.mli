@@ -55,3 +55,5 @@ val description : t -> hole_number -> string
 
 (** [weather] randomly generates the current wind *)
 val wind : unit -> wind
+
+val get_hole_number: hole -> int

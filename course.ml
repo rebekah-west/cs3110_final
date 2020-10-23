@@ -29,7 +29,7 @@ type hole = {
     RI:
 *)
 type t = {
-  holes: hole array;
+  holes: hole list;
   difficulty: string;
 }
 
@@ -51,19 +51,25 @@ let num_holes course =
 
 let get_holes course = course.holes
 
-let get_hole course hole_number = 
-  let holes = course.holes in 
-  holes.(hole_number)
+let rec get_hole hole_list hole_number = 
+  match hole_list with 
+  | [] -> raise (UnknownHole hole_number)
+  | hole::rest_of_holes -> begin
+      if hole.hole_number = hole_number then hole 
+      else get_hole rest_of_holes hole_number
+    end
 
 let get_hole_loc course hole_number =
-  let hole = get_hole course hole_number in 
+  let hole = get_hole course.holes hole_number in 
   hole.hole_location
 
 let difficulty course = course.difficulty
 
 let description course hole_number =
-  let hole = get_hole course hole_number in 
+  let hole = get_hole course.holes hole_number in 
   hole.description
 
 let wind () = 
   failwith "unimplemented"
+
+let get_hole_number hole = hole.hole_number
