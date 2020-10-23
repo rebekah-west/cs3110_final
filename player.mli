@@ -1,3 +1,4 @@
+open Command
 (*********************************************************************)
 (** Gian *)
 (*********************************************************************)
@@ -39,4 +40,6 @@ val get_player_power_multiplier : t -> float
 val get_player_accuracy_multiplier : t -> float
 
 val get_player_handicap : t -> int 
+
+val get_player_location : t -> int*int
 

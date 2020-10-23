@@ -16,6 +16,9 @@ type t
 (** The type of hole identifiers. *)
 type hole_number = int
 
+(** *)
+type hole_location = int * int
+
 (** The type of terrain obstacles *)
 type terrain
 
@@ -35,6 +38,9 @@ val start_hole : t -> hole_number
 
 (** [num_holes c] is the number of holes in the course [c]. *)
 val num_holes : t -> int
+
+(** [get_hole_loc h] is the coordinate location of hole [h]. *)
+val get_hole_loc : t -> hole_number -> hole_location
 
 (** [difficulty c] is a representation of how difficult course [c] is. *)
 val difficulty : t -> string
