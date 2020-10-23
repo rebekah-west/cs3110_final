@@ -159,7 +159,7 @@ let winner_of_game game =
   failwith "Unimplemented"
 
 let best_sc = winning_score game.roster (List.hd game.roster) in 
-  winners_roster game.roster best_sc
+winners_roster game.roster best_sc
 
 let get_course game = game.course
 

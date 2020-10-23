@@ -2,6 +2,7 @@
     RI:
 *)
 type hole_number = int
+type hole_location = int * int
 
 
 (** AF:
@@ -18,21 +19,18 @@ type terrain =
 type hole = {
   hole_number: hole_number;
   par_number: int;
-  hole_location: int * int;
+  hole_location: hole_location;
   description: string;
   terrain: terrain list
 }
 
-type difficulty = {
-  (*A placeholder*)
-  diff : int;
-}
+
 (** AF:
     RI:
 *)
 type t = {
   holes: hole array;
-  difficulty: difficulty;
+  difficulty: string;
 }
 
 (** The type of wind representing the strength and direction *)
@@ -55,7 +53,7 @@ let get_hole course hole_number =
   let holes = course.holes in 
   holes.(hole_number)
 
-let get_hole_location course hole_number =
+let get_hole_loc course hole_number =
   let hole = get_hole course hole_number in 
   hole.hole_location
 
