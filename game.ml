@@ -1,9 +1,5 @@
 open Course
 open Player
-<<<<<<< HEAD
-
-=======
->>>>>>> cdac30ed597d5ab6614bd02a20386ce5f381cf10
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
