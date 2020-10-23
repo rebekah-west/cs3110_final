@@ -24,27 +24,27 @@ let pp_list pp_elt lst =
    actual output*)
 let club_parser_helper
     (name : string) (input_club : string)
-    (expected_output : club) : test = 
+    (expected_output : Command.club) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_club input_club))
 
 let angle_parser_helper
     (name : string)
     (input_angle : float)
-    (expected_output : angle) : test = 
+    (expected_output : Command.angle) : test = 
   name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
                expected_output (parse_angle input_angle))
 
 let alignment_parser_helper
     (name : string)
     (input_alignment : float)
-    (expected_output : alignment) : test = 
+    (expected_output : Command.alignment) : test = 
   name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
                expected_output (parse_alignment input_alignment))
 
 let power_parser_helper
     (name : string)
     (input_power : float)
-    (expected_output : power) : test = 
+    (expected_output : Command.power) : test = 
   name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
                expected_output (parse_power input_power))
 
@@ -53,7 +53,7 @@ let power_parser_helper
 let swing_parser_exn_helper
     (name : string) (input_power : int) (expected_output : exn) : test = 
   name >:: (fun _ -> assert_raises expected_output 
-               (fun () -> parse_swing ()))
+               (fun () -> Command.parse_swing ()))
 
 
 let command_tests =

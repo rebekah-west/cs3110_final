@@ -2,6 +2,7 @@
     RI:
 *)
 type hole_number = int
+type hole_location = int * int
 
 
 (** AF:
@@ -18,21 +19,18 @@ type terrain =
 type hole = {
   hole_number: hole_number;
   par_number: int;
-  hole_location: int * int;
+  hole_location: hole_location;
   description: string;
   terrain: terrain list
 }
 
-type difficulty = {
-  (*A placeholder*)
-  diff : int;
-}
+
 (** AF:
     RI:
 *)
 type t = {
-  holes: hole list;
-  difficulty: difficulty;
+  holes: hole array;
+  difficulty: string;
 }
 
 (** The type of wind representing the strength and direction *)
@@ -45,17 +43,25 @@ exception UnknownHole of hole_number
 let from_json j =
   failwith "unimplemented"
 
-let start_hole = 
+let start_hole course = 
   failwith "unimplemented"
 
-let num_holes =
+let num_holes course =
   failwith "unimplemented"
 
-let difficulty =
-  failwith "unimplemented"
+let get_hole course hole_number = 
+  let holes = course.holes in 
+  holes.(hole_number)
 
-let description =
-  failwith "unimplemented"
+let get_hole_loc course hole_number =
+  let hole = get_hole course hole_number in 
+  hole.hole_location
 
-let wind = 
+let difficulty course = course.difficulty
+
+let description course hole_number =
+  let hole = get_hole course hole_number in 
+  hole.description
+
+let wind () = 
   failwith "unimplemented"
