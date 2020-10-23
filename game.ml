@@ -1,6 +1,8 @@
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
+open Course
+open Player
 
 (* only need to keep track of score per hole since Player.t
    keeps track of the overall score of a player*)
