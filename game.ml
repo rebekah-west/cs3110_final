@@ -1,3 +1,4 @@
+
 open Course
 open Player
 (*****************************************************)
@@ -40,27 +41,23 @@ let rec init_scorecard players hole =
       p1_score::init_scorecard rest_of_players hole
     end
 
-let rec game_helper (players: Player.t list) holes = 
+let rec game_helper (players: Player.t list) (holes: Course.hole list) = 
   match holes with 
   | [] -> []
   | h1::rest_of_holes -> begin 
       (* also need to be shown type hole  *)
-      let hole_scores = init_scorecard players h1.hole_number in 
+      let hole_scores = init_scorecard players (get_hole_number h1) in 
       hole_scores::game_helper players rest_of_holes
     end
 
 (** required: there must be at least one hole with*)
 let init_game players (course: Course.t) = 
   (* need a getter to get the course holes here  *)
-  let scores = game_helper players course.holes in
+  let scores = game_helper players (get_holes course) in
   let current_hole = Course.start_hole course in
   let frst_up = List.hd players in 
-  let game = {roster=players;
-              scores=scores; 
-              current_hole=current_hole;
-              current_turn= frst_up; 
-              holes_played=[];} 
-  in game
+  {roster=players; course=course;scores=scores; current_hole=current_hole;
+   current_turn= frst_up; holes_played=[]}
 
 (* getter for current hole *)
 let current_hole game = game.current_hole
@@ -80,12 +77,13 @@ let update_score game = failwith "Unimplemented"
 let update_turn game = 
   failwith "Unimplemented" 
 
-(* 1. if same hole: iterate over players to see who is furthest away from hole  *)
+(* 1. if same hole: iterate over players to see who is furthest away from 
+   hole  *)
 (* if different hole, players should tee-off in order of who won last round *)
 (* 2. make that player the current player  *)
 
 (* gets just a specific hole from the holescore list of one player *)
-let rec grab_hole_from_player player (scores:hole_score list) hole= 
+let rec grab_hole_from_player (player:Player.t) (scores:hole_score list) hole= 
   begin 
     let is_hole hl = hl.hole == hole in 
     match scores with 
@@ -141,9 +139,9 @@ let winner_of_hole (game:t) hole =
 (* gets the winning score of all players  *)
 let rec winning_score roster (best:Player.t) = 
   match roster with 
-  | [] -> best.overall_score
+  | [] -> get_player_score best
   | p1::rest_of_roster -> begin 
-      if p1.overall_score < best.overall_score
+      if get_player_score p1 < get_player_score best
       then winning_score rest_of_roster p1 
       else winning_score rest_of_roster best end
 
@@ -153,7 +151,7 @@ let rec winners_roster roster sc =
   match roster with 
   |[] -> []
   |p1::rest_of_roster -> begin 
-      if p1.overall_score = sc 
+      if get_player_score p1 = sc 
       then p1::winners_roster rest_of_roster sc 
       else winners_roster rest_of_roster sc 
     end
@@ -161,7 +159,7 @@ let rec winners_roster roster sc =
 (* returns a list of winners  *)
 let winner_of_game game = 
   failwith "Unimplemented"
-
+(* 
 let best_sc = winning_score game.roster (List.hd game.roster) in 
 winners_roster game.roster best_sc
 
@@ -171,4 +169,4 @@ let update_location swing game =
   let hole_num = current_hole game in 
   let hole_loc = Course.get_hole_loc (get_course game) hole_num in
   let player_loc = Player.get_player_location game.current_player in
-  failwith "Unimplemented"
+  failwith "Unimplemented" *)
