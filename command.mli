@@ -21,15 +21,22 @@ type club =
   | SandWedge
 
 (** The type [power] represents how hard the golf ball is hit. 
-    Requires: A float between 0 and 100
+    Requires: Must be an int between 0 and 100
 *)
 type power
 
 (** The type [angle] represents the vertical angle from the ground the ball 
     will travel 
-    Requires: A float between 0 and 90
+    Requires: Must be an ine between 0 and 90
 *)
 type angle
+
+(** The type [alignment] represents the offset the player takes from being
+    pointed directly at the hole. Negative alignment implies turning left of 
+    the hole and positive alignment implies aiming to the right
+    Requires: Must be an int between -90 and 90 
+*)
+type alignment
 
 
 (** The type [command] *)
@@ -50,6 +57,7 @@ exception InvalidInput
    acceptable values*)
 exception ValueOutOfRange
 
+
 (* [parse_club clb] evaluates the type of club a player wishes to use on their 
    turn represented by string [clb]
    Requires: A valid input string which represents a club
@@ -57,6 +65,26 @@ exception ValueOutOfRange
    representation of a club or an [Empty] exception if no argument is passed
 *) 
 val parse_club : string -> club
+
+(* [parse_power pow] evaluates the power a player wishes to use on their 
+   turn represented by int [pow]
+   Requires: A valid input, an int between 0 and 100
+*)
+val parse_power : int -> power
+
+(* [parse_angle ang] evaluates the angle a player wishes to use on their 
+   turn represented by int [ang]
+   Requires: A valid input, an int betwwen 0 and 90
+*)
+val parse_angle : int -> angle
+
+(* [parse_alignment degrees] evaluates the angle a player wishes to use 
+   to offset themselves from the initial positioning of being
+   directly pointed at the hole. Takes in an int [degrees] and outputs the
+   corresponding alignment
+   Requires: A valid input, an int between -90 and 90
+*)
+val parse_alignment : int -> alignment
 
 (** [parse_input] prompts the users for various inputs (which club they want
     to use, how much power they want to swing with, the vertical angle, and the 
