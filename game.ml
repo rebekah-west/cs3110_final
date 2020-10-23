@@ -3,8 +3,6 @@ open Player
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
-open Course
-open Player
 
 (* only need to keep track of score per hole since Player.t
    keeps track of the overall score of a player*)
@@ -61,8 +59,7 @@ let init_game players (course: Course.t) =
               scores=scores; 
               current_hole=current_hole;
               current_turn= frst_up; 
-              holes_played=[];
-             } 
+              holes_played=[];} 
   in game
 
 (* getter for current hole *)
