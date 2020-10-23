@@ -18,6 +18,9 @@ type scorecard
 (** the type of the a score for one player at one hole*)
 type hole_score
 
+(* exception if the hole is not a valid representation *)
+exception InvalidHole
+
 (** [init_scorecard p c] is the initial state of the scorecard 
     when players p play a game on course c. In this game the players are 
     currently located at hole 1, and they all have scores of 0 *)
@@ -34,22 +37,22 @@ val played: t -> Course.hole_number list
 (** [current_turn gm] is the player who is currently up to swing.  *)
 val current_turn: t -> Player.t 
 
+(** [current_score gm] returns the scorecord object for the game at its current 
+    state *)
+val current_score: t -> scorecard 
+
+(** [game_roster gm] returns the list of players playing the game *)
+val game_roster: t -> Player.t list
+
 (** [update turn gm] is attempting to update the turn after a player swings. 
     During the first hole, players go in order of lineup. After that, player 
     furthest from hole is up. At the start of any other hole, the player with
     honors, who won the last hole, wins *)
 val update_turn: t -> t
 
-(** [current_score gm] returns the scorecord object for the game at its current 
-    state *)
-val current_score: t -> scorecard 
-
-(** UNSURE IF THIS IS NEEDED?
-    the type representing the outcome of a hole*)
-(* type outcome = Win of t | Lose of t *)
-
-(** [winner_of_hole gm] returns the player who won the hole just played *)
-val winner_of_hole: t -> Player.t 
+(** [winner_of_hole gm] returns  the player who won the hole just 
+    played, If it is a tie, all players with lowest score listed *)
+val winner_of_hole: t -> Course.hole_number -> Player.t list
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
 val winner_of_game: t -> Player.t
