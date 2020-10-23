@@ -47,7 +47,7 @@ type t = {
   power_multiplier : float;
   accuracy_multiplier : float;
   handicap : int ; 
-  location : (float * float);
+  location : (int * int);
   overall_score : int;
   (*may be helpful based on everyone else's implementations *)
   (* current_hole : int or string ; <- to get hole location of a player
@@ -88,7 +88,7 @@ let create_player entry =
     power_multiplier = pow_mult; 
     accuracy_multiplier = acc_mult;
     handicap = handicap;
-    location = (0.0, 0.0);
+    location = (0, 0);
     overall_score = 0;
   } in p
 
