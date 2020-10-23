@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-=======
+
 open Course
 open Player
-  >>>>>>> dcf0c0a650d8d4fa327517fb82a17fb83628da7b
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
@@ -43,19 +41,19 @@ let rec init_scorecard players hole =
       p1_score::init_scorecard rest_of_players hole
     end
 
-let rec game_helper (players: Player.t list) holes = 
+let rec game_helper (players: Player.t list) (holes: hole_score list) = 
   match holes with 
   | [] -> []
   | h1::rest_of_holes -> begin 
       (* also need to be shown type hole  *)
-      let hole_scores = init_scorecard players h1.hole_number in 
+      let hole_scores = init_scorecard players h1.hole in 
       hole_scores::game_helper players rest_of_holes
     end
 
 (** required: there must be at least one hole with*)
 let init_game players (course: Course.t) = 
   (* need a getter to get the course holes here  *)
-  let scores = game_helper players course.holes in
+  let scores = game_helper players (get_holes course) in
   let current_hole = Course.start_hole course in
   let frst_up = List.hd players in 
   {roster=players; course=course;scores=scores; current_hole=current_hole;
@@ -140,9 +138,9 @@ let winner_of_hole (game:t) hole =
 (* gets the winning score of all players  *)
 let rec winning_score roster (best:Player.t) = 
   match roster with 
-  | [] -> best.overall_score
+  | [] -> get_player_score best
   | p1::rest_of_roster -> begin 
-      if p1.overall_score < best.overall_score
+      if get_player_score p1 < get_player_score best
       then winning_score rest_of_roster p1 
       else winning_score rest_of_roster best end
 

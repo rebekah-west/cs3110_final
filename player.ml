@@ -128,3 +128,5 @@ let get_player_handicap t =
 
 let get_player_location t = 
   t.location
+
+let get_player_score t = t.overall_score

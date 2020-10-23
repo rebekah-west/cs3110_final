@@ -49,6 +49,8 @@ let start_hole course =
 let num_holes course =
   failwith "unimplemented"
 
+let get_holes course = course.holes
+
 let get_hole course hole_number = 
   let holes = course.holes in 
   holes.(hole_number)

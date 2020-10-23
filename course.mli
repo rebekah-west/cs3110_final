@@ -13,6 +13,8 @@
 (** The abstract type of values representing the course. *)
 type t
 
+type hole
+
 (** The type of hole identifiers. *)
 type hole_number = int
 
@@ -38,6 +40,8 @@ val start_hole : t -> hole_number
 
 (** [num_holes c] is the number of holes in the course [c]. *)
 val num_holes : t -> int
+
+val get_holes: t -> hole list
 
 (** [get_hole_loc h] is the coordinate location of hole [h]. *)
 val get_hole_loc : t -> hole_number -> hole_location
