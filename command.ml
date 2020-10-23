@@ -89,13 +89,6 @@ let rec parse_alignment (degrees : int) =
     Printf.printf "Your alignment cannot be over 90, please enter an integer between -90 and 90. \n" |>  
     fun () -> read_line() |> int_of_string |> parse_alignment 
 
-let create_swing (clb: string) (pow : int) (ang : int) (align : int)= {
-  club = parse_club (clb);
-  power = pow;
-  angle = ang;
-  alignment = align;
-}
-
 let parse_swing () =
   Printf.printf "Which club would you like to use? (Driver, Nine Iron, Eight Iron, Putter, Pitching Wedge, Sand Wedge) \n";
   let club = parse_club (read_line ()) in
