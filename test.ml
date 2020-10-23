@@ -27,12 +27,26 @@ let club_parser_helper
     (expected_output : club) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_club input_club))
 
-(* A helper function to test parse_club by seeing if proper exceptions are
-   thrown at run time*)
-let club_parser_exn_helper (name : string) (input_club : string)
-    (expected_output : exn) : test = 
-  name >:: (fun _ -> assert_raises expected_output 
-               (fun () -> parse_club input_club))
+let angle_parser_helper
+    (name : string)
+    (input_angle : float)
+    (expected_output : angle) : test = 
+  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
+               expected_output (parse_angle input_angle))
+
+let alignment_parser_helper
+    (name : string)
+    (input_alignment : float)
+    (expected_output : alignment) : test = 
+  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
+               expected_output (parse_alignment input_alignment))
+
+let power_parser_helper
+    (name : string)
+    (input_power : float)
+    (expected_output : power) : test = 
+  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
+               expected_output (parse_power input_power))
 
 (* A helper function to test parse_swing by seeing if proper exceptions are
    thrown at run time*)
@@ -135,54 +149,33 @@ let command_tests =
     club_parser_helper "'SAND WEDGE' to a SandWedge club, full
       capitalization" "SAND WEDGE" SandWedge;
 
-    club_parser_exn_helper "Empty string is given -> [Empty] exception is 
-      thrown" "" Empty;
-    club_parser_exn_helper "Mispelled club is given -> [Malformed] exception 
-    is thrown" "Drvier" (Invalid_argument "That is not a club");
+    power_parser_helper "int 50 to power 50" 50 50;
+    power_parser_helper "int 21 to power 21" 21 21;
+    power_parser_helper "int 0 to power 0, edge case" 0 0;
+    power_parser_helper " int 1 to power 1, edge case" 1 1;
+    power_parser_helper "int 99 to power 99" 99 99;
+    power_parser_helper "int 100 to power 100" 100 100;
 
-    (* power_parser_helper "int 50 to power 50" 50 50;
-       power_parser_helper "int 21 to power 21" 21 21;
-       power_parser_helper "int 0 to power 0, edge case" 0 0;
-       power_parser_helper " int 1 to power 1, edge case" 1 1;
-       power_parser_helper "int 99 to power 99" 99 99;
-       power_parser_helper "int 100 to power 100" 100 100;
+    angle_parser_helper "int 45 to angle 45" 45 45;
+    angle_parser_helper "int 21 to angle 21" 21 21;
+    angle_parser_helper "int 0 to angle 0, edge case" 0 0;
+    angle_parser_helper "int 1 to angle 1, edge case" 1 1;
+    angle_parser_helper "int 89 to angle 89, edge case" 89 89;
+    angle_parser_helper "int 90 to angle 90, edge case" 90 90;
 
-       power_parser_exn_helper "ValueOutOfRange] exception is thrown if value 
-       above the acceptable range" 150 ValueOutOfRange;
-       power_parser_exn_helper "[ValueOutOfRange] exception is thrown if value 
-       below the acceptable range" (-50) ValueOutOfRange;
+    alignment_parser_helper "int 5 to alignment 5" 5 5;
+    alignment_parser_helper "int -5 to alignment -5" (-5) (-5);
 
-       angle_parser_helper "int 45 to angle 45" 45 45;
-       angle_parser_helper "int 21 to angle 21" 21 21;
-       angle_parser_helper "int 0 to angle 0, edge case" 0 0;
-       angle_parser_helper "int 1 to angle 1, edge case" 1 1;
-       angle_parser_helper "int 89 to angle 89, edge case" 89 89;
-       angle_parser_helper "int 90 to angle 90, edge case" 90 90;
+    alignment_parser_helper "int 1 to alignment 1, edge case" 1 1;
+    alignment_parser_helper "int -1 to alignment -1, edge case" (-1) (-1);
 
-       angle_parser_exn_helper "ValueOutOfRange] exception thrown for angle 
-       above acceptable range" 150 ValueOutOfRange;
-       angle_parser_exn_helper "ValueOutOfRange] exception thrown for angle 
-       below acceptable range" (-50) ValueOutOfRange;
+    alignment_parser_helper "int 0 to alignment 0, edge case" 0 0;
 
-       alignment_parser_helper "int 5 to alignment 5" 5 5;
-       alignment_parser_helper "int -5 to alignment -5" (-5) (-5);
+    alignment_parser_helper "int 90 to alignment 90, edge case" 90 90;
+    alignment_parser_helper "int -90 to alignment -90, edge case" (-90) (-90);
 
-       alignment_parser_helper "int 1 to alignment 1, edge case" 1 1;
-       alignment_parser_helper "int -1 to alignment -1, edge case" (-1) (-1);
-
-       alignment_parser_helper "int 0 to alignment 0, edge case" 0 0;
-
-       alignment_parser_helper "int 90 to alignment 90, edge case" 90 90;
-       alignment_parser_helper "int -90 to alignment -90, edge case" (-90) (-90);
-
-       alignment_parser_helper "int 89 to alignment 89" 89 89;
-       alignment_parser_helper "int -89 to alignment -89" (-89) (-89);
-
-
-       alignment_parser_exn_helper "[ValueOutOfRange] thrown if a value is 
-       above 90" 110 ValueOutOfRange;
-       alignment_parser_exn_helper "[ValueOutOfRange] thrown if a value is  
-       below -90" (-110) ValueOutOfRange; *)
+    alignment_parser_helper "int 89 to alignment 89" 89 89;
+    alignment_parser_helper "int -89 to alignment -89" (-89) (-89);
   ]
 
 (* make the course t object *)
