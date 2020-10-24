@@ -41,7 +41,7 @@ val start_hole : t -> hole_number
 (** [num_holes c] is the number of holes in the course [c]. *)
 val num_holes : t -> int
 
-val get_holes: t -> hole list
+val get_holes: t -> hole array
 
 (** [get_hole_loc h] is the coordinate location of hole [h]. *)
 val get_hole_loc : t -> hole_number -> hole_location

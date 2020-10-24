@@ -41,7 +41,7 @@ let rec init_scorecard players hole =
       p1_score::init_scorecard rest_of_players hole
     end
 
-let rec game_helper (players: Player.t list) (holes: Course.hole list) = 
+let rec game_helper (players: Player.t array) (holes: Course.hole list) = 
   match holes with 
   | [] -> []
   | h1::rest_of_holes -> begin 
