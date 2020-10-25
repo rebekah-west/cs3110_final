@@ -33,13 +33,15 @@ let current_hole game = game.current_hole
     that hole *)
 let init_hole_score player hole = {
   hole = hole;
-  player=player;
-  hole_score=0; }
+  player = player;
+  hole_score = 0; }
 
-(** [init_scorecard players hole] *)
+(** [init_scorecard players hole] initializes a 0 score for every player
+    on hole [hole] *)
 let rec init_scorecard players hole = 
   failwith "Unimplemented"
 
+(* [game_helper players holes] *)
 let rec game_helper (players: Player.t array) (holes: Course.hole list) = 
   failwith "Unimplemented"
 
@@ -47,13 +49,11 @@ let rec game_helper (players: Player.t array) (holes: Course.hole list) =
 let init_game players (course: Course.t) = 
   failwith "Unimplemented"
 
-(* getter for current hole *)
+
 let current_hole game = game.current_hole
 
-(* getter for holes already played *)
 let played game = game.holes_played
 
-(* getter for the current turn *)
 let current_turn game = game.current_turn
 
 let current_score game = game.scores

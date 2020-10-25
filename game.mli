@@ -60,4 +60,4 @@ val winner_of_game: t -> Player.t
 
 (** [update_location command.t game.t] computes the impact of a swing and 
     returns the game with updated location *)
-(* val update_location : Command.t -> t  *)
+(*val update_location : Command.t -> t -> t *)

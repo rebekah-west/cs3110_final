@@ -45,10 +45,12 @@ type wind = int * float
 
 exception UnknownHole of hole_number
 
+(* [tuple_of_string string] creates a tuple from string [string] *)
 let tuple_of_string string = 
   let lst = String.split_on_char ',' string in
   (int_of_string (List.hd lst), int_of_string (List.nth lst 1))
 
+(* [terrain_of_json j] creates a terrain object from json [j] *)
 let terrain_of_json j =
   let open Yojson.Basic.Util in {
     name = j |> member "name" |> to_string;
@@ -56,7 +58,8 @@ let terrain_of_json j =
     size = j |> member "size" |> to_string;
   }
 
-let holes_of_json j =
+(* [hole_of_json j] creates a hole object from json [j] *)
+let hole_of_json j =
   let open Yojson.Basic.Util in {
     hole_number = j |> member "hole_number" |> to_int;
     par_number = j |> member "par_number" |> to_int;
@@ -68,7 +71,7 @@ let holes_of_json j =
 
 let from_json j =
   let open Yojson.Basic.Util in {
-    holes = j |> member "holes" |> to_list |> Array.of_list |> Array.map holes_of_json;
+    holes = j |> member "holes" |> to_list |> Array.of_list |> Array.map hole_of_json;
     difficulty = j |> member "difficulty" |> to_string;
   }
 
