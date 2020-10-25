@@ -1,19 +1,31 @@
 Install.txt, golf game demo:
 
-Welcome to the demo, the following instructions will allow you to load our code and demo the player initialization and swing functionalities. 
+Welcome to the demo, the following instructions will allow you to load our code 
+and demo the player initialization and swing functionalities. 
 
 1. Download and Unzip all files. This should be done preferably in Vscode. 
 
-2. After unzipping the file, run the “make build” command on the command line in a terminal window within VScode
+2. After unzipping the file, run the “make build” command on the command line 
+in a terminal window within VScode
 
 3. Open top to run Ocaml inside the terminal window
 
 4. Enter  [ #load "str.cma";; ] into utop (do not include brackets). 
 
-5. The first file we are going to demo is player.ml. It allows users to input their player information to be stored in the game. Enter the command [ #use “player.ml”;; ] into utop
+5. The first file we are going to demo is player.ml. It allows users to input 
+their player information to be stored in the game. Enter the command 
+[ #use “player.ml”;; ] into utop
 
-6. Next type [ init_players();;]  into utop. This will begin the prompting for information from the user, please follow along. It will ask for the number of players in the game along with their information. Note that exceptions will be thrown for invalid input and the program will stop. 
+6. Next type [ init_players();;]  into utop. This will begin the prompting for 
+information from the user, please follow along. It will ask for the number of 
+players in the game along with their information. Note that exceptions will be 
+thrown for invalid input and the program will stop. 
 
-7. The next file to demo is command.ml. It allows users to input information regarding their swing on their turn. Enter the command [ #use “command.ml”;; ] into utop
+7. The next file to demo is command.ml. It allows users to input information 
+regarding their swing on their turn. Enter the command [ #use “command.ml”;; ] 
+into utop
 
-8. Enter [ parse_swing();;] into the command line in utop. The program will begin prompting the user for input, please follow along. Note that upon incorrect input, different messages will be displayed depending on the error of the input. 
+8. Enter [ parse_swing();;] into the command line in utop. The program will 
+begin prompting the user for input, please follow along. Note that upon 
+incorrect input, different messages will be displayed depending on the error 
+of the input. 
