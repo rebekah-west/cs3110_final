@@ -20,7 +20,7 @@ play:
 
 
 zip:
-	zip golf.zip *.ml* *.json _tags Makefile
+	zip golf.zip *.ml* *.json _tags Makefile INSTALL.txt .merlin .ocamlinit
 	
 docs: docs-public docs-private
 	
