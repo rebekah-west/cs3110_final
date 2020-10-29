@@ -105,3 +105,23 @@ let parse_swing () =
 
 let get_command command = 
   failwith "Unimplemented"
+
+let get_power t = 
+  t.power |> float_of_int
+
+let get_club t = 
+  t.club
+
+(* AF: [get_club_adjustments clb] returns the adjustment tuple 
+   (power adjustment, accuracy adjustment) based on the input club [clb]
+   given to the function *)
+let get_club_adjustments (clb : club) = 
+  match clb with
+  | Driver -> (1.5, 0.8)
+  | NineIron -> (0.9,1.1)
+  | EightIron -> (0.8,1.2)
+  | Putter -> (0.5,1.3)
+  | PitchingWedge -> (0.7, 1.5)
+  | SandWedge -> (0.8,1.1)
+  | _ -> failwith "cant"
+

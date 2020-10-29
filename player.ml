@@ -1,5 +1,6 @@
 open Yojson.Basic.Util
 open Command
+include Command
 open Game
 open Str
 open Parse
@@ -139,3 +140,17 @@ let get_player_location t =
   t.location
 
 let get_player_score t = t.overall_score
+
+(*command gives a club, a power, an angle, and an alignment*)
+let calculate_location t (swing : Command.t) = 
+  let current_loc = t.location in
+  let acc_mul = t.accuracy_multiplier in  
+  let pow_mul = t.power_multiplier in
+  let clb = get_club swing in
+  let club_pow_adj = fst (get_club_adjustments clb) in
+  let club_acc_adj = snd (get_club_adjustments clb) in
+  let adj_pow = (swing |> get_power) *. pow_mul *. club_pow_adj in
+  let adj_acc = acc_mul *. club_acc_adj in
+  (*find horizontal and vertical speed, time in air from vertical, location 
+    from horizontal and alignment*)
+  failwith "fail" 

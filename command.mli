@@ -98,3 +98,9 @@ val parse_swing : unit -> t
 (* [get_command comm] is the command t contained within [comm] if 
    the result is legal and throws a "Not_Legal" exception otherwise.*)
 val get_command : command -> t
+
+val get_power : t -> float
+
+val get_club : t -> club
+
+val get_club_adjustments : club -> (float * float)
