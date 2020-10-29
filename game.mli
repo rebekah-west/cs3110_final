@@ -52,7 +52,7 @@ val update_turn: t -> t
 
 (** [winner_of_hole gm] returns  the player who won the hole just 
     played, If it is a tie, all players with lowest score listed *)
-val winner_of_hole: t -> Course.hole_number -> hole_score list
+val winner_of_hole: t -> Course.hole_number -> Player.t list 
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
 val winner_of_game: t -> Player.t
