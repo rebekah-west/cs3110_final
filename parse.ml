@@ -2,6 +2,7 @@ open Str
 (*****************************************************)
 (* Implementations of parse and it's functions*)
 (*****************************************************)
+type parsable = string 
 
 let remove_blanks parsbl = 
   parsbl |> Str.global_replace (Str.regexp " ") ""

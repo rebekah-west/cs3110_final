@@ -29,24 +29,21 @@ let club_parser_helper
 
 let angle_parser_helper
     (name : string)
-    (input_angle : float)
+    (input_angle : int)
     (expected_output : Command.angle) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_angle input_angle))
+  name >:: (fun _ -> assert_equal expected_output (parse_angle input_angle))
 
 let alignment_parser_helper
     (name : string)
-    (input_alignment : float)
+    (input : int)
     (expected_output : Command.alignment) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_alignment input_alignment))
+  name >:: (fun _ -> assert_equal expected_output (parse_alignment input))
 
 let power_parser_helper
     (name : string)
-    (input_power : float)
+    (input_power : int)
     (expected_output : Command.power) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (parse_power input_power))
+  name >:: (fun _ -> assert_equal expected_output (parse_power input_power))
 
 (* A helper function to test parse_swing by seeing if proper exceptions are
    thrown at run time*)
@@ -98,6 +95,7 @@ let command_tests =
       "PutTEr" Putter;
     club_parser_helper "'PUTTER' to a Putter club, full capitalization" 
       "PUTTER"  Putter;
+
 
     club_parser_helper "'pitching wedge' to a PitchingWedge club" 
       "pitching wedge" PitchingWedge;
@@ -194,49 +192,45 @@ let course_tests =
 
 let current_hole_test (name : string) (input_game : Game.t)
     (expected_output : Course.hole_number) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (current_hole input_game))
+  name >:: (fun _ -> assert_equal expected_output (current_hole input_game))
 
 let played_test
     (name : string)
     (input_game : Game.t)
-    (expected_output : Course.hole_number list) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (current_hole input_game))
+    (expected_output : Game.hole_score list) : test = 
+  name >:: (fun _ -> assert_equal expected_output (Game.played input_game))
 
 let current_turn_test
     (name : string)
     (input_game : Game.t)
     (expected_output : Player.t) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (current_turn input_game))
+  name >:: (fun _ -> assert_equal expected_output (current_turn input_game))
 
 let current_score_test
     (name : string)
     (input_game : Game.t)
     (expected_output : scorecard) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (current_score input_game))
+  name >:: (fun _ -> assert_equal expected_output (current_score input_game))
 
 let winner_of_hole_test
     (name : string)
     (input_game : Game.t)
-    (expected_output : Player.t) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (winner_of_hole input_game))
+    (input_hole : Course.hole_number )
+    (expected_output : Player.t list) : test = 
+  name >:: (fun _ -> assert_equal expected_output 
+               (winner_of_hole input_game input_hole))
 
 let winner_of_game_test
     (name : string)
     (input_game : Game.t)
     (expected_output : Player.t) : test = 
-  name >:: (fun _ -> assert_equal ~printer:(pp_list pp_string)
-               expected_output (winner_of_game input_game))
+  name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
 
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
 let first_player =
   match test_players with 
   |h :: t -> h
-  |[] -> Empty
+  |[] -> raise Empty
 
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
@@ -256,16 +250,16 @@ let player_name_test (name : string) (input : Player.t) (exp_output : string) :
     assert_equal exp_output (Player.get_player_name input) ~printer:pp_string)
 
 let pl_pow_test (name : string) (input : Player.t) (exp_output : float) : 
-  test = name >:: (fun _ -> assert_equal exp_output 
-                      (Player.get_player_power_multiplier input) ~printer:string_of_float)
+  test = name >:: (fun _ -> assert_equal exp_output ~printer:string_of_float
+                      (Player.get_player_power_multiplier input))
 
 let pl_acc_test (name : string) (input : Player.t) (exp_output : float) : 
-  test = name >:: (fun _ -> assert_equal exp_output 
-                      (Player.get_player_accuracy_multiplier input) ~printer:string_of_float)
+  test = name >:: (fun _ -> assert_equal exp_output ~printer:string_of_float
+                      (Player.get_player_accuracy_multiplier input) )
 
 let pl_handicap_test (name : string) (input : Player.t) (exp_output : int) : 
-  test = name >:: (fun _ -> assert_equal exp_output 
-                      (Player.get_player_handicap input) ~printer:string_of_int)
+  test = name >:: (fun _ -> assert_equal exp_output ~printer:string_of_int
+                      (Player.get_player_handicap input))
 
 let players = Player.read_players(Yojson.Basic.from_file("Players.json"))
 let jenna = List.hd players

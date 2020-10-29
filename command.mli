@@ -23,20 +23,20 @@ type club =
 (** The type [power] represents how hard the golf ball is hit. 
     Requires: Must be an int between 0 and 100
 *)
-type power
+type power = int
 
 (** The type [angle] represents the vertical angle from the ground the ball 
     will travel 
     Requires: Must be an ine between 0 and 90
 *)
-type angle
+type angle = int
 
 (** The type [alignment] represents the offset the player takes from being
     pointed directly at the hole. Negative alignment implies turning left of 
     the hole and positive alignment implies aiming to the right
     Requires: Must be an int between -90 and 90 
 *)
-type alignment
+type alignment = int
 
 
 (** The type [command] *)
