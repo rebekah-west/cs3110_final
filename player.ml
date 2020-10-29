@@ -1,6 +1,8 @@
 open Yojson.Basic.Util
 open Command
 open Game
+open Str
+open Parse
 (*****************************************************)
 (* Implementations of player and it's functions*)
 (*****************************************************)
@@ -56,21 +58,28 @@ type t = {
 
 (* [parse_acc_mult str] returns the accuracy multiplier based on how comfortable
    someone indicates they are with golf
-   Raises: Invalid_argument if the string is not one of the suggested skill levels*)
-let parse_acc_mult = function
+   Raises: None
+*)
+let rec parse_acc_mult (acc : string) = 
+  let parsed = parse acc in 
+  match parsed with 
   | "beginner" -> 0.5
   | "intermediate" -> 1.0
   | "advanced" -> 1.5
-  | _ -> raise (Invalid_argument "You must enter beginner, intermediate, or advanced")
+  | _ -> Printf.printf "You must enter beginner, intermediate, or advanced, please check your spelling and try again. \n"; 
+    parse_acc_mult(read_line())
 
 (* [parse_pow_mult str] returns the power multiplier based on how strong
    someone indicates they are
    Raises: Invalid_argument if the string is not one of the suggested strengths*)
-let parse_pow_mult = function
+let rec parse_pow_mult (pow : string) = 
+  let parsed = parse pow in 
+  match parsed with 
   | "below average" -> 0.5
   | "average" -> 1.0
   | "above average" -> 1.5
-  | _ -> raise (Invalid_argument "You must enter below average, average, or above average")
+  | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
+    parse_pow_mult(read_line())
 
 (* [create_player entry] prompts user for input, parses it, and returns type Player.t *)
 let create_player entry =

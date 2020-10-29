@@ -1,4 +1,5 @@
 open Str
+open Parse
 (*****************************************************)
 (* Implementations of command and it's functions*)
 (*****************************************************)
@@ -29,9 +30,6 @@ type t = {
 type command =
   | Swing of t
   | None
-
-let remove_blanks = Str.global_replace (Str.regexp " ") ""
-let parse string = string |> remove_blanks |> String.lowercase_ascii
 
 (* A recursive helper that either parses a string [clb] to its corresponding 
    club or prompts the user to type another club if they spell it wrong*)

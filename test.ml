@@ -99,7 +99,6 @@ let command_tests =
     club_parser_helper "'PUTTER' to a Putter club, full capitalization" 
       "PUTTER"  Putter;
 
-
     club_parser_helper "'pitching wedge' to a PitchingWedge club" 
       "pitching wedge" PitchingWedge;
     club_parser_helper "'Pitching wedge' to a PitchingWedge club, first word
