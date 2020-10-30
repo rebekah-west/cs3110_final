@@ -106,3 +106,6 @@ let rec winners_roster roster sc =
 (* returns a list of winners  *)
 let winner_of_game game = 
   failwith "Unimplemented"
+
+let play_hole game =
+  failwith "unimplemented"
