@@ -24,7 +24,7 @@ exception InvalidHole
 (** [init_scorecard p c] is the initial state of the scorecard 
     when players p play a game on course c. In this game the players are 
     currently located at hole 1, and they all have scores of 0 *)
-val init_game: Player.t list -> Course.t -> t
+val init_game: Player.t array -> Course.t -> t
 
 (** [current_hole gm] is the identifier of the hole on which the players are
     currently located in game [gm]. *)
