@@ -16,7 +16,7 @@ type hole_score = {
 type scorecard = hole_score list list
 
 type t = {
-  roster: Player.t list;
+  roster: Player.t array;
   course: Course.t;
   current_hole: Course.hole_number;
   current_turn: Player.t;
