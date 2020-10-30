@@ -109,9 +109,6 @@ let init_players () =
   Array.map create_player player_array
 
 
-let read_players j = 
-  failwith "Unimplemented"
-
 (*
 -needs to communicate with command about where the ball lands
 -we need to assume the player is just a point in space

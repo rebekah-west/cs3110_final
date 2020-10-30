@@ -42,7 +42,7 @@ val current_turn: t -> Player.t
 val current_score: t -> scorecard 
 
 (** [game_roster gm] returns the list of players playing the game *)
-val game_roster: t -> Player.t list
+val game_roster: t -> Player.t array
 
 (** [update turn gm] is attempting to update the turn after a player swings. 
     During the first hole, players go in order of lineup. After that, player 
@@ -61,3 +61,8 @@ val winner_of_game: t -> Player.t
 (** [update_location command.t game.t] computes the impact of a swing and 
     returns the game with updated location *)
 (*val update_location : Command.t -> t -> t *)
+
+(** [play_hole t] plays the current hole, including prompting each player to
+    swing, updating their location and score, and changing the current hole
+    to the next one *)
+val play_hole: t -> t

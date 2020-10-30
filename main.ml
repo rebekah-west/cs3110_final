@@ -8,7 +8,7 @@ let play_game f =
   let players = Player.init_players () in
   let game = Game.init_game players course in
   for x=1 to (Course.num_holes course) do
-    failwith "Unimplemented"
+    failwith "unimplemented"
   done;
   Printf.printf "Congratulations! You have completed the course.";
   Printf.printf "The winner is %s" (Player.get_player_name (Game.winner_of_game game));
