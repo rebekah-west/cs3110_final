@@ -52,7 +52,7 @@ val update_turn: t -> t
 
 (** [winner_of_hole gm] returns  the player who won the hole just 
     played, If it is a tie, all players with lowest score listed *)
-val winner_of_hole: t -> Course.hole_number -> Player.t list 
+val winner_of_hole: t -> Course.hole_number -> Player.t array
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
 val winner_of_game: t -> Player.t
@@ -66,3 +66,7 @@ val winner_of_game: t -> Player.t
     swing, updating their location and score, and changing the current hole
     to the next one *)
 val play_hole: t -> t
+
+(** [print_scorecard t] prints the scorecard for all players for a specific 
+    hole into the terminal*)
+val print_scorecard: t -> unit

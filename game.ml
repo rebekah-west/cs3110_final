@@ -13,7 +13,7 @@ type hole_score = {
   hole_score: int;
 }
 
-type scorecard = hole_score list list
+type scorecard = hole_score array array
 
 type t = {
   roster: Player.t array;
@@ -21,7 +21,7 @@ type t = {
   current_hole: Course.hole_number;
   current_turn: Player.t;
   scores: scorecard;
-  holes_played: hole_score list;
+  holes_played: Course.hole_number list;
 }
 
 exception InvalidHole
@@ -31,37 +31,26 @@ let current_hole game = game.current_hole
 
 (** [init_hole_score player hole] initializes a 0 score for that player and
     that hole *)
-let init_hole_score player hole = {
+let init_hole_score hole player = {
   hole = hole;
   player = player;
   hole_score = 0; }
 
 (** [init_scorecard players hole] initializes a 0 score for every player
     on hole [hole] *)
-let rec init_scorecard players hole = 
-  match players with 
-  | [] -> []
-  | p1::rest_of_players -> begin
-      let p1_score = init_hole_score p1 hole in
-      p1_score::init_scorecard rest_of_players hole
-    end
+let rec init_scorecard (players: Player.t array) hole = 
+  Array.map (init_hole_score hole) players 
 
 (* [create_scorecard players holes]  *)
-let rec create_scorecard (players: Player.t list) (holes: Course.hole array) = 
-  let hole_list = Array.to_list holes in 
-  match hole_list with 
-  | [] -> []
-  | h1::rest_of_holes -> begin 
-      (* also need to be shown type hole  *)
-      let hole_scores = init_scorecard players (get_hole_number h1) in 
-      hole_scores::create_scorecard players (Array.of_list rest_of_holes)
-    end
+let rec create_scorecard (players: Player.t array) (course: Course.t) = 
+  let hole_array = (Array.map get_hole_number (get_holes course)) in
+  Array.map (init_scorecard players) hole_array
 
 (** required: there must be at least one hole with*)
-let init_game players (course: Course.t) = 
-  let scores = create_scorecard players (get_holes course) in
+let init_game (players: Player.t array ) (course: Course.t) = 
+  let scores = create_scorecard players course in
   let current_hole = Course.start_hole course in
-  let frst_up = List.hd players in 
+  let frst_up = players.(0) in 
   let first = {
     roster=players; 
     course=course;
@@ -94,43 +83,41 @@ let update_turn game =
 (* 2. make that player the current player  *)
 
 (* gets just a specific hole from the holescore list of one player *)
-let rec grab_hole_from_player (player:Player.t) (scores:hole_score list) 
-    (hole: Course.hole_number) = begin 
-  let is_hole hl = hl.hole == hole in 
-  match scores with 
-  | [] -> raise InvalidHole
-  | s1::rest_of_scores -> 
-    let score_for_hole = List.filter is_hole scores 
-    in List.hd score_for_hole end
+(* let rec grab_hole_from_player (player:Player.t) (scores:hole_score list) 
+    (hole: Course.hole_number) = 
 
-(* get score for one player at one hole from scorecard *)
-let rec player_score (player:Player.t) scorecard hole= 
-  failwith "Unimplemented"
+   (* get score for one player at one hole from scorecard *)
+   let rec player_score (player:Player.t) scorecard hole= 
+   failwith "Unimplemented"
 
-(* get the hole_scores for all players at a specific hole  *)
-let rec scores_for_hole players scorecard hole = 
-  failwith "Unimplemented"
+   (* get the hole_scores for all players at a specific hole  *)
+   let rec scores_for_hole players scorecard hole = 
+   failwith "Unimplemented"
 
-(* get the integer score of the best score for a specific hole  *)
-let rec top_score_of_hole (hole_list: hole_score list) max = 
-  failwith "Unimplemented"
+   (* get the integer score of the best score for a specific hole  *)
+   let rec top_score_of_hole (hole_list: hole_score list) max = 
+   failwith "Unimplemented"
 
-(* returns a list of the winners of the hole given the best score  *)
-let rec get_winners score_list best_score = 
-  failwith "Unimplemented"
+   (* returns a list of the winners of the hole given the best score  *)
+   let rec get_winners score_list best_score = 
+   failwith "Unimplemented" *)
 
-let winner_of_hole (game:t) hole = 
-  failwith "Unimplemented"
+let winner_of_hole (game:t) (hole:Course.hole_number) = 
+  let scorecard = game.scores.(hole) in 
+  let lowest_score = scorecard.(0) in 
+  for x=0 to 
 
-(* gets the winning score of all players  *)
-let rec winning_score roster (best:Player.t) = 
-  failwith "Unimplemented"
+      (* gets the winning score of all players 
+         let rec winning_score roster (best:Player.t) = 
+         failwith "Unimplemented"
 
-(* returns winner or winners of game best on who has best overall 
-   score at end of the game*)
-let rec winners_roster roster sc = 
-  failwith "Unimplemented"
+         (* returns winner or winners of game best on who has best overall 
+         score at end of the game*)
+         let rec winners_roster roster sc = 
+         failwith "Unimplemented" *)
 
-(* returns a list of winners  *)
-let winner_of_game game = 
-  failwith "Unimplemented"
+      (* returns a list of winners  *)
+      let winner_of_game game = 
+        failwith "Unimplemented"
+
+let print_scorecard game = failwith "Unimplemented"
