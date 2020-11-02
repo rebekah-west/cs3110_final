@@ -38,11 +38,11 @@ let init_hole_score hole player = {
 
 (** [init_scorecard players hole] initializes a 0 score for every player
     on hole [hole] *)
-let rec init_scorecard (players: Player.t array) hole = 
+let init_scorecard (players: Player.t array) hole = 
   Array.map (init_hole_score hole) players 
 
 (* [create_scorecard players holes]  *)
-let rec create_scorecard (players: Player.t array) (course: Course.t) = 
+let create_scorecard (players: Player.t array) (course: Course.t) = 
   let hole_array = (Array.map get_hole_number (get_holes course)) in
   Array.map (init_scorecard players) hole_array
 
@@ -105,19 +105,20 @@ let update_turn game =
 let winner_of_hole (game:t) (hole:Course.hole_number) = 
   let scorecard = game.scores.(hole) in 
   let lowest_score = scorecard.(0) in 
-  for x=0 to 
+  Array.fold_left (fun lowest hs -> if hs.hole_score <= lowest_score.hole_score ) 
+    scorecard
 
-      (* gets the winning score of all players 
-         let rec winning_score roster (best:Player.t) = 
-         failwith "Unimplemented"
+(* gets the winning score of all players 
+   let rec winning_score roster (best:Player.t) = 
+   failwith "Unimplemented"
 
-         (* returns winner or winners of game best on who has best overall 
-         score at end of the game*)
-         let rec winners_roster roster sc = 
-         failwith "Unimplemented" *)
+   (* returns winner or winners of game best on who has best overall 
+   score at end of the game*)
+   let rec winners_roster roster sc = 
+   failwith "Unimplemented" *)
 
-      (* returns a list of winners  *)
-      let winner_of_game game = 
-        failwith "Unimplemented"
+(* returns a list of winners  *)
+let winner_of_game game = 
+  failwith "Unimplemented"
 
 let print_scorecard game = failwith "Unimplemented"
