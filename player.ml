@@ -53,7 +53,6 @@ type t = {
   accuracy_multiplier : float;
   handicap : int ; 
   location : (int * int);
-  overall_score : int;
   (*may be helpful based on everyone else's implementations *)
   (* current_hole : int or string ; <- to get hole location of a player
      hole_strokes : int or int list; <- to get score at every hole*)
@@ -67,7 +66,6 @@ let player_from_json j =
     accuracy_multiplier = j |> member "accuracy_multiplier" |> to_float;
     handicap = j |> member "handicap" |> to_int;
     location = (0,0);
-    overall_score = 0;
   }
 
 let read_players j =
@@ -120,13 +118,12 @@ let create_player entry =
     accuracy_multiplier = acc_mult;
     handicap = handicap;
     location = (0, 0);
-    overall_score = 0;
   } in p
 
 let init_players () =
   Printf.printf "How many players will be participating today? Enter an int \n";
   let num_players = int_of_string (read_line ()) in
-  let player_array = Array.make num_players 0 in
+  let player_array = Array.make num_players 0. in
   Array.map create_player player_array
 
 
@@ -156,10 +153,6 @@ let get_player_handicap t =
 
 let get_player_location t = 
   t.location
-
-let get_player_score t = t.overall_score
-
-
 
 (*A helper to get the radian measure from degrees*)
 let rad_from_deg degrees = 
