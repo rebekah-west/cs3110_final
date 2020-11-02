@@ -38,11 +38,11 @@ let init_hole_score hole player = {
 
 (** [init_scorecard players hole] initializes a 0 score for every player
     on hole [hole] *)
-let rec init_scorecard (players: Player.t array) hole = 
+let init_scorecard (players: Player.t array) hole = 
   Array.map (init_hole_score hole) players 
 
 (* [create_scorecard players holes]  *)
-let rec create_scorecard (players: Player.t array) (course: Course.t) = 
+let create_scorecard (players: Player.t array) (course: Course.t) = 
   let hole_array = (Array.map get_hole_number (get_holes course)) in
   Array.map (init_scorecard players) hole_array
 
@@ -59,7 +59,6 @@ let init_game (players: Player.t array ) (course: Course.t) =
     current_turn= frst_up; 
     holes_played=[];
   } in first
-
 
 let current_hole game = game.current_hole
 
@@ -86,27 +85,6 @@ let update_score game =
   game.scores
 
 
-
-
-
-
-(* type hole_score = {
-   hole: Course.hole_number;
-   player: Player.t;
-   hole_score: int;
-   }
-
-   type scorecard = hole_score array array
-
-   type t = {
-   roster: Player.t array;
-   course: Course.t;
-   current_hole: Course.hole_number;
-   current_turn: Player.t;
-   scores: scorecard;
-   holes_played: Course.hole_number list;
-   } *)
-
 let update_turn game = 
   failwith "Unimplemented" 
 
@@ -127,29 +105,70 @@ let update_turn game =
    let rec scores_for_hole players scorecard hole = 
    failwith "Unimplemented"
 
-   (* get the integer score of the best score for a specific hole  *)
-   let rec top_score_of_hole (hole_list: hole_score list) max = 
-   failwith "Unimplemented"
-
    (* returns a list of the winners of the hole given the best score  *)
    let rec get_winners score_list best_score = 
    failwith "Unimplemented" *)
 
-let winner_of_hole (game:t) (hole:Course.hole_number) = 
+(* get the integer score of the best score for a specific hole  *)
+let winning_score game hole = 
   let scorecard = game.scores.(hole) in 
-  let lowest_score = scorecard.(0) in 
-  for x=0 to 3 do
-    failwith "unimplemented"
-  done
+  let lowest_score = scorecard.(0).hole_score in 
+  let winner_array = Array.of_list [lowest_score] in 
+  for i = 0 to Array.length scorecard do 
+    let current_scorecard = scorecard.(i) in 
+    if current_scorecard.hole_score < lowest_score then 
+      let lowest_score = current_scorecard.hole_score
+      in winner_array.(0) <- lowest_score 
+    else 
+      winner_array.(0) <- lowest_score
+  done;
+  winner_array.(0)
+
+let rec winner_add winner_array scorecard low = 
+  if (Array.length scorecard) = 0 then winner_array 
+  else 
+    let current_scorecard = scorecard.(0) in 
+    if current_scorecard.hole_score = low then
+      let add = Array.of_list ([current_scorecard.player]) in 
+      let winners = Array.append winner_array add
+      in let subs = Array.sub scorecard 1 (Array.length scorecard)
+      in winner_add winners subs low
+    else 
+      let subs = Array.sub scorecard 1 (Array.length scorecard)
+      in winner_add winner_array subs low
+
+let winner_of_hole game hole = 
+  let lowest_score= winning_score game hole in 
+  let winner_array = Array.of_list [] in 
+  let scorecard = game.scores.(hole) in 
+  winner_add winner_array scorecard lowest_score
 
 (* gets the winning score of all players 
    let rec winning_score roster (best:Player.t) = 
-   failwith "Unimplemented"
-
-   (* returns winner or winners of game best on who has best overall 
-   score at end of the game*)
-   let rec winners_roster roster sc = 
    failwith "Unimplemented" *)
+(* 
+let sum_scores game player = 
+  let sc = game.scores in 
+  let sums = Array.of_list [0] in 
+  for i = 0 to Array.length sc do 
+  let cur_sc = sc.(i) in 
+    if sc.(i).player = player 
+let update_sc = sums.(0) + sc.(i).hole_score
+in sums.(0) <- update_sc 
+else sums.(0) <- sum.(0) 
+done;
+sums.(0) *)
+
+let winning_score_game game = 
+  (* let roster = game.roster in 
+     let lowest_score = roster.(0).total in 
+     roster *)
+  failwith "Unimplemented"
+
+(* returns winner or winners of game best on who has best overall 
+   score at end of the game*)
+let rec winners_roster roster sc = 
+  failwith "Unimplemented" 
 
 
 (* returns a list of winners  *)

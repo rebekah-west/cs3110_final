@@ -32,7 +32,7 @@ val current_hole: t -> Course.hole_number
 
 (** [played gm] is the list of all the holes of game [gm] the players 
     have already completed*)
-val played: t -> hole_score list
+val played: t -> Course.hole_number list
 
 (** [current_turn gm] is the player who is currently up to swing.  *)
 val current_turn: t -> Player.t 
