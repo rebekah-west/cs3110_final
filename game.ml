@@ -136,23 +136,6 @@ let update_turn game =
 let winner_of_hole (game:t) (hole:Course.hole_number) = 
   let scorecard = game.scores.(hole) in 
   let lowest_score = scorecard.(0) in 
-<<<<<<< HEAD
-  Array.fold_left (fun lowest hs -> if hs.hole_score <= lowest_score.hole_score ) 
-    scorecard
-
-(* gets the winning score of all players 
-   let rec winning_score roster (best:Player.t) = 
-   failwith "Unimplemented"
-
-   (* returns winner or winners of game best on who has best overall 
-   score at end of the game*)
-   let rec winners_roster roster sc = 
-   failwith "Unimplemented" *)
-
-(* returns a list of winners  *)
-let winner_of_game game = 
-  failwith "Unimplemented"
-=======
   for x=0 to 3 do
     failwith "unimplemented"
   done
@@ -175,5 +158,4 @@ let play_hole game =
   failwith "unimplemented"
 
 let print_scorecard game = failwith "Unimplemented"
->>>>>>> cb856b80e7b39e0d7265a49967812c527ce18774
 
