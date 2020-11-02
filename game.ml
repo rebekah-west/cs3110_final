@@ -71,8 +71,39 @@ let current_score game = game.scores
 
 let game_roster game = game.roster
 
+(* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
-  failwith "Unimplemented" 
+  let sc = game.scores.(game.current_hole) in 
+  let current_player = game.current_turn in 
+  for i = 0 to Array.length sc do 
+    if sc.(i).player == current_player
+    then let new_hole_score = {
+        hole = game.current_hole;
+        player = current_player;
+        hole_score = sc.(i).hole_score + 1;
+      } in game.scores.(game.current_hole).(i) <- new_hole_score
+  done
+
+
+
+
+
+(* type hole_score = {
+   hole: Course.hole_number;
+   player: Player.t;
+   hole_score: int;
+   }
+
+   type scorecard = hole_score array array
+
+   type t = {
+   roster: Player.t array;
+   course: Course.t;
+   current_hole: Course.hole_number;
+   current_turn: Player.t;
+   scores: scorecard;
+   holes_played: Course.hole_number list;
+   } *)
 
 let update_turn game = 
   failwith "Unimplemented" 

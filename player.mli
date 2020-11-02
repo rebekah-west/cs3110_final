@@ -41,4 +41,3 @@ val get_player_handicap : t -> int
 
 val get_player_location : t -> int*int
 
-val get_player_score : t -> int
