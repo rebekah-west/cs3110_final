@@ -82,7 +82,9 @@ let update_score game =
         player = current_player;
         hole_score = sc.(i).hole_score + 1;
       } in game.scores.(game.current_hole).(i) <- new_hole_score
-  done
+  done;
+  game.scores
+
 
 
 

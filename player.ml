@@ -188,6 +188,7 @@ let float_of_int_tuple tup =
   let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
   ret 
 
+(* TODO: make it take in only a game since it contains course*)
 (*command gives a club, a power, an angle, and an alignment*)
 let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)= 
   let current_loc = t.location |> float_of_int_tuple  in
