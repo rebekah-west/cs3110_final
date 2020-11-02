@@ -112,6 +112,12 @@ let get_power t =
 let get_club t = 
   t.club
 
+let get_angle t = 
+  t.angle |> float_of_int
+
+let get_align t = 
+  t.alignment |> float_of_int
+
 (* AF: [get_club_adjustments clb] returns the adjustment tuple 
    (power adjustment, accuracy adjustment) based on the input club [clb]
    given to the function *)
@@ -123,5 +129,4 @@ let get_club_adjustments (clb : club) =
   | Putter -> (0.5,1.3)
   | PitchingWedge -> (0.7, 1.5)
   | SandWedge -> (0.8,1.1)
-  | _ -> failwith "cant"
 

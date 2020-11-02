@@ -227,10 +227,7 @@ let winner_of_game_test
   name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
 
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
-let first_player =
-  match test_players with 
-  |h :: t -> h
-  |[] -> raise Empty
+let first_player = test_players.(0)
 
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
@@ -261,9 +258,8 @@ let pl_handicap_test (name : string) (input : Player.t) (exp_output : int) :
   test = name >:: (fun _ -> assert_equal exp_output ~printer:string_of_int
                       (Player.get_player_handicap input))
 
-let players = Player.read_players(Yojson.Basic.from_file("Players.json"))
-let jenna = List.hd players
-let gian = List.nth players 2
+let jenna = test_players.(0)
+let gian = test_players.(1)
 
 let player_tests =
   [
