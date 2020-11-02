@@ -27,10 +27,8 @@ type handicap = int
      Raises: Invalid_argument if input is not one of the accepted forms *)
 val init_players : unit -> t array
 
-(** [read_players j] produces the list of players enumerated in 
-    json j which contains player information. 
-    Requires: j is a valid json representation of a list of players*)
-val read_players : Yojson.Basic.t -> t list
+(** [read_players j] produces an array of players based on input from a json *)
+val read_players : Yojson.Basic.t -> t array
 
 (** *)
 val get_player_name : t -> string

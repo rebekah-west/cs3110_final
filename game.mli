@@ -24,7 +24,7 @@ exception InvalidHole
 (** [init_scorecard p c] is the initial state of the scorecard 
     when players p play a game on course c. In this game the players are 
     currently located at hole 1, and they all have scores of 0 *)
-val init_game: Player.t list -> Course.t -> t
+val init_game: Player.t array -> Course.t -> t
 
 (** [current_hole gm] is the identifier of the hole on which the players are
     currently located in game [gm]. *)
@@ -42,7 +42,7 @@ val current_turn: t -> Player.t
 val current_score: t -> scorecard 
 
 (** [game_roster gm] returns the list of players playing the game *)
-val game_roster: t -> Player.t list
+val game_roster: t -> Player.t array
 
 (** [update turn gm] is attempting to update the turn after a player swings. 
     During the first hole, players go in order of lineup. After that, player 
@@ -52,7 +52,7 @@ val update_turn: t -> t
 
 (** [winner_of_hole gm] returns  the player who won the hole just 
     played, If it is a tie, all players with lowest score listed *)
-val winner_of_hole: t -> Course.hole_number -> Player.t list 
+val winner_of_hole: t -> Course.hole_number -> Player.t array
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
 val winner_of_game: t -> Player.t
@@ -61,3 +61,12 @@ val winner_of_game: t -> Player.t
 (** [update_location command.t game.t] computes the impact of a swing and 
     returns the game with updated location *)
 (*val update_location : Command.t -> t -> t *)
+
+(** [play_hole t] plays the current hole, including prompting each player to
+    swing, updating their location and score, and changing the current hole
+    to the next one *)
+val play_hole: t -> t
+
+(** [print_scorecard t] prints the scorecard for all players for a specific 
+    hole into the terminal*)
+val print_scorecard: t -> unit

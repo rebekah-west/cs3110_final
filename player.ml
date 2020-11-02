@@ -59,6 +59,25 @@ type t = {
      hole_strokes : int or int list; <- to get score at every hole*)
 }
 
+(** [player_from_json j] reads in the player from the json *)
+let player_from_json j =
+  let open Yojson.Basic.Util in {
+    player_name = j |> member "name" |> to_string;
+    power_multiplier = j |> member "power_multiplier" |> to_float;
+    accuracy_multiplier = j |> member "accuracy_multiplier" |> to_float;
+    handicap = j |> member "handicap" |> to_int;
+    location = (0,0);
+    overall_score = 0;
+  }
+
+let read_players j =
+  let open Yojson.Basic.Util in 
+  let players =  
+    j |> member "Players" |> to_list 
+    |> Array.of_list |> Array.map player_from_json
+  in players
+
+
 (* [parse_acc_mult str] returns the accuracy multiplier based on how comfortable
    someone indicates they are with golf
    Raises: None
@@ -110,9 +129,6 @@ let init_players () =
   let player_array = Array.make num_players 0 in
   Array.map create_player player_array
 
-
-let read_players j = 
-  failwith "Unimplemented"
 
 (*
 -needs to communicate with command about where the ball lands
