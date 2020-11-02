@@ -1,9 +1,11 @@
 open Yojson.Basic.Util
 open Command
-include Command
 open Game
+open Course 
 open Str
 open Parse
+open Float
+open Random
 (*****************************************************)
 (* Implementations of player and it's functions*)
 (*****************************************************)
@@ -141,9 +143,45 @@ let get_player_location t =
 
 let get_player_score t = t.overall_score
 
+
+
+(*A helper to get the radian measure from degrees*)
+let rad_from_deg degrees = 
+  degrees /. 180.0 *. pi
+
+(* AF: Converting a swing to a "speed" in meters per second for calculation with 
+   gravity given a players power multiplier after personal and club adjustments
+   and given the power they selected to use. We represent 100 power as hitting 
+   a ball with an initial velocity of 50 m/s. This is because if a player sets 
+   an "optimal" angle, given no multipliers this would lead to a 279 yard drive
+   which we find to be a reasonable average. 
+   Example: power_to_ms 30 converts to an initial velocity of 15 m/s*)
+let power_to_ms adj_pow =
+  adj_pow /. 2.0 
+
+(* Use the Box-Muller transformation to generate a single standard 
+   normal random variable 
+   https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform *)
+let random_gaussian () =
+  sqrt (-2. *. log (Random.float 1.)) *. cos (2. *. pi *. Random.float 1.)
+
+(* A helper that gets the initial direction a player is facing (towards
+   the hole) before any adjustment. *)
+let get_direction (p1 : float*float) (p2 : float*float) = 
+  let x1 = fst p1 in
+  let x2 = fst p2 in
+  let y1 = snd p1 in 
+  let y2 = snd p2 in 
+  ( (y2 -. y1) /. (x2 -. x1) )|> atan 
+
+(* A helper that converts (int*int) to (float*float) *)
+let float_of_int_tuple tup = 
+  let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
+  ret 
+
 (*command gives a club, a power, an angle, and an alignment*)
-let calculate_location t (swing : Command.t) = 
-  let current_loc = t.location in
+let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)= 
+  let current_loc = t.location |> float_of_int_tuple  in
   let acc_mul = t.accuracy_multiplier in  
   let pow_mul = t.power_multiplier in
   let clb = get_club swing in
@@ -151,6 +189,47 @@ let calculate_location t (swing : Command.t) =
   let club_acc_adj = snd (get_club_adjustments clb) in
   let adj_pow = (swing |> get_power) *. pow_mul *. club_pow_adj in
   let adj_acc = acc_mul *. club_acc_adj in
-  (*find horizontal and vertical speed, time in air from vertical, location 
-    from horizontal and alignment*)
-  failwith "fail" 
+  let chosen_ang = get_angle swing in 
+  (* Adjust angle based on accuracy, the adjustment is a Normal Random 
+     variable with mean 0 and standard deviation equal to the inverse of the
+     accuracy multiplier. The adjustment is in degrees, it will never result in
+     the angle being less than 0 or greater than 90.
+     Example: Accuracy multiplier of .5 means 2 times as much of a standard 
+     deviation as an Accuracy multiplier of 1. Accuracy multiplier of 1.25 
+     means .8 times as much standard deviation.*)
+  let adj_ang chosen_ang adj_acc = 
+    let calced = chosen_ang *. random_gaussian() /. adj_acc in
+    match calced < 0. with
+    |true -> 0.
+    |false -> begin 
+        match calced > 90. with 
+        |true -> 90.
+        |false -> calced
+      end in 
+  let final_ang = adj_ang chosen_ang adj_acc in 
+  let chosen_align = get_align swing in 
+  (* Adjust alignment the same way except divide by 5 as alignment is much more 
+     sensitive to change *)
+  let adj_align chosen_align adj_acc = 
+    let calced2 = chosen_align *. random_gaussian() /. adj_acc /. 5. in
+    match calced2 < 90. with
+    |false -> 90.
+    |true -> begin 
+        match calced2 > (-90.) with 
+        |false -> (-90.)
+        |true -> calced2
+      end in 
+  let final_align = adj_align chosen_align adj_acc in 
+  let theta = rad_from_deg (final_ang) in 
+  let init_velocity = power_to_ms adj_pow in
+  let horiz_speed = (cos theta) *. init_velocity in
+  let vert_speed = (sin theta) *. init_velocity in
+  let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
+  let horiz_dist = time_in_air *. horiz_speed in
+  let hol_loc = get_hole_loc cours (current_hole gam) |> float_of_int_tuple  in 
+  let direction = get_direction current_loc hol_loc +. final_align in 
+  let new_loc = 
+    ( (direction |> rad_from_deg |> cos) *. horiz_dist +. fst current_loc ,  
+      ( (direction |> rad_from_deg |> sin) *. horiz_dist +. snd current_loc) ) 
+  in 
+  new_loc

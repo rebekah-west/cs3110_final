@@ -101,6 +101,10 @@ val get_command : command -> t
 
 val get_power : t -> float
 
+val get_angle : t -> float 
+
 val get_club : t -> club
+
+val get_align : t -> float
 
 val get_club_adjustments : club -> (float * float)
