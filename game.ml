@@ -144,18 +144,18 @@ let winner_of_hole game hole =
 (* gets the winning score of all players 
    let rec winning_score roster (best:Player.t) = 
    failwith "Unimplemented" *)
-(* 
+
 let sum_scores game player = 
   let sc = game.scores in 
   let sums = Array.of_list [0] in 
   for i = 0 to Array.length sc do 
-  let cur_sc = sc.(i) in 
+    let cur_sc = sc.(i) in 
     if sc.(i).player = player 
 let update_sc = sums.(0) + sc.(i).hole_score
 in sums.(0) <- update_sc 
 else sums.(0) <- sum.(0) 
 done;
-sums.(0) *)
+sums.(0)
 
 let winning_score_game game = 
   (* let roster = game.roster in 
@@ -167,7 +167,6 @@ let winning_score_game game =
    score at end of the game*)
 let rec winners_roster roster sc = 
   failwith "Unimplemented" 
-
 
 (* returns a list of winners  *)
 let winner_of_game game = 
