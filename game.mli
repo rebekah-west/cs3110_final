@@ -21,6 +21,9 @@ type hole_score
 (* exception if the hole is not a valid representation *)
 exception InvalidHole
 
+(*the exception if the score is not the actual score of a player in the game *)
+exception InvalidScore
+
 (** [init_scorecard p c] is the initial state of the scorecard 
     when players p play a game on course c. In this game the players are 
     currently located at hole 1, and they all have scores of 0 *)

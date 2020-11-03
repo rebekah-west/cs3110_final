@@ -25,6 +25,7 @@ type t = {
 }
 
 exception InvalidHole
+exception InvalidScore
 
 (** [current_hole game] returns the hole currently being played *)
 let current_hole game = game.current_hole
@@ -141,36 +142,41 @@ let winner_of_hole game hole =
   let scorecard = game.scores.(hole) in 
   winner_add winner_array scorecard lowest_score
 
-(* gets the winning score of all players 
-   let rec winning_score roster (best:Player.t) = 
-   failwith "Unimplemented" *)
-
 let sum_scores game player = 
   let sc = game.scores in 
   let sums = Array.of_list [0] in 
   for i = 0 to Array.length sc do 
-    let cur_sc = sc.(i) in 
-    if sc.(i).player = player 
-let update_sc = sums.(0) + sc.(i).hole_score
-in sums.(0) <- update_sc 
-else sums.(0) <- sum.(0) 
-done;
-sums.(0)
+    let sc_per_hole = sc.(i) in 
+    for j = 0 to Array.length sc_per_hole do 
+      let cur_sc = sc_per_hole.(j) in
+      if cur_sc.player = player then
+        let update_sc = sums.(0) + cur_sc.hole_score
+        in sums.(0) <- update_sc 
+      else sums.(0) <- sums.(0) 
+    done;
+  done;
+  sums.(0)
 
-let winning_score_game game = 
-  (* let roster = game.roster in 
-     let lowest_score = roster.(0).total in 
-     roster *)
-  failwith "Unimplemented"
+(* returns an array of all the current total scores of the player *)
+let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
 
-(* returns winner or winners of game best on who has best overall 
-   score at end of the game*)
-let rec winners_roster roster sc = 
-  failwith "Unimplemented" 
+let winning_score_game score_lst= List.fold_left max 0 score_lst
+
 
 (* returns a list of winners  *)
 let winner_of_game game = 
-  failwith "Unimplemented"
+  (* let last_hole = Array.length game.scores -1 in *)
+  let scores = scores_list game game.roster in 
+  let winning_score = winning_score_game scores in 
+  let winner_inds_unfiltered = List.mapi 
+      (fun i elem -> if elem = winning_score then i else -1) scores in
+  let winner_inds = Array.of_list (List.filter (fun x -> x > -1) 
+                                     winner_inds_unfiltered) in 
+  let winner_arr =Array.make (Array.length winner_inds) game.roster.(0) in 
+  for i = 0 to Array.length(winner_inds) do 
+    winner_arr.(i) <- game.roster.(i)
+  done;
+  winner_arr
 
 let play_hole game =
   failwith "unimplemented"
