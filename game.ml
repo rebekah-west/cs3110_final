@@ -162,7 +162,6 @@ let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
 
 let winning_score_game score_lst= List.fold_left max 0 score_lst
 
-
 (* returns a list of winners  *)
 let winner_of_game game = 
   (* let last_hole = Array.length game.scores -1 in *)

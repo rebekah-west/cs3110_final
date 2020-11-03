@@ -58,7 +58,7 @@ val update_turn: t -> t
 val winner_of_hole: t -> Course.hole_number -> Player.t array
 
 (** [winner_of_game gm] returns the player who won the game of golf *)
-val winner_of_game: t -> Player.t
+val winner_of_game: t -> Player.t array
 
 
 (** [update_location command.t game.t] computes the impact of a swing and 
