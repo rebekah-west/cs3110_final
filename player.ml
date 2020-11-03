@@ -4,8 +4,8 @@ open Game
 open Course 
 open Str
 open Parse
-open Float
 open Random
+
 (*****************************************************)
 (* Implementations of player and it's functions*)
 (*****************************************************)
@@ -70,9 +70,9 @@ let player_from_json j =
 
 let read_players j =
   let open Yojson.Basic.Util in 
-  let players =  
+  let players = 
     j |> member "Players" |> to_list 
-    |> Array.of_list |> Array.map player_from_json
+    |> Array.of_list |>  Array.map player_from_json
   in players
 
 
@@ -154,6 +154,7 @@ let get_player_handicap t =
 let get_player_location t = 
   t.location
 
+open Float
 (*A helper to get the radian measure from degrees*)
 let rad_from_deg degrees = 
   degrees /. 180.0 *. pi

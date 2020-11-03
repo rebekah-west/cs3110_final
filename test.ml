@@ -197,7 +197,7 @@ let current_hole_test (name : string) (input_game : Game.t)
 let played_test
     (name : string)
     (input_game : Game.t)
-    (expected_output : Game.hole_score list) : test = 
+    (expected_output : Course.hole_number list) : test = 
   name >:: (fun _ -> assert_equal expected_output (Game.played input_game))
 
 let current_turn_test
@@ -216,7 +216,7 @@ let winner_of_hole_test
     (name : string)
     (input_game : Game.t)
     (input_hole : Course.hole_number )
-    (expected_output : Player.t list) : test = 
+    (expected_output : Player.t array) : test = 
   name >:: (fun _ -> assert_equal expected_output 
                (winner_of_hole input_game input_hole))
 
