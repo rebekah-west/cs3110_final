@@ -84,29 +84,22 @@ let update_score game =
       } in game.scores.(game.current_hole).(i) <- new_hole_score
   done
 
-let update_turn game = 
-  failwith "Unimplemented" 
 
-(* 1. if same hole: iterate over players to see who is furthest away from 
-   hole  *)
-(* if different hole, players should tee-off in order of who won last round *)
-(* 2. make that player the current player  *)
-
-(* gets just a specific hole from the holescore list of one player *)
-(* let rec grab_hole_from_player (player:Player.t) (scores:hole_score list) 
-    (hole: Course.hole_number) = 
-
-   (* get score for one player at one hole from scorecard *)
-   let rec player_score (player:Player.t) scorecard hole= 
-   failwith "Unimplemented"
-
-   (* get the hole_scores for all players at a specific hole  *)
-   let rec scores_for_hole players scorecard hole = 
-   failwith "Unimplemented"
-
-   (* returns a list of the winners of the hole given the best score  *)
-   let rec get_winners score_list best_score = 
-   failwith "Unimplemented" *)
+let update_turn game (hole:Course.hole) = 
+  let next_player = Array.make 1 game.roster.(0) in 
+  let next_dist = Array.make 1 (get_distance (get_player_location 
+                                                next_player.(0)) 
+                                  (get_hole_loc game.course 
+                                     (get_hole_number hole))) in 
+  for i = 0 to Array.length game.roster do 
+    let cur_player = game.roster.(i) in 
+    let cur_dist = get_distance (get_player_location cur_player) 
+        (get_hole_loc game.course (get_hole_number hole)) in 
+    if cur_dist > next_dist.(0) then 
+      next_dist.(0) <- cur_dist;
+    next_player.(0) <- cur_player
+  done;
+  next_player.(0)
 
 (* get the integer score of the best score for a specific hole  *)
 let winning_score game hole = 

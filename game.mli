@@ -51,7 +51,7 @@ val game_roster: t -> Player.t array
     During the first hole, players go in order of lineup. After that, player 
     furthest from hole is up. At the start of any other hole, the player with
     honors, who won the last hole, wins *)
-val update_turn: t -> t
+val update_turn: t -> Course.hole -> Player.t
 
 (** [winner_of_hole gm] returns  the player who won the hole just 
     played, If it is a tie, all players with lowest score listed *)

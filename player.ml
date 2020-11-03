@@ -243,3 +243,8 @@ let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)=
       ( (direction |> rad_from_deg |> sin) *. horiz_dist +. snd current_loc) ) 
   in 
   new_loc
+
+let get_distance hole_loc player_loc = 
+  let a = ((fst hole_loc - fst player_loc) * (fst hole_loc - fst player_loc)) + 
+          ((snd hole_loc - snd player_loc) * (snd hole_loc - snd player_loc)) 
+  in  1/ (a * a)
