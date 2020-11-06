@@ -202,7 +202,7 @@ let get_direction (p1 : float*float) (p2 : float*float) =
 
 (* TODO: make it take in only a game since it contains course*)
 (*command gives a club, a power, an angle, and an alignment*)
-let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)= 
+let calculate_location t (swing : Command.t)( hol_num : int )(cours : Course.t)= 
   let current_loc = t.location in
   let acc_mul = t.accuracy_multiplier in  
   let pow_mul = t.power_multiplier in
@@ -248,7 +248,7 @@ let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)=
   let vert_speed = (sin theta) *. init_velocity in
   let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
   let horiz_dist = time_in_air *. horiz_speed in
-  let hol_loc = get_hole_loc cours (current_hole gam) in 
+  let hol_loc = get_hole_loc cours hol_num in 
   let direction = get_direction current_loc hol_loc +. final_align in 
   let new_loc = 
     ( (direction |> rad_from_deg |> cos) *. horiz_dist +. fst current_loc ,  
