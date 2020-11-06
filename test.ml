@@ -154,40 +154,56 @@ let command_tests =
 
 (* make the course t object *)
 let robert_trent = Course.from_json (Yojson.Basic.from_file "RobertTrent.json")
+let pebble = Course.from_json (Yojson.Basic.from_file "PebbleBeach.json")
 
 (* course testing helper functions  *)
-let start_hole_test (name: string) (course:Course.t) (output:Course.hole_number) = 
-  name >:: (fun _ -> assert_equal output (start_hole course))
-
+let start_hole_test (name: string) (course:Course.t) (output:Course.hole_number) 
+  = name >:: (fun _ -> assert_equal output (start_hole course))
 let num_holes_test (name: string) (course:Course.t) (output:int) = 
   name >:: (fun _ -> assert_equal output (num_holes course))
-
+let holes_array_test (name: string) (course:Course.t) (num_holes:int) = 
+  name >:: (fun _ -> assert_equal num_holes (Array.length (get_holes course)))
+let hole_loc_test (name: string) (course:Course.t) (hole:Course.hole_number) 
+    (output : Course.hole_location)
+  = name >:: (fun _ -> assert_equal output (get_hole_loc course hole))
+let par_test (name: string) (course:Course.t) (hole:Course.hole_number) 
+    (output : int)
+  = name >:: (fun _ -> assert_equal output (get_par course hole))
 let difficulty_test (name: string) (course:Course.t) (output:string) = 
   name >:: (fun _ -> assert_equal output (difficulty course))
-
 let description_test (name: string) (course:Course.t) (num:Course.hole_number) 
     (output:string) = 
   name >:: (fun _ -> assert_equal output (description course num))
-
-let description_exceptions_test (name: string) (course:Course.t) (num:Course.hole_number) 
-    (output:exn) = 
+let description_exceptions_test 
+    (name: string) (course:Course.t) (num:Course.hole_number) (output:exn) = 
   name >:: (fun _ -> assert_raises output (fun _ ->  description course num))
 
 (* course test suite *)
 let course_tests =
   [
     start_hole_test "Robert Trent start hole" robert_trent 1;
-    num_holes_test "Robert Trent num_holes" robert_trent 2;
+    num_holes_test "Robert Trent num_holes is 2" robert_trent 2;
+    num_holes_test "Pebble Beach num_holes is 3" pebble 3;
+    hole_loc_test "Robert Trent hole 1 at 230,45" robert_trent 1 (230,45); 
+    hole_loc_test "Pebble Beach hole 1 located at 430,45" pebble 1 (430,45); 
+    hole_loc_test "Pebble Beach hole 3 located at 530,65" pebble 3 (530,65); 
+    holes_array_test "Pebble has 3 holes" pebble 3;
+    holes_array_test "Trent has 2 holes" robert_trent 2;
+    par_test "Trent hole 1 has par 3" robert_trent 1 3;
+    par_test "Trent hole 2 has par 4" robert_trent 2 4;
+    par_test "Pebble hole 1 has par 5" pebble 1 5;
     difficulty_test "Robert Trend difficulty" robert_trent "easy";
+    difficulty_test "Pebble Beach difficulty is hard" pebble "hard";
     description_test "Robert Trend hole 1 desc" robert_trent 1 
       "Welcome to Robert Trent. Enjoy golfing today. The hole has a lake to the southwest.";
     description_test "Robert Trend hole 2 desc" robert_trent 2 
       "This hole is a long drive. Get ready to swing!";
+    description_test "Pebble hole 2 desc" pebble 2 
+      "Avoid the ocean on this beautiful hole!";
     description_exceptions_test "Robert Trent not there" robert_trent
       76 (UnknownHole 76);
     (* can i even test wind?? not really i think? *)
     (* test that wind is an int *)
-
   ]
 
 let current_hole_test (name : string) (input_game : Game.t)
@@ -223,7 +239,7 @@ let winner_of_hole_test
 let winner_of_game_test
     (name : string)
     (input_game : Game.t)
-    (expected_output : Player.t) : test = 
+    (expected_output : Player.t array) : test = 
   name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
 
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
@@ -258,6 +274,11 @@ let pl_handicap_test (name : string) (input : Player.t) (exp_output : int) :
   test = name >:: (fun _ -> assert_equal exp_output ~printer:string_of_int
                       (Player.get_player_handicap input))
 
+let player_location_test 
+    (name : string) (input : Player.t) (exp_output : int*int) : 
+  test = name >:: (fun _ -> assert_equal exp_output
+                      (Player.get_player_location input))
+
 let jenna = test_players.(0)
 let gian = test_players.(1)
 
@@ -271,6 +292,8 @@ let player_tests =
     pl_acc_test "Gian has 0.9 accuracy" gian 0.9;
     pl_handicap_test "Jenna has -5 handicap" jenna (-5);
     pl_handicap_test "Gian has 20 handicap" gian 20;
+    player_location_test "Gian starts at 0,0" gian (0,0);
+    player_location_test "Jenna starts at 0,0" jenna (0,0);
   ]
 
 let suite =
