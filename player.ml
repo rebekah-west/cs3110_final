@@ -160,11 +160,6 @@ let float_of_int_tuple tup =
   let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
   ret 
 
-(* let get_distance hole_loc player_loc = 
-   let a = ((fst hole_loc - fst player_loc) * (fst hole_loc - fst player_loc)) + 
-          ((snd hole_loc - snd player_loc) * (snd hole_loc - snd player_loc)) 
-   in  1/ (a * a) *)
-
 (* returns the distance from hole *)
 let dist_from_hole hole_loc player_loc = 
   sqrt( pow (fst hole_loc -. fst player_loc) 2. 
