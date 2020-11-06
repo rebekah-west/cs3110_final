@@ -1,6 +1,5 @@
 open Yojson.Basic.Util
 open Command
-open Game
 open Course 
 open Str
 open Parse
