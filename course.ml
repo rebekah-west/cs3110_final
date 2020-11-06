@@ -88,7 +88,10 @@ let num_holes course = Array.length course.holes
 
 let get_holes course = course.holes
 
-let get_hole hole_array hole_number = hole_array.(hole_number)
+let get_hole hole_array hole_number = 
+  if not (hole_number <= Array.length hole_array) 
+  then raise (UnknownHole (hole_number))
+  else hole_array.(hole_number-1)
 
 let get_hole_loc course hole_number =
   let hole = get_hole course.holes hole_number in 
