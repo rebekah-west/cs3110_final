@@ -25,6 +25,7 @@ type t = {
 }
 
 exception InvalidHole
+exception InvalidScore
 
 (** [current_hole game] returns the hole currently being played *)
 let current_hole game = game.current_hole
@@ -85,29 +86,22 @@ let update_score game =
   game.scores
 
 
-let update_turn game = 
-  failwith "Unimplemented" 
 
-(* 1. if same hole: iterate over players to see who is furthest away from 
-   hole  *)
-(* if different hole, players should tee-off in order of who won last round *)
-(* 2. make that player the current player  *)
-
-(* gets just a specific hole from the holescore list of one player *)
-(* let rec grab_hole_from_player (player:Player.t) (scores:hole_score list) 
-    (hole: Course.hole_number) = 
-
-   (* get score for one player at one hole from scorecard *)
-   let rec player_score (player:Player.t) scorecard hole= 
-   failwith "Unimplemented"
-
-   (* get the hole_scores for all players at a specific hole  *)
-   let rec scores_for_hole players scorecard hole = 
-   failwith "Unimplemented"
-
-   (* returns a list of the winners of the hole given the best score  *)
-   let rec get_winners score_list best_score = 
-   failwith "Unimplemented" *)
+let update_turn game (hole:Course.hole) = 
+  let next_player = Array.make 1 game.roster.(0) in 
+  let next_dist = Array.make 1 (get_distance (get_player_location 
+                                                next_player.(0)) 
+                                  (get_hole_loc game.course 
+                                     (get_hole_number hole))) in 
+  for i = 0 to Array.length game.roster do 
+    let cur_player = game.roster.(i) in 
+    let cur_dist = get_distance (get_player_location cur_player) 
+        (get_hole_loc game.course (get_hole_number hole)) in 
+    if cur_dist > next_dist.(0) then 
+      next_dist.(0) <- cur_dist;
+    next_player.(0) <- cur_player
+  done;
+  next_player.(0)
 
 (* get the integer score of the best score for a specific hole  *)
 let winning_score game hole = 
@@ -143,37 +137,40 @@ let winner_of_hole game hole =
   let scorecard = game.scores.(hole) in 
   winner_add winner_array scorecard lowest_score
 
-(* gets the winning score of all players 
-   let rec winning_score roster (best:Player.t) = 
-   failwith "Unimplemented" *)
-(* 
 let sum_scores game player = 
   let sc = game.scores in 
   let sums = Array.of_list [0] in 
   for i = 0 to Array.length sc do 
-  let cur_sc = sc.(i) in 
-    if sc.(i).player = player 
-let update_sc = sums.(0) + sc.(i).hole_score
-in sums.(0) <- update_sc 
-else sums.(0) <- sum.(0) 
-done;
-sums.(0) *)
+    let sc_per_hole = sc.(i) in 
+    for j = 0 to Array.length sc_per_hole do 
+      let cur_sc = sc_per_hole.(j) in
+      if cur_sc.player = player then
+        let update_sc = sums.(0) + cur_sc.hole_score
+        in sums.(0) <- update_sc 
+      else sums.(0) <- sums.(0) 
+    done;
+  done;
+  sums.(0)
 
-let winning_score_game game = 
-  (* let roster = game.roster in 
-     let lowest_score = roster.(0).total in 
-     roster *)
-  failwith "Unimplemented"
+(* returns an array of all the current total scores of the player *)
+let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
 
-(* returns winner or winners of game best on who has best overall 
-   score at end of the game*)
-let rec winners_roster roster sc = 
-  failwith "Unimplemented" 
-
+let winning_score_game score_lst= List.fold_left max 0 score_lst
 
 (* returns a list of winners  *)
 let winner_of_game game = 
-  failwith "Unimplemented"
+  (* let last_hole = Array.length game.scores -1 in *)
+  let scores = scores_list game game.roster in 
+  let winning_score = winning_score_game scores in 
+  let winner_inds_unfiltered = List.mapi 
+      (fun i elem -> if elem = winning_score then i else -1) scores in
+  let winner_inds = Array.of_list (List.filter (fun x -> x > -1) 
+                                     winner_inds_unfiltered) in 
+  let winner_arr =Array.make (Array.length winner_inds) game.roster.(0) in 
+  for i = 0 to Array.length(winner_inds) do 
+    winner_arr.(i) <- game.roster.(i)
+  done;
+  winner_arr
 
 let play_hole game =
   failwith "unimplemented"
