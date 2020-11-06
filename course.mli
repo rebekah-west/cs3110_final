@@ -19,7 +19,7 @@ type hole
 type hole_number = int
 
 (** *)
-type hole_location = int * int
+type hole_location = float * float
 
 (** The type of terrain obstacles *)
 type terrain

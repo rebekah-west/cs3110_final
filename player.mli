@@ -39,6 +39,8 @@ val get_player_accuracy_multiplier : t -> float
 
 val get_player_handicap : t -> int 
 
-val get_player_location : t -> int*int
+val get_player_location : t -> float*float
 
-val get_distance: int*int -> int*int -> int
+(* val get_distance: int*int -> int*int -> int *)
+
+val dist_from_hole : float * float -> float * float -> float

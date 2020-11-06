@@ -91,15 +91,15 @@ let update_score game =
 
 let update_turn game (hole:Course.hole) = 
   let next_player = Array.make 1 game.roster.(0) in 
-  let next_dist = Array.make 1 (get_distance (get_player_location 
-                                                next_player.(0)) 
+  let next_dist = Array.make 1 (dist_from_hole (get_player_location 
+                                                  next_player.(0)) 
                                   (get_hole_loc game.course 
                                      (get_hole_number hole))) in 
   for i = 0 to Array.length game.roster do 
     let cur_player = game.roster.(i) in 
-    let cur_dist = get_distance (get_player_location cur_player) 
+    let cur_dist = dist_from_hole (get_player_location cur_player) 
         (get_hole_loc game.course (get_hole_number hole)) in 
-    if cur_dist > next_dist.(0) && next_dist.(0) != 0 then 
+    if cur_dist > next_dist.(0) && next_dist.(0) != 0. then 
       next_dist.(0) <- cur_dist;
     next_player.(0) <- cur_player
   done;

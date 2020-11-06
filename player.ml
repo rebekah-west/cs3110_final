@@ -52,7 +52,7 @@ type t = {
   power_multiplier : float;
   accuracy_multiplier : float;
   handicap : int ; 
-  location : (int * int);
+  location : (float * float);
   (*may be helpful based on everyone else's implementations *)
   (* current_hole : int or string ; <- to get hole location of a player
      hole_strokes : int or int list; <- to get score at every hole*)
@@ -65,7 +65,7 @@ let player_from_json j =
     power_multiplier = j |> member "power_multiplier" |> to_float;
     accuracy_multiplier = j |> member "accuracy_multiplier" |> to_float;
     handicap = j |> member "handicap" |> to_int;
-    location = (0,0);
+    location = (0.,0.);
   }
 
 let read_players j =
@@ -117,7 +117,7 @@ let create_player entry =
     power_multiplier = pow_mult; 
     accuracy_multiplier = acc_mult;
     handicap = handicap;
-    location = (0, 0);
+    location = (0., 0.);
   } in p
 
 let init_players () =
@@ -161,10 +161,10 @@ let float_of_int_tuple tup =
   let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
   ret 
 
-let get_distance hole_loc player_loc = 
-  let a = ((fst hole_loc - fst player_loc) * (fst hole_loc - fst player_loc)) + 
+(* let get_distance hole_loc player_loc = 
+   let a = ((fst hole_loc - fst player_loc) * (fst hole_loc - fst player_loc)) + 
           ((snd hole_loc - snd player_loc) * (snd hole_loc - snd player_loc)) 
-  in  1/ (a * a)
+   in  1/ (a * a) *)
 
 (* returns the distance from hole *)
 let dist_from_hole hole_loc player_loc = 
@@ -203,7 +203,7 @@ let get_direction (p1 : float*float) (p2 : float*float) =
 (* TODO: make it take in only a game since it contains course*)
 (*command gives a club, a power, an angle, and an alignment*)
 let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)= 
-  let current_loc = t.location |> float_of_int_tuple  in
+  let current_loc = t.location in
   let acc_mul = t.accuracy_multiplier in  
   let pow_mul = t.power_multiplier in
   let clb = get_club swing in
@@ -248,7 +248,7 @@ let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)=
   let vert_speed = (sin theta) *. init_velocity in
   let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
   let horiz_dist = time_in_air *. horiz_speed in
-  let hol_loc = get_hole_loc cours (current_hole gam) |> float_of_int_tuple  in 
+  let hol_loc = get_hole_loc cours (current_hole gam) in 
   let direction = get_direction current_loc hol_loc +. final_align in 
   let new_loc = 
     ( (direction |> rad_from_deg |> cos) *. horiz_dist +. fst current_loc ,  

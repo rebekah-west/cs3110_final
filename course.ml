@@ -2,7 +2,7 @@
     RI:
 *)
 type hole_number = int
-type hole_location = int * int
+type hole_location = float * float
 
 
 (** AF:
@@ -50,6 +50,12 @@ let tuple_of_string string =
   let lst = String.split_on_char ',' string in
   (int_of_string (List.hd lst), int_of_string (List.nth lst 1))
 
+(* [float_of_int_tuple tup] converts an integer tuple to a float tuple. *)
+let float_of_int_tuple tup = 
+  let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
+  ret 
+
+
 (* [terrain_of_json j] creates a terrain object from json [j] *)
 let terrain_of_json j =
   let open Yojson.Basic.Util in {
@@ -63,7 +69,8 @@ let hole_of_json j =
   let open Yojson.Basic.Util in {
     hole_number = j |> member "hole_number" |> to_int;
     par_number = j |> member "par_number" |> to_int;
-    hole_location = j |> member "hole_location" |> to_string |> tuple_of_string;
+    hole_location = j |> member "hole_location" |> to_string |> tuple_of_string 
+                    |> float_of_int_tuple;
     description = j |> member "description" |> to_string;
     terrain = j |> member "terrain" |> to_list |> List.map terrain_of_json;
   }
