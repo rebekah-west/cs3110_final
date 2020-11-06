@@ -88,7 +88,6 @@ let update_score game =
   game.scores
 
 
-
 let update_turn game (hole:Course.hole) = 
   let next_player = Array.make 1 game.roster.(0) in 
   let next_dist = 
@@ -138,6 +137,7 @@ let winner_of_hole game hole =
   let scorecard = game.scores.(hole) in 
   winner_add winner_array scorecard lowest_score
 
+(* returns the total score for a player for all holes played so far  *)
 let sum_scores game player = 
   let sc = game.scores in 
   let sums = Array.of_list [0] in 
@@ -156,7 +156,7 @@ let sum_scores game player =
 (* returns an array of all the current total scores of the player *)
 let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
 
-let winning_score_game score_lst= List.fold_left max 0 score_lst
+let winning_score_game score_lst= List.fold_left min 180 score_lst
 
 (* returns a list of winners  *)
 let winner_of_game game = 
@@ -176,5 +176,5 @@ let winner_of_game game =
 let play_hole game =
   failwith "unimplemented"
 
-let print_scorecard game = failwith "Unimplemented"
+let print_scorecard (game:t) = failwith "Unimplemented"
 
