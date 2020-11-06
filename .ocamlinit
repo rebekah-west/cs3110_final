@@ -1,6 +1,7 @@
 #require "ounit2";;
 #require "yojson";;
 #require "ANSITerminal";;
+#require "Str";;
 #directory "_build";;
 #load "command.cmo";;
 #load "course.cmo";;
