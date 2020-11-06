@@ -155,6 +155,22 @@ let get_player_location t =
   t.location
 
 open Float
+
+(* A helper that converts (int*int) to (float*float) *)
+let float_of_int_tuple tup = 
+  let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
+  ret 
+
+let get_distance hole_loc player_loc = 
+  let a = ((fst hole_loc - fst player_loc) * (fst hole_loc - fst player_loc)) + 
+          ((snd hole_loc - snd player_loc) * (snd hole_loc - snd player_loc)) 
+  in  1/ (a * a)
+
+(* returns the distance from hole *)
+let dist_from_hole hole_loc player_loc = 
+  sqrt( pow (fst hole_loc -. fst player_loc) 2. 
+        +. pow (snd hole_loc -. snd player_loc) 2. )
+
 (*A helper to get the radian measure from degrees*)
 let rad_from_deg degrees = 
   degrees /. 180.0 *. pi
@@ -183,11 +199,6 @@ let get_direction (p1 : float*float) (p2 : float*float) =
   let y1 = snd p1 in 
   let y2 = snd p2 in 
   ( (y2 -. y1) /. (x2 -. x1) )|> atan 
-
-(* A helper that converts (int*int) to (float*float) *)
-let float_of_int_tuple tup = 
-  let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
-  ret 
 
 (* TODO: make it take in only a game since it contains course*)
 (*command gives a club, a power, an angle, and an alignment*)
@@ -243,9 +254,10 @@ let calculate_location t (swing : Command.t) (gam : Game.t) (cours : Course.t)=
     ( (direction |> rad_from_deg |> cos) *. horiz_dist +. fst current_loc ,  
       ( (direction |> rad_from_deg |> sin) *. horiz_dist +. snd current_loc) ) 
   in 
-  new_loc
+  if dist_from_hole hol_loc new_loc < 1.0 then 
+    hol_loc else new_loc
 
-let get_distance hole_loc player_loc = 
-  let a = ((fst hole_loc - fst player_loc) * (fst hole_loc - fst player_loc)) + 
-          ((snd hole_loc - snd player_loc) * (snd hole_loc - snd player_loc)) 
-  in  1/ (a * a)
+
+
+
+

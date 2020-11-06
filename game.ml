@@ -63,6 +63,8 @@ let init_game (players: Player.t array ) (course: Course.t) =
 
 let current_hole game = game.current_hole
 
+let current_course game = game.course
+
 let played game = game.holes_played
 
 let current_turn game = game.current_turn
@@ -97,7 +99,7 @@ let update_turn game (hole:Course.hole) =
     let cur_player = game.roster.(i) in 
     let cur_dist = get_distance (get_player_location cur_player) 
         (get_hole_loc game.course (get_hole_number hole)) in 
-    if cur_dist > next_dist.(0) then 
+    if cur_dist > next_dist.(0) && next_dist.(0) != 0 then 
       next_dist.(0) <- cur_dist;
     next_player.(0) <- cur_player
   done;

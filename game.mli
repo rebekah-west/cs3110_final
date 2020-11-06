@@ -47,6 +47,9 @@ val current_score: t -> scorecard
 (** [game_roster gm] returns the list of players playing the game *)
 val game_roster: t -> Player.t array
 
+(** [current_course gm] returns the course being played on *)
+val current_course : t -> Course.t
+
 (** [update turn gm] is attempting to update the turn after a player swings. 
     During the first hole, players go in order of lineup. After that, player 
     furthest from hole is up. At the start of any other hole, the player with
