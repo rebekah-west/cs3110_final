@@ -184,9 +184,9 @@ let course_tests =
     start_hole_test "Robert Trent start hole" robert_trent 1;
     num_holes_test "Robert Trent num_holes is 2" robert_trent 2;
     num_holes_test "Pebble Beach num_holes is 3" pebble 3;
-    hole_loc_test "Robert Trent hole 1 at 230,45" robert_trent 1 (230,45); 
-    hole_loc_test "Pebble Beach hole 1 located at 430,45" pebble 1 (430,45); 
-    hole_loc_test "Pebble Beach hole 3 located at 530,65" pebble 3 (530,65); 
+    hole_loc_test "Robert Trent hole 1 at 230,45" robert_trent 1 (230.,45.); 
+    hole_loc_test "Pebble Beach hole 1 located at 430,45" pebble 1 (430.,45.); 
+    hole_loc_test "Pebble Beach hole 3 located at 530,65" pebble 3 (530.,65.); 
     holes_array_test "Pebble has 3 holes" pebble 3;
     holes_array_test "Trent has 2 holes" robert_trent 2;
     par_test "Trent hole 1 has par 3" robert_trent 1 3;
@@ -275,7 +275,7 @@ let pl_handicap_test (name : string) (input : Player.t) (exp_output : int) :
                       (Player.get_player_handicap input))
 
 let player_location_test 
-    (name : string) (input : Player.t) (exp_output : int*int) : 
+    (name : string) (input : Player.t) (exp_output : float*float) : 
   test = name >:: (fun _ -> assert_equal exp_output
                       (Player.get_player_location input))
 
@@ -292,8 +292,8 @@ let player_tests =
     pl_acc_test "Gian has 0.9 accuracy" gian 0.9;
     pl_handicap_test "Jenna has -5 handicap" jenna (-5);
     pl_handicap_test "Gian has 20 handicap" gian 20;
-    player_location_test "Gian starts at 0,0" gian (0,0);
-    player_location_test "Jenna starts at 0,0" jenna (0,0);
+    player_location_test "Gian starts at 0,0" gian (0.,0.);
+    player_location_test "Jenna starts at 0,0" jenna (0.,0.);
   ]
 
 let suite =
