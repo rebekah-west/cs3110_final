@@ -3,6 +3,7 @@ open Command
 open Course
 open Game
 open Player
+open Str
 
 (** [pp_string s] pretty-prints string [s]. *)
 let pp_string s = "\"" ^ s ^ "\""
