@@ -60,7 +60,7 @@ type t = {
 (** [player_from_json j] reads in the player from the json *)
 let player_from_json j =
   let open Yojson.Basic.Util in {
-    player_name = j |> member "name" |> to_string;
+    player_name = j |> member "Name" |> to_string;
     power_multiplier = j |> member "power_multiplier" |> to_float;
     accuracy_multiplier = j |> member "accuracy_multiplier" |> to_float;
     handicap = j |> member "handicap" |> to_int;
