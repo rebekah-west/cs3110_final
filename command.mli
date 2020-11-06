@@ -99,12 +99,18 @@ val parse_swing : unit -> t
    the result is legal and throws a "Not_Legal" exception otherwise.*)
 val get_command : command -> t
 
+(** [get_power t] returns the power associated with swing [t] *)
 val get_power : t -> float
 
+(** [get_angle t] returns the angle associated with swing [t] *)
 val get_angle : t -> float 
 
+(** [get_club t] returns the club associated with swing [t] *)
 val get_club : t -> club
 
+(** [get_align t] returns the alignment associated with swing [t] *)
 val get_align : t -> float
 
+(* [get_club_adjustments clb] returns the adjustment tuple 
+   (power adjustment, accuracy adjustment) based on the input club [clb] *)
 val get_club_adjustments : club -> (float * float)

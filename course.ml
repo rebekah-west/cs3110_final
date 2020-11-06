@@ -87,6 +87,10 @@ let get_hole_loc course hole_number =
   let hole = get_hole course.holes hole_number in 
   hole.hole_location
 
+let get_par course hole_number =  
+  let hole = get_hole course.holes hole_number in 
+  hole.par_number
+
 let difficulty course = course.difficulty
 
 let description course hole_number =

@@ -2,9 +2,9 @@
   "holes": [
     {
       "hole_number": 1,
-      "par_number": 3,
-      "hole_location": "230,45",
-      "description": "Welcome to Robert Trent. Enjoy golfing today. The hole has a lake to the southwest.",
+      "par_number": 5,
+      "hole_location": "430,45",
+      "description": "Welcome to Pebble Beach.",
       "terrain": [
         {
           "name": "tree",
@@ -25,7 +25,30 @@
     },
     {
       "hole_number": 2,
-      "par_number": 4,
+      "par_number": 5,
+      "hole_location": "480,430",
+      "description": "Avoid the ocean on this beautiful hole!",
+      "terrain": [
+        {
+          "name": "tree",
+          "location": "4,7",
+          "size": "small"
+        },
+        {
+          "name": "tree",
+          "location": "6,7",
+          "size": "small"
+        },
+        {
+          "name": "lake",
+          "location": "60,30",
+          "size": "large"
+        }
+      ]
+    },
+    {
+      "hole_number": 3,
+      "par_number": 10,
       "hole_location": "530,65",
       "description": "This hole is a long drive. Get ready to swing!",
       "terrain": [
@@ -47,5 +70,5 @@
       ]
     }
   ],
-  "difficulty": "easy"
+  "difficulty": "hard"
 }
