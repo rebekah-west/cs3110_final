@@ -41,6 +41,11 @@ val get_player_handicap : t -> int
 
 val get_player_location : t -> float*float
 
+val update_player_location: t -> float*float -> t
+
 (* val get_distance: int*int -> int*int -> int *)
 
 val dist_from_hole : float * float -> float * float -> float
+
+val calculate_location: t -> Command.t -> Course.hole_number -> 
+  Course.t -> Course.hole_location

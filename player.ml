@@ -148,6 +148,16 @@ let get_player_handicap t = t.handicap
 
 let get_player_location t = t.location
 
+let update_player_location p new_loc= 
+  let p = {
+    player_name = p.player_name; 
+    power_multiplier = p.power_multiplier; 
+    accuracy_multiplier = p.accuracy_multiplier ;
+    handicap = p.handicap;
+    location = new_loc;
+  } in p
+
+
 open Float
 
 (* A helper that converts (int*int) to (float*float) *)
@@ -191,7 +201,8 @@ let get_direction (p1 : float*float) (p2 : float*float) =
 
 (* TODO: make it take in only a game since it contains course*)
 (*command gives a club, a power, an angle, and an alignment*)
-let calculate_location t (swing : Command.t)( hol_num : int )(cours : Course.t)= 
+let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
+    (cours : Course.t)= 
   let current_loc = t.location in
   let acc_mul = t.accuracy_multiplier in  
   let pow_mul = t.power_multiplier in

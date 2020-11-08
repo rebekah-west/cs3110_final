@@ -44,6 +44,10 @@ val num_holes : t -> int
 (** [get_holes c] returns an array of holes in course [c] *)
 val get_holes: t -> hole array
 
+(** [get_hole c hole_num] returns the hole that corresponds to a 
+    specific hole number *)
+val get_hole: t -> hole_number -> hole
+
 (** [get_hole_loc h] is the coordinate location of hole [h]. 
     Raises: UnknownHole h if h is not a hole number in course [t]*)
 val get_hole_loc : t -> hole_number -> hole_location

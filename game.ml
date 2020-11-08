@@ -1,6 +1,8 @@
 
 open Course
 open Player
+open Command
+open Str
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
@@ -35,7 +37,7 @@ let current_hole game = game.current_hole
 let init_hole_score hole player = {
   hole = hole;
   player = player;
-  hole_score = 0; }
+  hole_score = 0 - get_player_handicap player; }
 
 (** [init_scorecard players hole] initializes a 0 score for every player
     on hole [hole] *)
@@ -173,8 +175,59 @@ let winner_of_game game =
   done;
   winner_arr
 
-let play_hole game =
-  failwith "unimplemented"
+(** [updated_rostr roster p] takes in a roster and the new player to update
+    with and returns that updated roster*)
+let update_roster roster player = 
+  for i = 0 to Array.length roster do
+    if get_player_name roster.(i) = get_player_name player then 
+      roster.(i) <- player 
+  done;
+  roster
+
+(** [play_one_swing_of_hole g] takes in the current game and iterates the game
+    to its newest version, returning the updated game*)
+let play_one_swing_of_hole game =
+  let command = parse_swing () in 
+  let new_loc = calculate_location game.current_turn command 
+      game.current_hole game.course in 
+  let updated_player = update_player_location game.current_turn new_loc in 
+  let updated_roster = update_roster game.roster updated_player in
+  {
+    roster = updated_roster; 
+    course = game.course;
+    scores = update_score game; 
+    current_hole = game.current_hole;
+    current_turn = update_turn game (get_hole game.course game.current_hole); 
+    holes_played =game.holes_played;
+  } 
+
+(** [someone_still_playing roster] *)
+let rec someone_still_playing roster = 
+  match Array.to_list roster with 
+  | [] -> false
+  | h::t -> if get_player_location h != (0., 0.) 
+    then true else someone_still_playing (Array.of_list t)
+
+(** [switch_holes g] updates the game to a the new game when it is time to 
+    switch holes*)
+let switch_holes game = 
+  let update_ind = game.current_hole in
+  let course_arr = get_holes game.course in 
+  let new_hole = course_arr.(update_ind) in
+  { roster = game.roster; 
+    course = game.course;
+    scores = game.scores; 
+    current_hole = get_hole_number new_hole;
+    current_turn = game.current_turn; 
+    holes_played = game.holes_played@[game.current_hole]; } 
+
+let play_hole game = failwith "Unimplemented"
+(* while someone_still_playing game.roster do 
+   let game = play_one_swing_of_hole game
+
+   done;
+   switch_holes game *)
+
 
 let print_scorecard (game:t) = failwith "Unimplemented"
 

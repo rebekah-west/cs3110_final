@@ -86,7 +86,7 @@ val parse_angle : int -> angle
 *)
 val parse_alignment : int -> alignment
 
-(** [parse_input] prompts the users for various inputs (which club they want
+(** [parse_swing] prompts the users for various inputs (which club they want
     to use, how much power they want to swing with, the vertical angle, and the 
     alignment) and creates a type t for the program to use going forward 
     Examples:

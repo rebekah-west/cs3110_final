@@ -10,9 +10,9 @@ let pp_string s = "\"" ^ s ^ "\""
 
 (** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
 let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
-
 (** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
     to pretty-print each element of [lst]. *)
+
 let pp_list pp_elt lst =
   let pp_elts lst =
     let rec loop n acc = function
@@ -169,8 +169,7 @@ let holes_array_test (name: string) (course:Course.t) (num_holes:int) =
   name >:: (fun _ -> assert_equal num_holes (Array.length (get_holes course)))
 let hole_loc_test (name: string) (course:Course.t) (hole:Course.hole_number) 
     (output : Course.hole_location)
-  = name >:: (fun _ -> assert_equal ~printer:pp_tup
-                 output (get_hole_loc course hole))
+  = name >:: (fun _ -> assert_equal output (get_hole_loc course hole))
 let par_test (name: string) (course:Course.t) (hole:Course.hole_number) 
     (output : int)
   = name >:: (fun _ -> assert_equal output (get_par course hole))
