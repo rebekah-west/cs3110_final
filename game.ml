@@ -221,13 +221,10 @@ let switch_holes game =
     current_turn = game.current_turn; 
     holes_played = game.holes_played@[game.current_hole]; } 
 
-let play_hole game = failwith "Unimplemented"
-(* while someone_still_playing game.roster do 
-   let game = play_one_swing_of_hole game
-
-   done;
-   switch_holes game *)
-
+let rec play_hole game = 
+  if someone_still_playing game.roster 
+  then play_hole (play_one_swing_of_hole game)
+  else switch_holes game
 
 let print_scorecard (game:t) = failwith "Unimplemented"
 
