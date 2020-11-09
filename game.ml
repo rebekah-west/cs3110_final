@@ -1,4 +1,3 @@
-
 open Course
 open Player
 open Command
@@ -79,7 +78,7 @@ let game_roster game = game.roster
 let update_score game = 
   let sc = game.scores.(game.current_hole) in 
   let current_player = game.current_turn in 
-  for i = 0 to Array.length sc do 
+  for i = 0 to (Array.length sc)-1 do 
     if sc.(i).player == current_player
     then let new_hole_score = {
         hole = game.current_hole;
@@ -94,7 +93,7 @@ let update_turn game (hole:Course.hole) =
   let next_dist = 
     Array.make 1 (dist_from_hole (get_player_location next_player.(0)) 
                     (get_hole_loc game.course (get_hole_number hole))) in 
-  for i = 0 to Array.length game.roster do 
+  for i = 0 to (Array.length game.roster)-1 do 
     let cur_player = game.roster.(i) in 
     let cur_dist = dist_from_hole (get_player_location cur_player) 
         (get_hole_loc game.course (get_hole_number hole)) in 
@@ -109,7 +108,7 @@ let winning_score game hole =
   let scorecard = game.scores.(hole) in 
   let lowest_score = scorecard.(0).hole_score in 
   let winner_array = Array.of_list [lowest_score] in 
-  for i = 0 to Array.length scorecard do 
+  for i = 0 to (Array.length scorecard)-1 do 
     let current_scorecard = scorecard.(i) in 
     if current_scorecard.hole_score < lowest_score then 
       let lowest_score = current_scorecard.hole_score
@@ -142,9 +141,9 @@ let winner_of_hole game hole =
 let sum_scores game player = 
   let sc = game.scores in 
   let sums = Array.of_list [0] in 
-  for i = 0 to Array.length sc do 
+  for i = 0 to (Array.length sc)-1 do 
     let sc_per_hole = sc.(i) in 
-    for j = 0 to Array.length sc_per_hole do 
+    for j = 0 to (Array.length sc_per_hole)-1 do 
       let cur_sc = sc_per_hole.(j) in
       if cur_sc.player = player then
         let update_sc = sums.(0) + cur_sc.hole_score
@@ -169,7 +168,7 @@ let winner_of_game game =
   let winner_inds = Array.of_list (List.filter (fun x -> x > -1) 
                                      winner_inds_unfiltered) in 
   let winner_arr =Array.make (Array.length winner_inds) game.roster.(0) in 
-  for i = 0 to Array.length(winner_inds) do 
+  for i = 0 to (Array.length(winner_inds))-1 do 
     winner_arr.(i) <- game.roster.(i)
   done;
   winner_arr
@@ -197,7 +196,7 @@ let winner_of_game2 game =
 (** [updated_rostr roster p] takes in a roster and the new player to update
     with and returns that updated roster*)
 let update_roster roster player = 
-  for i = 0 to Array.length roster do
+  for i = 0 to (Array.length roster)-1 do
     if get_player_name roster.(i) = get_player_name player then 
       roster.(i) <- player 
   done;
@@ -225,7 +224,7 @@ let play_one_swing_of_hole game =
 let get_player_score p game = 
   let hole_sc = game.scores.(game.current_hole) in 
   let score = ref [] in 
-  for i =0 to Array.length hole_sc do 
+  for i =0 to (Array.length hole_sc)-1 do 
     if hole_sc.(i).player == p
     then score := hole_sc.(i).hole_score :: !score
   done;
@@ -262,4 +261,3 @@ let rec play_hole game =
   else switch_holes game
 
 let print_scorecard (game:t) = failwith "Unimplemented"
-
