@@ -283,8 +283,20 @@ let player_location_test
   test = name >:: (fun _ -> assert_equal exp_output
                       (Player.get_player_location input))
 
+let dist_from_hole_test
+    (name : string) (player_loc : float * float ) (hole_loc : float * float ) 
+    (exp_output : float) : test = 
+  name >:: (fun _ -> assert_equal true 
+               ( (exp_output -.(Player.dist_from_hole player_loc hole_loc)) 
+                 < (0.001)) )
+
 let jenna = test_players.(0)
 let gian = test_players.(2)
+
+(*"Robert Trent hole 1 at 230,45"*)
+let rt_hole1 = get_hole_loc robert_trent 1
+(*"Pebble Beach hole 1 located at 430,45"*)
+let pb_hole1 = get_hole_loc pebble 1 
 
 let player_tests =
   [
@@ -298,6 +310,8 @@ let player_tests =
     pl_handicap_test "Gian has 20 handicap" gian 20;
     player_location_test "Gian starts at 0,0" gian (0.,0.);
     player_location_test "Jenna starts at 0,0" jenna (0.,0.);
+    dist_from_hole_test "Hole 1 robert trent" (0.,0.) (230.,45.) 234.361;
+    dist_from_hole_test "Hole 1 pebble beach" (0.,0.) (430.,45.) 432.348;
   ]
 
 let suite =
