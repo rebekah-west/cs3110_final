@@ -190,6 +190,37 @@ let power_to_ms adj_pow =
 let random_gaussian () =
   sqrt (-2. *. log (Random.float 1.)) *. cos (2. *. pi *. Random.float 1.)
 
+(* Adjust angle based on a player's accuracy multiplier [adj_acc] and their
+   chosen angle to hit the ball [chosen_ang], the adjustment is a Normal Random 
+   variable with mean 0 and standard deviation equal to the inverse of the
+   accuracy multiplier. The adjustment is in degrees, it will never result in
+   the angle being less than 0 or greater than 90.
+   Example: Accuracy multiplier of .5 means 2 times as much of a standard 
+   deviation as an Accuracy multiplier of 1. Accuracy multiplier of 1.25 
+   means .8 times as much standard deviation.*)
+let adj_ang chosen_ang adj_acc = 
+  let calced = chosen_ang *. random_gaussian() /. adj_acc in
+  match calced < 0. with
+  |true -> 0.
+  |false -> begin 
+      match calced > 90. with 
+      |true -> 90.
+      |false -> calced
+    end 
+
+(* Adjust alignment takes in the player's chosen alisgnment [chosen_align] and 
+   the calculcated accuracy multiplier from player information [adj_acc] and 
+   returnsthe the final adjusted alignment in degrees *)
+let adj_align chosen_align adj_acc = 
+  let calced2 = chosen_align *. random_gaussian() /. adj_acc /. 5. in
+  match calced2 < 90. with
+  |false -> 90.
+  |true -> begin 
+      match calced2 > (-90.) with 
+      |false -> (-90.)
+      |true -> calced2
+    end
+
 (* A helper that gets the initial direction a player is facing (towards
    the hole) before any adjustment. *)
 let get_direction (p1 : float*float) (p2 : float*float) = 
@@ -199,8 +230,6 @@ let get_direction (p1 : float*float) (p2 : float*float) =
   let y2 = snd p2 in 
   ( (y2 -. y1) /. (x2 -. x1) )|> atan 
 
-(* TODO: make it take in only a game since it contains course*)
-(*command gives a club, a power, an angle, and an alignment*)
 let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
     (cours : Course.t)= 
   let current_loc = t.location in
@@ -212,35 +241,8 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   let adj_pow = (swing |> get_power) *. pow_mul *. club_pow_adj in
   let adj_acc = acc_mul *. club_acc_adj in
   let chosen_ang = get_angle swing in 
-  (* Adjust angle based on accuracy, the adjustment is a Normal Random 
-     variable with mean 0 and standard deviation equal to the inverse of the
-     accuracy multiplier. The adjustment is in degrees, it will never result in
-     the angle being less than 0 or greater than 90.
-     Example: Accuracy multiplier of .5 means 2 times as much of a standard 
-     deviation as an Accuracy multiplier of 1. Accuracy multiplier of 1.25 
-     means .8 times as much standard deviation.*)
-  let adj_ang chosen_ang adj_acc = 
-    let calced = chosen_ang *. random_gaussian() /. adj_acc in
-    match calced < 0. with
-    |true -> 0.
-    |false -> begin 
-        match calced > 90. with 
-        |true -> 90.
-        |false -> calced
-      end in 
   let final_ang = adj_ang chosen_ang adj_acc in 
   let chosen_align = get_align swing in 
-  (* Adjust alignment the same way except divide by 5 as alignment is much more 
-     sensitive to change *)
-  let adj_align chosen_align adj_acc = 
-    let calced2 = chosen_align *. random_gaussian() /. adj_acc /. 5. in
-    match calced2 < 90. with
-    |false -> 90.
-    |true -> begin 
-        match calced2 > (-90.) with 
-        |false -> (-90.)
-        |true -> calced2
-      end in 
   let final_align = adj_align chosen_align adj_acc in 
   let theta = rad_from_deg (final_ang) in 
   let init_velocity = power_to_ms adj_pow in
