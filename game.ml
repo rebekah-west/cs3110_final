@@ -89,7 +89,6 @@ let update_score game =
   done;
   game.scores
 
-
 let update_turn game (hole:Course.hole) = 
   let next_player = Array.make 1 game.roster.(0) in 
   let next_dist = 
@@ -221,6 +220,7 @@ let switch_holes game =
     current_turn = game.current_turn; 
     holes_played = game.holes_played@[game.current_hole]; } 
 
+(* plays a hole to completion *)
 let rec play_hole game = 
   if someone_still_playing game.roster 
   then play_hole (play_one_swing_of_hole game)

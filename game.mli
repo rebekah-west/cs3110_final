@@ -50,23 +50,27 @@ val game_roster: t -> Player.t array
 (** [current_course gm] returns the course being played on *)
 val current_course : t -> Course.t
 
+(** [update_score gm] takes a game and returns the updated scorecard
+    for when a player takes a swing *)
+val update_score: t -> scorecard
+
 (** [update turn gm] is attempting to update the turn after a player swings. 
     During the first hole, players go in order of lineup. After that, player 
     furthest from hole is up. At the start of any other hole, the player with
     honors, who won the last hole, wins *)
 val update_turn: t -> Course.hole -> Player.t
 
-(** [winner_of_hole gm] returns  the player who won the hole just 
+(** [winner_of_hole gm] returns the player who won the hole just 
     played, If it is a tie, all players with lowest score listed *)
 val winner_of_hole: t -> Course.hole_number -> Player.t array
 
-(** [winner_of_game gm] returns the player who won the game of golf *)
+(** [winner_of_game gm] returns the player or players 
+    who won the game of golf *)
 val winner_of_game: t -> Player.t array
 
-
-(** [update_location command.t game.t] computes the impact of a swing and 
-    returns the game with updated location *)
-(*val update_location : Command.t -> t -> t *)
+(** [update_roster r p] takes in the game roster and the new updated 
+    player that should be updated in the roster*)
+val update_roster: Player.t array -> t -> Player.t array
 
 (** [play_hole t] plays the current hole, including prompting each player to
     swing, updating their location and score, and changing the current hole
