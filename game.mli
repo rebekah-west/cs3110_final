@@ -72,7 +72,7 @@ val winner_of_game: t -> Player.t array
 
 (** [update_roster r p] takes in the game roster and the new updated 
     player that should be updated in the roster*)
-val update_roster: Player.t array -> t -> Player.t array
+val update_roster: Player.t array -> Player.t -> Player.t array
 
 (** [play_hole t] plays the current hole, including prompting each player to
     swing, updating their location and score, and changing the current hole
