@@ -226,6 +226,13 @@ let current_turn_test
     (expected_output : Player.t) : test = 
   name >:: (fun _ -> assert_equal expected_output (current_turn input_game))
 
+let current_turn_valid_player
+    (name : string)
+    (input_game : Game.t)
+    (players : Player.t array) : test = 
+  name >:: (fun _ -> assert_equal true 
+               (Array.mem (current_turn input_game) players))
+
 let current_score_test
     (name : string)
     (input_game : Game.t)
@@ -251,6 +258,10 @@ let first_player = test_players.(0)
 
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
+let hole_one_complete_game = play_hole initialized_game
+let hole_two_complete_game = play_hole hole_one_complete_game
+
+
 
 let game_tests =
   [
@@ -258,8 +269,14 @@ let game_tests =
     current_hole_test "The game starts at hole 1" initialized_game 1;
     current_turn_test "Game starts with the player who was first in the lineup"
       initialized_game first_player;
+    current_turn_valid_player "Is the player returned by current turn a valid player" 
+      initialized_game test_players;
     played_test "Ensure the game starts with no holes played" 
       initialized_game [];
+    played_test "Hole 1 added to holes_played after play_hole called once"
+      hole_one_complete_game [1];
+    played_test "Hole 2 added to holes_played after play_hole called twice"
+      hole_two_complete_game [1;2];
   ]
 
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
