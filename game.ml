@@ -174,6 +174,26 @@ let winner_of_game game =
   done;
   winner_arr
 
+(* [find_winner sw sl pl] returns a tuple containing the winning score and
+   the winning player from a list of scores and players
+   Requires: The list of scores [sl] and players [pl] are of the same length 
+   and their indexing corresponds to each other *)
+let rec find_winner score_and_winner scores_list players_list =
+  match scores_list with 
+  | [] -> score_and_winner
+  | h :: t -> begin
+      if h < fst score_and_winner 
+      then find_winner (h,List.hd players_list) t (List.tl players_list) 
+      else find_winner score_and_winner t (List.tl players_list)
+    end
+
+let winner_of_game2 game = 
+  let scores = scores_list game game.roster in 
+  let players = Array.to_list game.roster in 
+  let curr_min = List.hd scores - get_player_handicap (List.hd players) in
+  let curr_winner = List.hd players in 
+  find_winner (curr_min, curr_winner) (List.tl scores) (List.tl players)
+
 (** [updated_rostr roster p] takes in a roster and the new player to update
     with and returns that updated roster*)
 let update_roster roster player = 
@@ -200,12 +220,26 @@ let play_one_swing_of_hole game =
     holes_played =game.holes_played;
   } 
 
+(* [get_player_score] p game gets the current score for a player on the current
+   hole *) 
+let get_player_score p game = 
+  let hole_sc = game.scores.(game.current_hole) in 
+  let score = ref [] in 
+  for i =0 to Array.length hole_sc do 
+    if hole_sc.(i).player == p
+    then score := hole_sc.(i).hole_score :: !score
+  done;
+  List.hd !score
+
 (** [someone_still_playing roster] *)
-let rec someone_still_playing roster = 
+let rec someone_still_playing roster gam hol_loc =
   match Array.to_list roster with 
   | [] -> false
-  | h::t -> if get_player_location h != (0., 0.) 
-    then true else someone_still_playing (Array.of_list t)
+  | h::t -> begin
+      let player_score = get_player_score h gam in 
+      if (get_player_location h != hol_loc) && (player_score <= 10)
+      then true else (someone_still_playing (Array.of_list t) gam hol_loc)
+    end
 
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
@@ -222,7 +256,8 @@ let switch_holes game =
 
 (* plays a hole to completion *)
 let rec play_hole game = 
-  if someone_still_playing game.roster 
+  if someone_still_playing 
+      game.roster game (Course.get_hole_loc game.course game.current_hole)
   then play_hole (play_one_swing_of_hole game)
   else switch_holes game
 
