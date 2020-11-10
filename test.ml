@@ -265,7 +265,7 @@ let hole_two_complete_game = play_hole hole_one_complete_game
 
 let game_tests =
   [
-    (*tests on the initialization*)
+    (* tests on the initialization*)
     current_hole_test "The game starts at hole 1" initialized_game 1;
     current_turn_test "Game starts with the player who was first in the lineup"
       initialized_game first_player;
@@ -276,7 +276,7 @@ let game_tests =
     played_test "Hole 1 added to holes_played after play_hole called once"
       hole_one_complete_game [1];
     played_test "Hole 2 added to holes_played after play_hole called twice"
-      hole_two_complete_game [1;2];
+      hole_two_complete_game [1;2]; 
   ]
 
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
