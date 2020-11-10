@@ -5,6 +5,8 @@ open Game
 open Player
 open Str
 
+let () = Printexc.record_backtrace true
+
 (** [pp_string s] pretty-prints string [s]. *)
 let pp_string s = "\"" ^ s ^ "\""
 
@@ -230,8 +232,9 @@ let current_turn_valid_player
     (name : string)
     (input_game : Game.t)
     (players : Player.t array) : test = 
-  name >:: (fun _ -> assert_equal true 
-               (Array.mem (current_turn input_game) players))
+  name >:: (fun _ -> 
+      assert_equal true (Array.mem (current_turn input_game) players))
+
 
 let current_score_test
     (name : string)
