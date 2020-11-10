@@ -223,21 +223,21 @@ let play_one_swing_of_hole game =
    hole *) 
 let get_player_score p game = 
   let hole_sc = game.scores.(game.current_hole) in 
-  let score = ref [] in 
+  let score = Array.make 1 0 in 
   for i =0 to (Array.length hole_sc)-1 do 
     if hole_sc.(i).player == p
-    then score := hole_sc.(i).hole_score :: !score
+    then score.(0) <- hole_sc.(i).hole_score
   done;
-  List.hd !score
+  score.(0)
 
 (** [someone_still_playing roster] *)
-let rec someone_still_playing roster gam hol_loc =
+let rec someone_still_playing roster game hol_loc =
   match Array.to_list roster with 
   | [] -> false
   | h::t -> begin
-      let player_score = get_player_score h gam in 
+      let player_score = get_player_score h game in 
       if (get_player_location h != hol_loc) && (player_score <= 10)
-      then true else (someone_still_playing (Array.of_list t) gam hol_loc)
+      then true else (someone_still_playing (Array.of_list t) game hol_loc)
     end
 
 (** [switch_holes g] updates the game to a the new game when it is time to 
