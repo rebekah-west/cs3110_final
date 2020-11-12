@@ -177,13 +177,15 @@ let winner_of_game game =
    the winning player from a list of scores and players
    Requires: The list of scores [sl] and players [pl] are of the same length 
    and their indexing corresponds to each other *)
-let rec find_winner score_and_winner scores_list players_list =
+let rec find_winner scores_list players_list acc=
   match scores_list with 
-  | [] -> score_and_winner
+  | [] -> acc
   | h :: t -> begin
-      if h < fst score_and_winner 
-      then find_winner (h,List.hd players_list) t (List.tl players_list) 
-      else find_winner score_and_winner t (List.tl players_list)
+      if h < fst (List.hd acc) 
+      then find_winner t (List.tl players_list) [(h, List.hd players_list)]
+      else if h > fst (List.hd acc)
+      then find_winner t (List.tl players_list) acc
+      else find_winner t (List.tl players_list) (acc @ [(h, List.hd players_list)])
     end
 
 let winner_of_game2 game = 
@@ -191,7 +193,7 @@ let winner_of_game2 game =
   let players = Array.to_list game.roster in 
   let curr_min = List.hd scores - get_player_handicap (List.hd players) in
   let curr_winner = List.hd players in 
-  find_winner (curr_min, curr_winner) (List.tl scores) (List.tl players)
+  find_winner (List.tl scores) (List.tl players) [(curr_min, curr_winner)]
 
 (** [updated_rostr roster p] takes in a roster and the new player to update
     with and returns that updated roster*)
