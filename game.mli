@@ -79,6 +79,9 @@ val update_roster: Player.t array -> Player.t -> Player.t array
     to the next one *)
 val play_hole: t -> t
 
+(** [play_hole t] creates the game and plays through all holes in the course*)
+val play_game: Player.t array -> Course.t -> t
+
 (** [print_scorecard t] prints the scorecard for all players for a specific 
     hole into the terminal*)
 val print_scorecard: t -> unit

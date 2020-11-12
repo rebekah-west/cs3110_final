@@ -260,4 +260,12 @@ let rec play_hole game =
   then play_hole (play_one_swing_of_hole game)
   else switch_holes game
 
+let play_game players course = 
+  let game = init_game players course in 
+  let game_arr = Array.make 1 game in 
+  for i = 0 to (Array.length (get_holes course))-1 do
+    game_arr.(0) <- (play_hole game)
+  done;
+  game_arr.(0)
+
 let print_scorecard (game:t) = failwith "Unimplemented"
