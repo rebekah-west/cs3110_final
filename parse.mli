@@ -12,3 +12,6 @@ val remove_blanks : parsable -> string
 (* [parse parsbl] converts a parsable that has had its white space removed
    into a string that can be interpretted by the game *)
 val parse : parsable -> string 
+
+(*TODO*)
+val string_catcher : string -> int 
