@@ -1,6 +1,20 @@
 open Str
 
 
+let remove_blanks parsbl = 
+  parsbl |> Str.global_replace (Str.regexp " ") ""
+
+let parse str = 
+  let parsed = str|> remove_blanks |> String.lowercase_ascii in 
+  parsed
+
+let rec string_catcher str = 
+  try int_of_string str
+  with Failure "int_of_string" -> begin
+      Printf.printf "\n Your input was not recognized, please try again> ";
+      read_line () |> parse |> string_catcher
+    end
+
 (* main menu explanations *)
 let game_explanation = 
   "This game is modeled after a normal golf game. You begin by entering your
@@ -98,10 +112,10 @@ let scoring_menu () =
   Printf.printf "5) Winning the game \n";
   Printf.printf "6) Go back to the main menu \n";
   Printf.printf "Enter Number > ";
-  let selection = ref (int_of_string (read_line()) )in 
+  let selection = ref (read_line() |> parse |> string_catcher)in 
   while (!selection != 6) do 
     scoring_menu_parser (!selection);
-    selection := (int_of_string (read_line()))
+    selection := (read_line() |> parse |> string_catcher)
   done;
   scoring_menu_parser 6
 
@@ -111,34 +125,33 @@ let club_menu_parser selection =
   | 1 -> Printf.printf "Showing explanation for Driver... \n %s" 
            driver_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
-    (* club_menu_parser (int_of_string (read_line())) *)
+
   | 2 -> Printf.printf "Showing explanation for Nine Iron... \n %s" 
            nine_iron_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
-    (* club_menu_parser (int_of_string (read_line())) *)
+
   | 3 -> Printf.printf "Showing explanation for Eight Iron... \n %s" 
            eight_iron_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
-    (* club_menu_parser (int_of_string (read_line())) *)
+
   | 4 -> Printf.printf "Showing an explanation of Putter... \n %s" 
            putter_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
-    (* club_menu_parser (int_of_string (read_line())) *)
+
   | 5 -> Printf.printf "Showing an explanation of Pitching Wedge... \n %s" 
            pitching_wedge_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
-    (* club_menu_parser (int_of_string (read_line())) *)
+
   | 6 -> Printf.printf "Showing an explanation of Sand Wedge... \n %s" 
            sand_wedge_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
-    (* club_menu_parser (int_of_string (read_line())) *)
+
   | 7 -> Printf.printf "Going back to the swing input menu... \n";
     ()
 
   | _ -> Printf.printf "Unknown selection, please enter another selection> ";
     ()
 
-(* club_menu_parser (int_of_string (read_line())) *)
 
 let club_menu () = 
   Printf.printf "\n Welcome to the club help menu! Each club has different \n";
@@ -153,10 +166,10 @@ let club_menu () =
   Printf.printf "6) Sand Wedge \n";
   Printf.printf "7) Go back to the swing input menu \n";
   Printf.printf "Enter Number > ";
-  let selection = ref (int_of_string (read_line()) )in 
+  let selection = ref (read_line() |> parse |> string_catcher)in 
   while (!selection != 7) do 
     club_menu_parser (!selection);
-    selection := (int_of_string (read_line()) )
+    selection := (read_line() |> parse |> string_catcher)
   done;
   club_menu_parser 7
 
@@ -197,15 +210,13 @@ let swing_input_menu_disp (header : bool) =
   ()
 
 let swing_input_menu_rep () = 
-  Printf.printf "\n Welcome back to the swing input help menu! Please enter the \n";
-  Printf.printf "number next to the topic you'd like to learn more about! \n";
   swing_input_menu_disp(false);
-  let selection = ref (int_of_string (read_line()) )in 
+  let selection = ref (read_line() |> parse |> string_catcher )in 
   while (!selection != 5) do 
     swing_input_menu_parser (!selection);
     if (!selection == 1) 
     then swing_input_menu_disp (true);
-    selection := (int_of_string (read_line()) )
+    selection := (read_line() |> parse |> string_catcher )
   done;
   swing_input_menu_parser 4
 
@@ -243,8 +254,6 @@ let player_input_menu_parser selection =
     ()
 
 let player_input_menu_rep () = 
-  Printf.printf "\n Welcome to the player initialization input help \n";
-  Printf.printf "menu! Please enter the number learn more about! \n";
   Printf.printf "1) Number of players \n";
   Printf.printf "2) Names \n";
   Printf.printf "3) Beginner, Intermediate, Advanced Options \n";
@@ -252,10 +261,10 @@ let player_input_menu_rep () =
   Printf.printf "5) Handicap \n";
   Printf.printf "6) Go back to the main menu \n";
   Printf.printf "Enter Number > ";
-  let selection = ref (int_of_string (read_line()) )in 
+  let selection = ref (read_line() |> parse |> string_catcher )in 
   while (!selection != 6) do 
     player_input_menu_parser (!selection);
-    selection := (int_of_string (read_line()) )
+    selection := (read_line() |> parse |> string_catcher)
   done;
   player_input_menu_parser 6
 
@@ -304,16 +313,16 @@ let main_menu_disp (header : bool) =
 
 let main_menu_rep () =
   main_menu_disp(false);
-  let selection = ref (int_of_string (read_line()) )in 
+  let selection = ref (read_line() |> parse |> string_catcher)in 
   while (!selection != 6) do
     main_menu_parser (!selection);
     if (!selection == 2 || !selection == 3 || !selection == 5) 
     then main_menu_disp (true);
-    selection := (int_of_string (read_line()));
+    selection := (read_line() |> parse |> string_catcher);
   done;
   main_menu_parser 6
 
-let main_menu_init () = 
+let help_menu_init () = 
   Printf.printf "Welcome to the help menu! Please enter the number next to \n";
   Printf.printf "the topic you would like to learn more about! \n";
   main_menu_rep()

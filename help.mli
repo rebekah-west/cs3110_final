@@ -7,4 +7,4 @@
 
 
 (** [help_menu] prints instructions to the terminal *)
-val help_menu: unit -> unit
+val help_menu_init: unit -> unit
