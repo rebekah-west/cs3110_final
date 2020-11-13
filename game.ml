@@ -270,4 +270,11 @@ let play_game players course =
   done;
   game_arr.(0)
 
-let print_scorecard (game:t) = failwith "Unimplemented"
+let pp_string s = "\"" ^ s ^ "\""
+
+let print_scorecard (game:t) = 
+  for i = 0 to Array.length (game.roster) do
+    Printf.printf "Player %s" (pp_string (get_player_name game.roster.(i)));
+    Printf.printf "Your current Score is %s" 
+      (pp_string (string_of_int (sum_scores game game.roster.(i))));
+  done;
