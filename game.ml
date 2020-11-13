@@ -28,6 +28,9 @@ type t = {
 exception InvalidHole
 exception InvalidScore
 
+(** [pp_tup] transforms a float tuple to a string for printing *)
+let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
+
 (** [current_hole game] returns the hole currently being played *)
 let current_hole game = game.current_hole
 
@@ -204,13 +207,19 @@ let update_roster roster player =
   done;
   roster
 
+(** [print_location player] prints the current location of the player *)
+let print_location player = print_string 
+    (Player.get_player_name player ^ "\'s new location is " ^
+     (pp_tup (Player.get_player_location player)) ^ "\n")
+
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
 let play_one_swing_of_hole game =
   let command = parse_swing () in 
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 
-  let updated_player = update_player_location game.current_turn new_loc in 
+  let updated_player = update_player_location game.current_turn new_loc in
+  print_location updated_player;
   let updated_roster = update_roster game.roster updated_player in
   {
     roster = updated_roster; 
@@ -218,7 +227,7 @@ let play_one_swing_of_hole game =
     scores = update_score game; 
     current_hole = game.current_hole;
     current_turn = update_turn game (get_hole game.course game.current_hole); 
-    holes_played =game.holes_played;
+    holes_played = game.holes_played;
   } 
 
 (* [get_player_score] p game gets the current score for a player on the current
