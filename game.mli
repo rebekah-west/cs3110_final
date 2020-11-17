@@ -74,6 +74,10 @@ val winner_of_game: t -> Player.t array
     player that should be updated in the roster*)
 val update_roster: Player.t array -> Player.t -> Player.t array
 
+(** [play_one_swing_of_hole gm] takes in a game and plays one of swing of 
+    the players who's turn it currently is*)
+val play_one_swing_of_hole: t -> t
+
 (** [play_hole t] plays the current hole, including prompting each player to
     swing, updating their location and score, and changing the current hole
     to the next one *)

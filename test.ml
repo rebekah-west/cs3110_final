@@ -28,26 +28,19 @@ let pp_list pp_elt lst =
 
 (* A helper function to test parse_club by comparing expected output to 
    actual output*)
-let club_parser_helper
-    (name : string) (input_club : string)
+let club_parser_helper(name : string) (input_club : string)
     (expected_output : Command.club) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_club input_club))
 
-let angle_parser_helper
-    (name : string)
-    (input_angle : int)
+let angle_parser_helper(name : string)(input_angle : int)
     (expected_output : Command.angle) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_angle input_angle))
 
-let alignment_parser_helper
-    (name : string)
-    (input : int)
+let alignment_parser_helper(name : string)(input : int)
     (expected_output : Command.alignment) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_alignment input))
 
-let power_parser_helper
-    (name : string)
-    (input_power : int)
+let power_parser_helper(name : string)(input_power : int)
     (expected_output : Command.power) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_power input_power))
 
@@ -60,8 +53,7 @@ let swing_parser_exn_helper
 
 
 let command_tests =
-  [
-    club_parser_helper "'driver' to a Driver club" "driver" Driver;
+  [ club_parser_helper "'driver' to a Driver club" "driver" Driver;
     club_parser_helper  "'Driver' to a Driver club, first letter 
       capitalization" "Driver" Driver;
     club_parser_helper  "'DriVEr' to a Driver club, random 
@@ -216,43 +208,28 @@ let current_hole_test (name : string) (input_game : Game.t)
     (expected_output : Course.hole_number) : test = 
   name >:: (fun _ -> assert_equal expected_output (current_hole input_game))
 
-let played_test
-    (name : string)
-    (input_game : Game.t)
+let played_test (name : string)(input_game : Game.t)
     (expected_output : Course.hole_number list) : test = 
   name >:: (fun _ -> assert_equal expected_output (Game.played input_game))
 
-let current_turn_test
-    (name : string)
-    (input_game : Game.t)
+let current_turn_test(name : string)(input_game : Game.t)
     (expected_output : Player.t) : test = 
   name >:: (fun _ -> assert_equal expected_output (current_turn input_game))
 
-let current_turn_valid_player
-    (name : string)
-    (input_game : Game.t)
-    (players : Player.t array) : test = 
-  name >:: (fun _ -> 
-      assert_equal true (Array.mem (current_turn input_game) players))
+let current_turn_valid_player(name : string)(input_game : Game.t)
+    (players : Player.t array) : test = name >:: (fun _ -> 
+    assert_equal true (Array.mem (current_turn input_game) players))
 
-
-let current_score_test
-    (name : string)
-    (input_game : Game.t)
+let current_score_test(name : string)(input_game : Game.t)
     (expected_output : scorecard) : test = 
   name >:: (fun _ -> assert_equal expected_output (current_score input_game))
 
-let winner_of_hole_test
-    (name : string)
-    (input_game : Game.t)
-    (input_hole : Course.hole_number )
-    (expected_output : Player.t array) : test = 
-  name >:: (fun _ -> assert_equal expected_output 
-               (winner_of_hole input_game input_hole))
+let winner_of_hole_test(name : string)(input_game : Game.t)
+    (input_hole : Course.hole_number )(expected_output : Player.t array) 
+  : test = name >:: (fun _ -> assert_equal expected_output 
+                        (winner_of_hole input_game input_hole))
 
-let winner_of_game_test
-    (name : string)
-    (input_game : Game.t)
+let winner_of_game_test(name : string)(input_game : Game.t)
     (expected_output : Player.t array) : test = 
   name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
 
@@ -261,8 +238,9 @@ let first_player = test_players.(0)
 
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
-let hole_one_complete_game = play_hole initialized_game
-let hole_two_complete_game = play_hole hole_one_complete_game
+let swing1_game = play_one_swing_of_hole initialized_game
+(* let hole_one_complete_game = play_hole initialized_game
+   let hole_two_complete_game = play_hole hole_one_complete_game *)
 
 
 
@@ -276,10 +254,19 @@ let game_tests =
       initialized_game test_players;
     played_test "Ensure the game starts with no holes played" 
       initialized_game [];
-    played_test "Hole 1 added to holes_played after play_hole called once"
-      hole_one_complete_game [1];
-    played_test "Hole 2 added to holes_played after play_hole called twice"
-      hole_two_complete_game [1;2]; 
+    (* tests after one swing *)
+    current_hole_test "The game stays at hole 1" swing1_game 1;
+    current_turn_test "Game moves to next player in lineup"
+      swing1_game test_players.(1);
+    current_turn_valid_player "Is the player updated to a valid player
+     after swing one" swing1_game test_players;
+    played_test "played should still be empty after one swing" 
+      swing1_game [];
+
+    (* played_test "Hole 1 added to holes_played after play_hole called once"
+       hole_one_complete_game [1];
+       played_test "Hole 2 added to holes_played after play_hole called twice"
+       hole_two_complete_game [1;2];  *)
   ]
 
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
@@ -298,14 +285,12 @@ let pl_handicap_test (name : string) (input : Player.t) (exp_output : int) :
   test = name >:: (fun _ -> assert_equal exp_output ~printer:string_of_int
                       (Player.get_player_handicap input))
 
-let player_location_test 
-    (name : string) (input : Player.t) (exp_output : float*float) : 
-  test = name >:: (fun _ -> assert_equal exp_output
-                      (Player.get_player_location input))
+let player_location_test (name : string) (input : Player.t) 
+    (exp_output : float*float) : test = name >:: (fun _ -> 
+    assert_equal exp_output(Player.get_player_location input))
 
-let dist_from_hole_test
-    (name : string) (player_loc : float * float ) (hole_loc : float * float ) 
-    (exp_output : float) : test = 
+let dist_from_hole_test (name : string) (player_loc : float * float ) 
+    (hole_loc : float * float ) (exp_output : float) : test = 
   name >:: (fun _ -> assert_equal true 
                ( (exp_output -.(Player.dist_from_hole player_loc hole_loc)) 
                  < (0.001)) )
@@ -338,8 +323,9 @@ let suite =
   "test suite for final project"  >::: List.flatten [
     command_tests;
     course_tests;
-    game_tests;
     player_tests;
+    (* make sure game tests is last  *)
+    game_tests;
   ]
 
 let _ = run_test_tt_main suite
