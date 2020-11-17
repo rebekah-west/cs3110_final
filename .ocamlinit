@@ -7,3 +7,8 @@
 #load "course.cmo";;
 #load "game.cmo";;
 #load "player.cmo";;
+#load "game.cmo";;
+#load "help.cmo";;
+#load "main.cmo";;
+#load "parse.cmo";;
+#load "visual.cmo";;

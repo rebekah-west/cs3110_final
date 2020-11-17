@@ -1,4 +1,4 @@
-MODULES= author command course game parse player main
+MODULES= author command course game parse player main visual
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
