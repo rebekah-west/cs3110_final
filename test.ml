@@ -26,6 +26,10 @@ let pp_list pp_elt lst =
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
 
+let pp_player pl = 
+  let name = get_player_name pl in 
+  pp_string name
+
 (* A helper function to test parse_club by comparing expected output to 
    actual output*)
 let club_parser_helper(name : string) (input_club : string)
@@ -204,70 +208,12 @@ let course_tests =
     (* test that wind is an int *)
   ]
 
-let current_hole_test (name : string) (input_game : Game.t)
-    (expected_output : Course.hole_number) : test = 
-  name >:: (fun _ -> assert_equal expected_output (current_hole input_game))
-
-let played_test (name : string)(input_game : Game.t)
-    (expected_output : Course.hole_number list) : test = 
-  name >:: (fun _ -> assert_equal expected_output (Game.played input_game))
-
-let current_turn_test(name : string)(input_game : Game.t)
-    (expected_output : Player.t) : test = 
-  name >:: (fun _ -> assert_equal expected_output (current_turn input_game))
-
-let current_turn_valid_player(name : string)(input_game : Game.t)
-    (players : Player.t array) : test = name >:: (fun _ -> 
-    assert_equal true (Array.mem (current_turn input_game) players))
-
-let current_score_test(name : string)(input_game : Game.t)
-    (expected_output : scorecard) : test = 
-  name >:: (fun _ -> assert_equal expected_output (current_score input_game))
-
-let winner_of_hole_test(name : string)(input_game : Game.t)
-    (input_hole : Course.hole_number )(expected_output : Player.t array) 
-  : test = name >:: (fun _ -> assert_equal expected_output 
-                        (winner_of_hole input_game input_hole))
-
-let winner_of_game_test(name : string)(input_game : Game.t)
-    (expected_output : Player.t array) : test = 
-  name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
-
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
 let first_player = test_players.(0)
 
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
-let swing1_game = play_one_swing_of_hole initialized_game
-(* let hole_one_complete_game = play_hole initialized_game
-   let hole_two_complete_game = play_hole hole_one_complete_game *)
 
-
-
-let game_tests =
-  [
-    (* tests on the initialization*)
-    current_hole_test "The game starts at hole 1" initialized_game 1;
-    current_turn_test "Game starts with the player who was first in the lineup"
-      initialized_game first_player;
-    current_turn_valid_player "Is the player returned by current turn a valid player" 
-      initialized_game test_players;
-    played_test "Ensure the game starts with no holes played" 
-      initialized_game [];
-    (* tests after one swing *)
-    current_hole_test "The game stays at hole 1" swing1_game 1;
-    current_turn_test "Game moves to next player in lineup"
-      swing1_game test_players.(1);
-    current_turn_valid_player "Is the player updated to a valid player
-     after swing one" swing1_game test_players;
-    played_test "played should still be empty after one swing" 
-      swing1_game [];
-
-    (* played_test "Hole 1 added to holes_played after play_hole called once"
-       hole_one_complete_game [1];
-       played_test "Hole 2 added to holes_played after play_hole called twice"
-       hole_two_complete_game [1;2];  *)
-  ]
 
 let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
   test = name >:: (fun _ -> 
@@ -318,6 +264,68 @@ let player_tests =
     dist_from_hole_test "Hole 1 robert trent" (0.,0.) (230.,45.) 234.361;
     dist_from_hole_test "Hole 1 pebble beach" (0.,0.) (430.,45.) 432.348;
   ]
+
+let current_hole_test (name : string) (input_game : Game.t)
+    (expected_output : Course.hole_number) : test = 
+  name >:: (fun _ -> assert_equal expected_output (current_hole input_game))
+
+let played_test (name : string)(input_game : Game.t)
+    (expected_output : Course.hole_number list) : test = 
+  name >:: (fun _ -> assert_equal expected_output (Game.played input_game))
+
+let current_turn_test(name : string)(input_game : Game.t)
+    (expected_output : Player.t) : test = 
+  name >:: (fun _ -> assert_equal expected_output ~printer:pp_player
+               (current_turn input_game))
+
+let current_turn_valid_player(name : string)(input_game : Game.t)
+    (players : Player.t array) : test = name >:: (fun _ -> 
+    assert_equal true (Array.mem (current_turn input_game) 
+                         players ) )
+
+let current_score_test(name : string)(input_game : Game.t)
+    (expected_output : scorecard) : test = 
+  name >:: (fun _ -> assert_equal expected_output (current_score input_game))
+
+let winner_of_hole_test(name : string)(input_game : Game.t)
+    (input_hole : Course.hole_number )(expected_output : Player.t array) 
+  : test = name >:: (fun _ -> assert_equal expected_output 
+                        (winner_of_hole input_game input_hole))
+
+let winner_of_game_test(name : string)(input_game : Game.t)
+    (expected_output : Player.t array) : test = 
+  name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
+
+let swing1_game = play_one_swing_of_hole initialized_game
+let swing2_game = play_one_swing_of_hole swing1_game
+(* let hole_one_complete_game = play_hole initialized_game
+   let hole_two_complete_game = play_hole hole_one_complete_game *)
+
+let game_tests =
+  [
+    (* tests on the initialization*)
+    current_hole_test "The game starts at hole 1" initialized_game 1;
+    current_turn_test "Game starts with the player who was first in the lineup"
+      initialized_game first_player;
+    current_turn_valid_player "Is the player returned by current turn a valid player" 
+      initialized_game test_players;
+    played_test "Ensure the game starts with no holes played" 
+      initialized_game [];
+    (* tests after one swing *)
+    current_hole_test "The game stays at hole 1" swing1_game 1;
+    current_turn_test "Game moves to next player in lineup"
+      swing1_game test_players.(2);
+    current_turn_valid_player "Is the player updated to a valid player
+       after swing one" swing1_game test_players;
+    played_test "played should still be empty after one swing" 
+      swing1_game [];
+
+    (* played_test "Hole 1 added to holes_played after play_hole called once"
+       hole_one_complete_game [1];
+       played_test "Hole 2 added to holes_played after play_hole called twice"
+       hole_two_complete_game [1;2];  *)
+  ]
+
 
 let suite =
   "test suite for final project"  >::: List.flatten [
