@@ -251,6 +251,23 @@ let rec someone_still_playing roster game hol_loc =
       then true else (someone_still_playing (Array.of_list t) game hol_loc)
     end
 
+let pp_string s = "\"" ^ s ^ "\""
+
+let print_score game player = print_string 
+    (Player.get_player_name player ^ "\'s score is " ^
+     (pp_string (string_of_int (sum_scores game player))) ^ 
+     "after hole" ^ pp_string (string_of_int game.current_hole) ^ "\n")
+
+
+(* let print_scorecard (game:t) = 
+   for i = 0 to Array.length (game.roster) do
+    (* Printf.printf "Player %s" (pp_string (get_player_name game.roster.(i)));
+       Printf.printf "Your current Score is %s" 
+       (pp_string (string_of_int (sum_scores game game.roster.(i)))); *)
+    print_score game game.roster.(i)
+   done; *)
+
+
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
 let switch_holes game = 
@@ -278,12 +295,3 @@ let play_game players course =
     game_arr.(0) <- (play_hole game)
   done;
   game_arr.(0)
-
-let pp_string s = "\"" ^ s ^ "\""
-
-let print_scorecard (game:t) = 
-  for i = 0 to Array.length (game.roster) do
-    Printf.printf "Player %s" (pp_string (get_player_name game.roster.(i)));
-    Printf.printf "Your current Score is %s" 
-      (pp_string (string_of_int (sum_scores game game.roster.(i))));
-  done;
