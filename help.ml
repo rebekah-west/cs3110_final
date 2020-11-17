@@ -10,7 +10,7 @@ let parse str =
 
 let rec string_catcher str = 
   try int_of_string str
-  with Failure "int_of_string" -> begin
+  with Failure _ -> begin
       Printf.printf "\n Your input was not recognized, please try again> ";
       read_line () |> parse |> string_catcher
     end
