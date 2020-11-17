@@ -259,6 +259,8 @@ let winner_of_game_test
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
 let first_player = test_players.(0)
 
+let test_player_input = Player.init_players ()
+
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
 let hole_one_complete_game = play_hole initialized_game
