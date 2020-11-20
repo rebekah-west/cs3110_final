@@ -105,11 +105,11 @@ let create_player entry =
   Printf.printf "\nWelcome new player. Please enter your name.\n";
   let name = read_line () |> parse in
   Printf.printf "For golf, are you beginner, intermediate, or advanced?\n";
-  let acc_mult = read_line () |> parse |> parse_acc_mult in
+  let acc_mult = read_line () |> parse_acc_mult in
   Printf.printf "How strong are you? (below average, average, above average)\n";
-  let pow_mult = read_line () |> parse |> parse_pow_mult in
+  let pow_mult = read_line () |> parse_pow_mult in
   Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
-  let handicap = read_line () |> parse |> int_of_string in
+  let handicap = read_line () |> int_of_string in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
   let p = {
     player_name = name; 

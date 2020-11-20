@@ -5,6 +5,8 @@ open Help
 (*****************************************************)
 type parsable = string 
 
+exception Quit of string
+
 let remove_blanks parsbl = 
   parsbl |> Str.global_replace (Str.regexp " ") ""
 
@@ -12,7 +14,9 @@ let parse parsbl =
   let parsed = parsbl |> remove_blanks |> String.lowercase_ascii in 
   if parsed = "help" 
   then 
-    Help.help_menu_init(); 
+    Help.help_menu_init()
+  else if parsed = "quit" then raise (Quit "Quitting the game!");
+  (* else if parsed = "scorecard" then print_scorecard() *)
   parsed
 
 (* for the help cmo*)
