@@ -271,13 +271,13 @@ let print_score game player = print_string
      "after hole" ^ pp_string (string_of_int game.current_hole) ^ "\n")
 
 
-(* let print_scorecard (game:t) = 
-   for i = 0 to Array.length (game.roster) do
+let print_scorecard (game:t) = 
+  for i = 0 to Array.length (game.roster) do
     (* Printf.printf "Player %s" (pp_string (get_player_name game.roster.(i)));
        Printf.printf "Your current Score is %s" 
        (pp_string (string_of_int (sum_scores game game.roster.(i)))); *)
     print_score game game.roster.(i)
-   done; *)
+  done
 
 
 (** [switch_holes g] updates the game to a the new game when it is time to 

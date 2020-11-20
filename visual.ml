@@ -21,4 +21,4 @@ let hole =
 "
 
 
-let print_loc () = print_string hole
+let print_loc game = print_string hole
