@@ -212,9 +212,21 @@ let print_location player = print_string
     (Player.get_player_name player ^ "\'s new location is " ^
      (pp_tup (Player.get_player_location player)) ^ "\n")
 
+(* [print_init_loc g] prints the location of the player who is about to swing 
+   along with the location of the hole *)
+let print_init_locs game = 
+  let hole = current_hole game in 
+  let hole_loc = Course.get_hole_loc game.course hole in 
+  let pl_loc = Player.get_player_location game.current_turn in
+  let pl_name = Player.get_player_name game.current_turn in 
+  print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
+  print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
+  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
+
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
 let play_one_swing_of_hole game =
+  print_init_locs game;
   let command = parse_swing () in 
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 

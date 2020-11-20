@@ -57,6 +57,10 @@ type t = {
      hole_strokes : int or int list; <- to get score at every hole*)
 }
 
+(* Used to keep track of the names as they are added in order to avoid 
+   duplicates *)
+type names = string list
+
 (** [player_from_json j] reads in the player from the json *)
 let player_from_json j =
   let open Yojson.Basic.Util in {
@@ -94,16 +98,27 @@ let rec parse_acc_mult (acc : string) =
 let rec parse_pow_mult (pow : string) = 
   let parsed = parse pow in 
   match parsed with 
-  | "below average" -> 0.5
+  | "belowaverage" -> 0.5
   | "average" -> 1.0
-  | "above average" -> 1.5
+  | "aboveaverage" -> 1.5
   | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
-    read_line() |> parse |>parse_pow_mult
+    read_line() |> parse |> parse_pow_mult
+
+let init_names = ref []
+
+(** [parse_name name] checks if [name] has already been used and prompts the 
+    user to enter a different name if that name is already chosen *)
+let rec parse_name (name : string) =
+  match List.mem name !init_names with
+  | true -> Printf.printf "You must enter a unique name. Please try again. \n"; 
+    read_line() |> parse |> parse_name
+  | false -> init_names := name::!init_names;
+    name
 
 (* [create_player entry] prompts user for input, parses it, and returns type Player.t *)
 let create_player entry =
   Printf.printf "\nWelcome new player. Please enter your name.\n";
-  let name = read_line () |> parse in
+  let name = read_line () |> parse |> parse_name in
   Printf.printf "For golf, are you beginner, intermediate, or advanced?\n";
   let acc_mult = read_line () |> parse_acc_mult in
   Printf.printf "How strong are you? (below average, average, above average)\n";
