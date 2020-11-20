@@ -1,5 +1,10 @@
 Install.txt, golf game demo:
 
+Demo MS3
+
+
+
+
 Demo MS2
 Welcome to the demo, the following instructions will allow you to load our code 
 and demo the help menu and updating of locations. 
