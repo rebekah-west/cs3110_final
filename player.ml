@@ -245,6 +245,8 @@ let get_direction (p1 : float*float) (p2 : float*float) =
   let y2 = snd p2 in 
   ( (y2 -. y1) /. (x2 -. x1) )|> atan 
 
+let m_to_yd (meters : float) = (39.3701/. 36.) *. meters 
+
 let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
     (cours : Course.t)= 
   let current_loc = t.location in
@@ -265,13 +267,22 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   let vert_speed = (sin theta) *. init_velocity in
   let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
   let horiz_dist = time_in_air *. horiz_speed in
+  let horiz_dist_yd = m_to_yd horiz_dist in 
   let hol_loc = get_hole_loc cours hol_num in 
   let direction = get_direction current_loc hol_loc +. final_align in 
   let new_loc = 
-    ( (direction |> rad_from_deg |> cos) *. horiz_dist +. fst current_loc ,  
-      ( (direction |> rad_from_deg |> sin) *. horiz_dist +. snd current_loc) ) 
+    ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
+      ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
   in 
-  if dist_from_hole hol_loc new_loc < 1.0 then 
+  (*the case of rolling*)
+  if chosen_ang = 0. then 
+    let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
+    let new_loc =  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
+                     ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
+    in 
+    if dist_from_hole hol_loc new_loc < 1.0 then 
+      hol_loc else new_loc
+  else if dist_from_hole hol_loc new_loc < 1.0 then 
     hol_loc else new_loc
 
 
