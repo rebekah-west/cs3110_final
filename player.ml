@@ -259,6 +259,7 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
     ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
       ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
   in 
+  (*the case of rolling*)
   if chosen_ang = 0. then 
     let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
     let new_loc =  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
