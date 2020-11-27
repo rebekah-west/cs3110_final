@@ -9,4 +9,4 @@
 
 
 (** [print_loc] prints a visual of the hole to the terminal *)
-val print_loc: Game.t -> unit
+val print_loc: (float*float) -> (float*float) -> unit
