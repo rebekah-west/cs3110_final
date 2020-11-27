@@ -202,11 +202,13 @@ let winner_of_game2 game =
 (** [updated_rostr roster p] takes in a roster and the new player to update
     with and returns that updated roster*)
 let update_roster roster player = 
+  let new_roster = Array.make (Array.length roster) roster.(0) in
   for i = 0 to (Array.length roster)-1 do
     if get_player_name roster.(i) = get_player_name player then 
-      roster.(i) <- player 
+      new_roster.(i) <- player else
+      new_roster.(i) <- roster.(i)
   done;
-  roster
+  new_roster
 
 (** [print_location player] prints the current location of the player *)
 let print_location player = print_string 

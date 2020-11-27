@@ -30,6 +30,8 @@ let pp_player pl =
   let name = get_player_name pl in 
   pp_string name
 
+let pp_array arr = pp_list pp_player (Array.to_list arr)
+
 (* A helper function to test parse_club by comparing expected output to 
    actual output*)
 let club_parser_helper(name : string) (input_club : string)
@@ -282,8 +284,8 @@ let current_turn_test(name : string)(input_game : Game.t)
 
 let current_turn_valid_player(name : string)(input_game : Game.t)
     (players : Player.t array) : test = name >:: (fun _ -> 
-    assert_equal true (Array.mem (current_turn input_game) 
-                         players ) )
+    assert_equal true (Array.mem (current_turn input_game)
+                         players ))
 
 let current_score_test(name : string)(input_game : Game.t)
     (expected_output : scorecard) : test = 
@@ -329,6 +331,21 @@ let swing1_game_tests = [
     swing1_game [];
 ]
 
+let swing2_game = play_one_swing_of_hole swing1_game
+
+let swing2_game_tests = [ 
+
+  current_hole_test "Second swing: The game stays at hole 1" swing2_game 1;
+  current_turn_test "Second swing: Game moves to next player in lineup"
+    swing2_game (get_player_name test_players.(2));
+  current_turn_valid_player "Second swing: Is the player updated to a valid 
+  player" swing2_game (game_roster swing2_game);
+  played_test "Second swing: played should still be empty" 
+    swing2_game [];
+
+]
+
+
 let suite =
   "test suite for final project"  >::: List.flatten [
     command_tests;
@@ -337,6 +354,7 @@ let suite =
     (* make sure game tests is last  *)
     initial_game_tests;
     swing1_game_tests;
+    swing2_game_tests;
   ]
 
 let _ = run_test_tt_main suite
