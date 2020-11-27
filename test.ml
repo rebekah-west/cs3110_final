@@ -327,7 +327,6 @@ let swing1_game_tests = [
        after swing one" swing1_game (game_roster swing1_game);
   played_test "played should still be empty after one swing" 
     swing1_game [];
-
 ]
 
 let suite =

@@ -285,13 +285,14 @@ let print_scorecard (game:t) =
 let switch_holes game = 
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
+  print_scorecard game;
   let new_hole = course_arr.(update_ind) in
   { roster = game.roster; 
     course = game.course;
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; } 
+    holes_played = game.holes_played@[game.current_hole]; }
 
 (* plays a hole to completion *)
 let rec play_hole game = 
