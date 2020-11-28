@@ -34,11 +34,19 @@ let play_game f =
   Printf.printf "The complete scorecard is" ;
   Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."
 
+
+let course_options = 
+  "The two courses that come with this Golf System are PebbleBeach.json and 
+  RobertTrent.json. PebbleBeach has 3 holes and is hard. RobertTrent has 2 
+  holes and is easy. You can also upload your own course file. Instructions 
+  on how to construct your own course json can be found in the help menu. \n"
+
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   ANSITerminal.(print_string [red]
                   "\n\nWelcome to your remote golf game.\n");
   print_endline "Please enter the name of the game file you want to load.\n";
+  print_string course_options;
   print_string  "> ";
   match read_line () with
   | exception End_of_file -> ()

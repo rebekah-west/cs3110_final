@@ -17,15 +17,15 @@ let rec string_catcher str =
 
 (* main menu explanations *)
 let game_explanation = 
-  "This game is modeled after a normal golf game. You begin by entering your
-  player information. You then select which course you would like to play.
-  There are several courses that come with the game. These courses vary in
-  length, difficulty, and terrain. When making the decision of which course
-  to play, you will be provided with a short description of each of the options
-  After selecting a course, you choose how many players there are and input 
-  player information. You will then be taken to the first hole of the course.
-  Each hole will be played according to the rules of golf. After completing all
-  the holes, the game will end and a winner will be declared.\n"
+  "This game is modeled after a normal golf game. You begin by selecting which 
+  course you would like to play. There are several courses that come with the 
+  game. These courses vary in length, difficulty, and terrain. When making the 
+  decision of which course to play, you will be provided with a short 
+  description of each of the options. After selecting a course, you choose how 
+  many players there are and input player information. You will then be taken 
+  to the first hole of the course. Each hole will be played according to the 
+  rules of golf. After completing all the holes, the game will end and a 
+  winner will be declared.\n"
 
 let swing_input = 
   "When it becomes your turn, you are prompted to enter information about 
@@ -62,7 +62,8 @@ let course_selection_explanation =
   hole_location (string of an integer double), description (string), and a 
   list of terrain objects. Each terrain object must include name (string), 
   location (string of an integer double) and size (string small, medium, or 
-  large). If these types are not followed, program behavior is not defined.\n"
+  large). All locations must be within a 500x500 grid. If these types are not 
+  followed, program behavior is not defined.\n"
 
 (* for player initialization menu*)
 let num_players_explanation = 
