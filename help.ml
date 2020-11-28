@@ -46,6 +46,24 @@ let scoring_explanation =
   "A point is added to your score for each swing it takes to reach the hole. 
   Wait idk how golf scoring works. Par...? Handicap...?\n"
 
+
+(* for course selection menu*)
+let course_selection_explanation = 
+  "There are two courses provided with the game. These are PebbleBeach.json 
+  and RobertTrent.json. You can also choose to create your own golf course 
+  and upload it to the same folder as the source code. You would then be 
+  able to type in the name of the json representing your own course and play 
+  that course instead of one of the two pre-made options. 
+
+  In creating your own course, you must mimic the structure of the given 
+  course json files. This includes having a list of holes and a difficulty 
+  (string easy, medium, or hard). 
+  For each hole, you must include hole_number (int), par_number (int), 
+  hole_location (string of an integer double), description (string), and a 
+  list of terrain objects. Each terrain object must include name (string), 
+  location (string of an integer double) and size (string small, medium, or 
+  large). If these types are not followed, program behavior is not defined.\n"
+
 (* for player initialization menu*)
 let num_players_explanation = 
   "The number of players represents how many people will be playing golf during 
