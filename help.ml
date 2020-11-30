@@ -347,20 +347,24 @@ let main_menu_parser selection =
   | 1 -> Printf.printf "Showing game explanation... \n \n %s" game_explanation;
     Printf.printf "\n Please enter another selection from the menu >";
 
-  | 2 -> Printf.printf "Going to the player initialization input help menu... \n";
+  | 2 -> Printf.printf "Showing course selection explanation... \n \n %s" 
+           course_selection_explanation;
+    Printf.printf "\n Please enter another selection from the menu >";
+
+  | 3 -> Printf.printf "Going to the player initialization input help menu... \n";
     player_input_menu_init()
 
-  | 3 -> Printf.printf "Going to the swing input help menu... \n";
+  | 4 -> Printf.printf "Going to the swing input help menu... \n";
     swing_input_menu_init()
 
-  | 4 -> Printf.printf "Showing an explanation of who goes first... \n %s"
+  | 5 -> Printf.printf "Showing an explanation of who goes first... \n %s"
            who_goes_first;
     Printf.printf "\n Please enter another selection from the menu >";
 
-  | 5 -> Printf.printf "Showing an explanation of scoring... \n"; 
+  | 6 -> Printf.printf "Showing an explanation of scoring... \n"; 
     scoring_menu()
 
-  | 6 -> Printf.printf "Going back to the game... \n"; ()
+  | 7 -> Printf.printf "Going back to the game... \n"; ()
 
   | _ -> Printf.printf "Unknown selection, please enter another selection> ";
     ()
@@ -371,24 +375,25 @@ let main_menu_disp (header : bool) =
   if header then 
     Printf.printf "next to the topic you would like to learn more about! \n";
   Printf.printf "1) Game Explanation \n";
-  Printf.printf "2) Player Initialization Input \n";
-  Printf.printf "3) Swing Input \n";
-  Printf.printf "4) Who Goes First \n";
-  Printf.printf "5) Scoring and Turns:\n";
-  Printf.printf "6) Go back to the game \n";
+  Printf.printf "2) Course Selection Explanation \n";
+  Printf.printf "3) Player Initialization Input \n";
+  Printf.printf "4) Swing Input \n";
+  Printf.printf "5) Who Goes First \n";
+  Printf.printf "6) Scoring and Turns:\n";
+  Printf.printf "7) Go back to the game \n";
   Printf.printf "Enter Number > ";
   ()
 
 let main_menu_rep () =
   main_menu_disp(false);
   let selection = ref (read_line() |> parse |> string_catcher)in 
-  while (!selection != 6) do
+  while (!selection != 7) do
     main_menu_parser (!selection);
-    if (!selection == 2 || !selection == 3 || !selection == 5) 
+    if (!selection == 3 || !selection == 4 || !selection == 6) 
     then main_menu_disp (true);
     selection := (read_line() |> parse |> string_catcher);
   done;
-  main_menu_parser 6
+  main_menu_parser 7
 
 let help_menu_init () = 
   Printf.printf "Welcome to the help menu! Please enter the number next to \n";
