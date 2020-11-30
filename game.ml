@@ -93,34 +93,35 @@ let update_score game =
   game.scores
 
 let update_turn game (hole:Course.hole) = 
-  let next_player = Array.make 1 game.roster.(0) in 
-  let next_dist = 
-    Array.make 1 (dist_from_hole (get_player_location next_player.(0)) 
-                    (get_hole_loc game.course (get_hole_number hole))) in 
+  let next_player = ref game.roster.(0) in 
+  let next_dist = ref (dist_from_hole (get_player_location !next_player) 
+                         (get_hole_loc game.course (get_hole_number hole))) in 
   for i = 0 to (Array.length game.roster)-1 do 
     let cur_player = game.roster.(i) in 
     let cur_dist = dist_from_hole (get_player_location cur_player) 
         (get_hole_loc game.course (get_hole_number hole)) in 
-    if cur_dist > next_dist.(0) && next_dist.(0) != 0. then 
-      next_dist.(0) <- cur_dist;
-    next_player.(0) <- cur_player
+    if cur_dist > !next_dist && !next_dist != 0. then 
+      next_player := cur_player;
+    if cur_dist > !next_dist && !next_dist != 0. then 
+      next_dist :=  cur_dist;
   done;
-  next_player.(0)
+  !next_player
 
 (* get the integer score of the best score for a specific hole  *)
 let winning_score game hole = 
   let scorecard = game.scores.(hole) in 
   let lowest_score = scorecard.(0).hole_score in 
-  let winner_array = Array.of_list [lowest_score] in 
+  (* let winner_array = Array.of_list [lowest_score] in  *)
+  let winner = ref lowest_score in
   for i = 0 to (Array.length scorecard)-1 do 
     let current_scorecard = scorecard.(i) in 
     if current_scorecard.hole_score < lowest_score then 
       let lowest_score = current_scorecard.hole_score
-      in winner_array.(0) <- lowest_score 
+      in winner := lowest_score 
     else 
-      winner_array.(0) <- lowest_score
+      winner := lowest_score
   done;
-  winner_array.(0)
+  !winner
 
 let rec winner_add winner_array scorecard low = 
   if (Array.length scorecard) = 0 then winner_array 
@@ -282,7 +283,6 @@ let print_scorecard (game:t) =
        (pp_string (string_of_int (sum_scores game game.roster.(i)))); *)
     print_score game game.roster.(i)
   done
-
 
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)

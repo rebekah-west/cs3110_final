@@ -324,7 +324,7 @@ let swing1_game = play_one_swing_of_hole initialized_game
 let swing1_game_tests = [
   current_hole_test "The game stays at hole 1" swing1_game 1;
   current_turn_test "Game moves to next player in lineup"
-    swing1_game (get_player_name test_players.(2));
+    swing1_game (get_player_name test_players.(1));
   current_turn_valid_player "Is the player updated to a valid player
        after swing one" swing1_game (game_roster swing1_game);
   played_test "played should still be empty after one swing" 
