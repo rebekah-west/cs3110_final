@@ -70,7 +70,7 @@ let rec parse_angle (ang : int) =
   then Printf.printf "Your angle cannot be negative, please enter an integer between 0 and 90. > \n" |> 
        fun () -> read_line() |> Parse.parse |>  Parse.string_catcher |> parse_angle 
   else 
-    Printf.printf "Your power cannot be over 90, please enter an integer between 0 and 90. > \n" |>  
+    Printf.printf "Your angle cannot be over 90, please enter an integer between 0 and 90. > \n" |>  
     fun () -> read_line() |> Parse.parse |> Parse.string_catcher |> parse_angle 
 
 (*A recursive helper that either parses an int [degrees] to it's corresponding 

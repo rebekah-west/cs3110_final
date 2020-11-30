@@ -17,15 +17,15 @@ let rec string_catcher str =
 
 (* main menu explanations *)
 let game_explanation = 
-  "This game is modeled after a normal golf game. You begin by entering your
-  player information. You then select which course you would like to play.
-  There are several courses that come with the game. These courses vary in
-  length, difficulty, and terrain. When making the decision of which course
-  to play, you will be provided with a short description of each of the options
-  After selecting a course, you choose how many players there are and input 
-  player information. You will then be taken to the first hole of the course.
-  Each hole will be played according to the rules of golf. After completing all
-  the holes, the game will end and a winner will be declared.\n"
+  "This game is modeled after a normal golf game. You begin by selecting which 
+  course you would like to play. There are several courses that come with the 
+  game. These courses vary in length, difficulty, and terrain. When making the 
+  decision of which course to play, you will be provided with a short 
+  description of each of the options. After selecting a course, you choose how 
+  many players there are and input player information. You will then be taken 
+  to the first hole of the course. Each hole will be played according to the 
+  rules of golf. After completing all the holes, the game will end and a 
+  winner will be declared.\n"
 
 let swing_input = 
   "When it becomes your turn, you are prompted to enter information about 
@@ -45,6 +45,25 @@ let who_goes_first =
 let scoring_explanation =
   "A point is added to your score for each swing it takes to reach the hole. 
   Wait idk how golf scoring works. Par...? Handicap...?\n"
+
+
+(* for course selection menu*)
+let course_selection_explanation = 
+  "There are two courses provided with the game. These are PebbleBeach.json 
+  and RobertTrent.json. You can also choose to create your own golf course 
+  and upload it to the same folder as the source code. You would then be 
+  able to type in the name of the json representing your own course and play 
+  that course instead of one of the two pre-made options. 
+
+  In creating your own course, you must mimic the structure of the given 
+  course json files. This includes having a list of holes and a difficulty 
+  (string easy, medium, or hard). 
+  For each hole, you must include hole_number (int), par_number (int), 
+  hole_location (string of an integer double), description (string), and a 
+  list of terrain objects. Each terrain object must include name (string), 
+  location (string of an integer double) and size (string small, medium, or 
+  large). All locations must be within a 500x500 grid. If these types are not 
+  followed, program behavior is not defined.\n"
 
 (* for player initialization menu*)
 let num_players_explanation = 
@@ -328,20 +347,24 @@ let main_menu_parser selection =
   | 1 -> Printf.printf "Showing game explanation... \n \n %s" game_explanation;
     Printf.printf "\n Please enter another selection from the menu >";
 
-  | 2 -> Printf.printf "Going to the player initialization input help menu... \n";
+  | 2 -> Printf.printf "Showing course selection explanation... \n \n %s" 
+           course_selection_explanation;
+    Printf.printf "\n Please enter another selection from the menu >";
+
+  | 3 -> Printf.printf "Going to the player initialization input help menu... \n";
     player_input_menu_init()
 
-  | 3 -> Printf.printf "Going to the swing input help menu... \n";
+  | 4 -> Printf.printf "Going to the swing input help menu... \n";
     swing_input_menu_init()
 
-  | 4 -> Printf.printf "Showing an explanation of who goes first... \n %s"
+  | 5 -> Printf.printf "Showing an explanation of who goes first... \n %s"
            who_goes_first;
     Printf.printf "\n Please enter another selection from the menu >";
 
-  | 5 -> Printf.printf "Showing an explanation of scoring... \n"; 
+  | 6 -> Printf.printf "Showing an explanation of scoring... \n"; 
     scoring_menu()
 
-  | 6 -> Printf.printf "Going back to the game... \n"; ()
+  | 7 -> Printf.printf "Going back to the game... \n"; ()
 
   | _ -> Printf.printf "Unknown selection, please enter another selection> ";
     ()
@@ -352,24 +375,25 @@ let main_menu_disp (header : bool) =
   if header then 
     Printf.printf "next to the topic you would like to learn more about! \n";
   Printf.printf "1) Game Explanation \n";
-  Printf.printf "2) Player Initialization Input \n";
-  Printf.printf "3) Swing Input \n";
-  Printf.printf "4) Who Goes First \n";
-  Printf.printf "5) Scoring and Turns:\n";
-  Printf.printf "6) Go back to the game \n";
+  Printf.printf "2) Course Selection Explanation \n";
+  Printf.printf "3) Player Initialization Input \n";
+  Printf.printf "4) Swing Input \n";
+  Printf.printf "5) Who Goes First \n";
+  Printf.printf "6) Scoring and Turns:\n";
+  Printf.printf "7) Go back to the game \n";
   Printf.printf "Enter Number > ";
   ()
 
 let main_menu_rep () =
   main_menu_disp(false);
   let selection = ref (read_line() |> parse |> string_catcher)in 
-  while (!selection != 6) do
+  while (!selection != 7) do
     main_menu_parser (!selection);
-    if (!selection == 2 || !selection == 3 || !selection == 5) 
+    if (!selection == 3 || !selection == 4 || !selection == 6) 
     then main_menu_disp (true);
     selection := (read_line() |> parse |> string_catcher);
   done;
-  main_menu_parser 6
+  main_menu_parser 7
 
 let help_menu_init () = 
   Printf.printf "Welcome to the help menu! Please enter the number next to \n";

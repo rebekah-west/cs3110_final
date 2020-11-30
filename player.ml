@@ -57,10 +57,6 @@ type t = {
      hole_strokes : int or int list; <- to get score at every hole*)
 }
 
-(* Used to keep track of the names as they are added in order to avoid 
-   duplicates *)
-type names = string list
-
 (** [player_from_json j] reads in the player from the json *)
 let player_from_json j =
   let open Yojson.Basic.Util in {
@@ -98,33 +94,32 @@ let rec parse_acc_mult (acc : string) =
 let rec parse_pow_mult (pow : string) = 
   let parsed = parse pow in 
   match parsed with 
-  | "belowaverage" -> 0.5
+  | "below average" -> 0.5
   | "average" -> 1.0
-  | "aboveaverage" -> 1.5
+  | "above average" -> 1.5
   | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
     read_line() |> parse |> parse_pow_mult
 
-let init_names = ref []
-
-(** [parse_name name] checks if [name] has already been used and prompts the 
-    user to enter a different name if that name is already chosen *)
-let rec parse_name (name : string) =
-  match List.mem name !init_names with
-  | true -> Printf.printf "You must enter a unique name. Please try again. \n"; 
-    read_line() |> parse |> parse_name
-  | false -> init_names := name::!init_names;
-    name
+let rec parse_name (name : string) = 
+  let parsed_name = parse name in
+  if parsed_name == "help" 
+  then begin
+    Printf.printf "\n Please enter your name.\n";
+    let new_name = read_line () in
+    parse_name new_name;
+  end
+  else parsed_name
 
 (* [create_player entry] prompts user for input, parses it, and returns type Player.t *)
 let create_player entry =
   Printf.printf "\nWelcome new player. Please enter your name.\n";
-  let name = read_line () |> parse |> parse_name in
+  let name = read_line () |> parse_name in
   Printf.printf "For golf, are you beginner, intermediate, or advanced?\n";
   let acc_mult = read_line () |> parse_acc_mult in
   Printf.printf "How strong are you? (below average, average, above average)\n";
   let pow_mult = read_line () |> parse_pow_mult in
   Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
-  let handicap = read_line () |> int_of_string in
+  let handicap = read_line () |> string_catcher in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
   let p = {
     player_name = name; 
@@ -136,7 +131,7 @@ let create_player entry =
 
 let init_players () =
   Printf.printf "How many players will be participating today? Enter an int \n";
-  let num_players = read_line () |> parse |> int_of_string in
+  let num_players = read_line () |> parse |> string_catcher in
   let player_array = Array.make num_players 0. in
   Array.map create_player player_array
 
@@ -247,6 +242,15 @@ let get_direction (p1 : float*float) (p2 : float*float) =
 
 let m_to_yd (meters : float) = (39.3701/. 36.) *. meters 
 
+let rec bound_loc (pos : float * float)=
+  match pos with 
+  | (x , y) when x <= 500. && y <= 500. && x >= 0. && y >= 0. -> pos
+  | (x , y) when x > 500. -> bound_loc (500., y)
+  | (x , y) when y > 500. -> bound_loc (x , 500.)
+  | (x , y) when x < 0. -> bound_loc (0.,y)
+  | (x , y) when y < 0. -> bound_loc (x, 0.)
+  | _ -> failwith "unknown location"
+
 let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
     (cours : Course.t)= 
   let current_loc = t.location in
@@ -270,10 +274,11 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   let horiz_dist_yd = m_to_yd horiz_dist in 
   let hol_loc = get_hole_loc cours hol_num in 
   let direction = get_direction current_loc hol_loc +. final_align in 
-  let new_loc = 
+  let upd_loc = 
     ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
       ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
   in 
+  let new_loc = bound_loc upd_loc in 
   (*the case of rolling*)
   if chosen_ang = 0. then 
     let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
