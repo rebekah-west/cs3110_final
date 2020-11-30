@@ -111,7 +111,6 @@ let update_turn game (hole:Course.hole) =
 let winning_score game hole = 
   let scorecard = game.scores.(hole) in 
   let lowest_score = scorecard.(0).hole_score in 
-  (* let winner_array = Array.of_list [lowest_score] in  *)
   let winner = ref lowest_score in
   for i = 0 to (Array.length scorecard)-1 do 
     let current_scorecard = scorecard.(i) in 
@@ -145,18 +144,17 @@ let winner_of_hole game hole =
 (* returns the total score for a player for all holes played so far  *)
 let sum_scores game player = 
   let sc = game.scores in 
-  let sums = Array.of_list [0] in 
+  let sums = ref 0 in
   for i = 0 to (Array.length sc)-1 do 
     let sc_per_hole = sc.(i) in 
     for j = 0 to (Array.length sc_per_hole)-1 do 
       let cur_sc = sc_per_hole.(j) in
       if cur_sc.player = player then
-        let update_sc = sums.(0) + cur_sc.hole_score
-        in sums.(0) <- update_sc 
-      else sums.(0) <- sums.(0) 
+        let update_sc = !sums+ cur_sc.hole_score
+        in sums := update_sc 
     done;
   done;
-  sums.(0)
+  !sums
 
 (* returns an array of all the current total scores of the player *)
 let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
@@ -165,7 +163,6 @@ let winning_score_game score_lst= List.fold_left min 180 score_lst
 
 (* returns a list of winners  *)
 let winner_of_game game = 
-  (* let last_hole = Array.length game.scores -1 in *)
   let scores = scores_list game game.roster in 
   let winning_score = winning_score_game scores in 
   let winner_inds_unfiltered = List.mapi 
@@ -251,12 +248,12 @@ let play_one_swing_of_hole game =
    hole *) 
 let get_player_score p game = 
   let hole_sc = game.scores.(game.current_hole) in 
-  let score = Array.make 1 0 in 
+  let score = ref 0 in 
   for i =0 to (Array.length hole_sc)-1 do 
     if hole_sc.(i).player == p
-    then score.(0) <- hole_sc.(i).hole_score
+    then score := hole_sc.(i).hole_score
   done;
-  score.(0)
+  !score
 
 (** [someone_still_playing roster] *)
 let rec someone_still_playing roster game hol_loc =
@@ -278,9 +275,6 @@ let print_score game player = print_string
 
 let print_scorecard (game:t) = 
   for i = 0 to Array.length (game.roster) do
-    (* Printf.printf "Player %s" (pp_string (get_player_name game.roster.(i)));
-       Printf.printf "Your current Score is %s" 
-       (pp_string (string_of_int (sum_scores game game.roster.(i)))); *)
     print_score game game.roster.(i)
   done
 
@@ -307,8 +301,8 @@ let rec play_hole game =
 
 let play_game players course = 
   let game = init_game players course in 
-  let game_arr = Array.make 1 game in 
+  let game_update = ref game in 
   for i = 0 to (Array.length (get_holes course))-1 do
-    game_arr.(0) <- (play_hole game)
+    game_update := (play_hole game)
   done;
-  game_arr.(0)
+  !game_update
