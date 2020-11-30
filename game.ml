@@ -6,6 +6,31 @@ open Visual
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
+(** [pp_string s] pretty-prints string [s]. *)
+let pp_string s = "\"" ^ s ^ "\""
+
+(** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
+let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
+(** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
+    to pretty-print each element of [lst]. *)
+
+let pp_list pp_elt lst =
+  let pp_elts lst =
+    let rec loop n acc = function
+      | [] -> acc
+      | [h] -> acc ^ pp_elt h
+      | h1 :: (h2 :: t as t') ->
+        if n = 100 then acc ^ "..."  (* stop printing long list *)
+        else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
+    in loop 0 "" lst
+  in "[" ^ pp_elts lst ^ "]"
+
+let pp_player pl = 
+  let name = get_player_name pl in 
+  pp_string name
+
+let pp_array arr = pp_list pp_player (Array.to_list arr)
+
 
 (* only need to keep track of score per hole since Player.t
    keeps track of the overall score of a player*)
@@ -92,12 +117,12 @@ let update_score game =
   done;
   game.scores
 
-let update_turn game (hole:Course.hole) = 
-  let next_player = ref game.roster.(0) in 
+let update_turn game updated_roster (hole:Course.hole) = 
+  let next_player = ref updated_roster.(0) in 
   let next_dist = ref (dist_from_hole (get_player_location !next_player) 
                          (get_hole_loc game.course (get_hole_number hole))) in 
-  for i = 0 to (Array.length game.roster)-1 do 
-    let cur_player = game.roster.(i) in 
+  for i = 0 to (Array.length updated_roster)-1 do 
+    let cur_player = updated_roster.(i) in 
     let cur_dist = dist_from_hole (get_player_location cur_player) 
         (get_hole_loc game.course (get_hole_number hole)) in 
     if cur_dist > !next_dist && !next_dist != 0. then 
@@ -105,6 +130,7 @@ let update_turn game (hole:Course.hole) =
     if cur_dist > !next_dist && !next_dist != 0. then 
       next_dist :=  cur_dist;
   done;
+  print_string (pp_player !next_player);
   !next_player
 
 (* get the integer score of the best score for a specific hole  *)
@@ -197,6 +223,12 @@ let winner_of_game2 game =
   let curr_winner = List.hd players in 
   find_winner (List.tl scores) (List.tl players) [(curr_min, curr_winner)]
 
+
+(** [print_location player] prints the current location of the player *)
+let print_location player = print_string 
+    (Player.get_player_name player ^ "\'s new location is " ^
+     (pp_tup (Player.get_player_location player)) ^ "\n")
+
 (** [updated_rostr roster p] takes in a roster and the new player to update
     with and returns that updated roster*)
 let update_roster roster player = 
@@ -205,13 +237,13 @@ let update_roster roster player =
     if get_player_name roster.(i) = get_player_name player then 
       new_roster.(i) <- player else
       new_roster.(i) <- roster.(i)
+
   done;
+  let _= Array.map print_location new_roster in
+  print_string (pp_array new_roster);
   new_roster
 
-(** [print_location player] prints the current location of the player *)
-let print_location player = print_string 
-    (Player.get_player_name player ^ "\'s new location is " ^
-     (pp_tup (Player.get_player_location player)) ^ "\n")
+
 
 (* [print_init_loc g] prints the location of the player who is about to swing 
    along with the location of the hole *)
@@ -240,7 +272,7 @@ let play_one_swing_of_hole game =
     course = game.course;
     scores = update_score game; 
     current_hole = game.current_hole;
-    current_turn = update_turn game (get_hole game.course game.current_hole); 
+    current_turn = update_turn game updated_roster (get_hole game.course game.current_hole); 
     holes_played = game.holes_played;
   } 
 

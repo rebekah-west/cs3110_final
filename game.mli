@@ -58,7 +58,7 @@ val update_score: t -> scorecard
     During the first hole, players go in order of lineup. After that, player 
     furthest from hole is up. At the start of any other hole, the player with
     honors, who won the last hole, wins *)
-val update_turn: t -> Course.hole -> Player.t
+val update_turn: t -> Player.t array -> Course.hole -> Player.t
 
 
 (** [winner_of_hole gm h] returns  the player who won the hole [h], 

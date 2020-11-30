@@ -345,7 +345,6 @@ let swing2_game_tests = [
 
 ]
 
-
 let suite =
   "test suite for final project"  >::: List.flatten [
     command_tests;
