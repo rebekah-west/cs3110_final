@@ -98,18 +98,28 @@ let rec parse_pow_mult (pow : string) =
   | "average" -> 1.0
   | "above average" -> 1.5
   | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
-    read_line() |> parse |>parse_pow_mult
+    read_line() |> parse |> parse_pow_mult
+
+let rec parse_name (name : string) = 
+  let parsed_name = parse name in
+  if parsed_name == "help" 
+  then begin
+    Printf.printf "\n Please enter your name.\n";
+    let new_name = read_line () in
+    parse_name new_name;
+  end
+  else parsed_name
 
 (* [create_player entry] prompts user for input, parses it, and returns type Player.t *)
 let create_player entry =
   Printf.printf "\nWelcome new player. Please enter your name.\n";
-  let name = read_line () |> parse in
+  let name = read_line () |> parse_name in
   Printf.printf "For golf, are you beginner, intermediate, or advanced?\n";
   let acc_mult = read_line () |> parse_acc_mult in
   Printf.printf "How strong are you? (below average, average, above average)\n";
   let pow_mult = read_line () |> parse_pow_mult in
   Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
-  let handicap = read_line () |> int_of_string in
+  let handicap = read_line () |> string_catcher in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
   let p = {
     player_name = name; 
@@ -121,7 +131,7 @@ let create_player entry =
 
 let init_players () =
   Printf.printf "How many players will be participating today? Enter an int \n";
-  let num_players = read_line () |> parse |> int_of_string in
+  let num_players = read_line () |> parse |> string_catcher in
   let player_array = Array.make num_players 0. in
   Array.map create_player player_array
 
