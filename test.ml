@@ -342,7 +342,6 @@ let swing2_game_tests = [
   player" swing2_game (game_roster swing2_game);
   played_test "Second swing: played should still be empty" 
     swing2_game [];
-
 ]
 
 let suite =
