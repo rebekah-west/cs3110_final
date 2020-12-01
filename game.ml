@@ -130,7 +130,6 @@ let update_turn game updated_roster (hole:Course.hole) =
     if cur_dist > !next_dist && !next_dist != 0. then 
       next_dist :=  cur_dist;
   done;
-  print_string (pp_player !next_player);
   !next_player
 
 (* get the integer score of the best score for a specific hole  *)
@@ -239,8 +238,6 @@ let update_roster roster player =
       new_roster.(i) <- roster.(i)
 
   done;
-  let _= Array.map print_location new_roster in
-  print_string (pp_array new_roster);
   new_roster
 
 
