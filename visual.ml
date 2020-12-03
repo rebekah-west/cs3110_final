@@ -108,3 +108,4 @@ let print_loc hole player =
 (** Examples:
     print_loc (400.,300.) (400.,200.);;
     print_loc (300.,300.) (400.,300.);;*)
+

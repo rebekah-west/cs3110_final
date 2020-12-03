@@ -44,6 +44,10 @@ val current_turn: t -> Player.t
     state *)
 val current_score: t -> scorecard 
 
+(** [get_hole_score gm p h] returns the score for player [p] at hole [h]
+    in game [gm] *)
+val get_hole_score: t -> Player.t -> int -> int
+
 (** [game_roster gm] returns the list of players playing the game *)
 val game_roster: t -> Player.t array
 
@@ -53,6 +57,11 @@ val current_course : t -> Course.t
 (** [update_score gm] takes a game and returns the updated scorecard
     for when a player takes a swing *)
 val update_score: t -> scorecard
+
+(** [sum_scores gm p] returns the current total game score for
+    a player. If the hole has not yet been played, counts the score for 
+    that hole as 0 *)
+val sum_scores: t-> Player.t -> int
 
 (** [update turn gm] is attempting to update the turn after a player swings. 
     During the first hole, players go in order of lineup. After that, player 

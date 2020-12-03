@@ -181,6 +181,16 @@ let sum_scores game player =
   done;
   !sums
 
+let get_hole_score game player hole = 
+  let hole_list = game.scores.(hole-1) in 
+  let hole = ref hole_list.(0) in
+  for i = 0 to Array.length hole_list -1 do 
+    let hole_sc = hole_list.(i) in 
+    if hole_sc.player = player then 
+      hole := hole_sc
+  done;
+  !hole.hole_score
+
 (* returns an array of all the current total scores of the player *)
 let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
 
