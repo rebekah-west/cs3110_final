@@ -4,26 +4,17 @@ open Player
 open Course
 
 (*********************************************************************)
-(*  
+(*  Example Representation of one players scorecard
 
-Example Representation of one players scorecard
+    Player: Jenna
+    _______________________________
+    | Hole Number | 1 | 2 | 3 | 4 |
+    |_____________|___|___|___|___| 
+    |    Score    | 4 | 3 | 5 | 4 | Total: 16, (+2)
+    |_____________|___|___|___|___| Par: 14
 
-Player: Jenna
-_______________________________
-| Hole Number | 1 | 2 | 3 | 4 |
-|_____________|___|___|___|___| 
-|    Score    | 4 | 3 | 5 | 4 | Total: 16, (+2)
-|_____________|___|___|___|___| Par: 14
-
- *)
+*)
 (*********************************************************************)
-
-
-let beginning1 = "_______________"
-let beginning2 = "| Hole Number |"
-let beginning3 = "|_____________|"
-let beginning4 = "|    Score    |"
-let beginning5 = "|_____________|"
 
 let player_name_str player = "Player: " ^ get_player_name player 
 
@@ -40,8 +31,6 @@ let get_course_par course =
 
 let total_str game player course = 
   let total_score = sum_scores game player in
-  let par = get_course_par course in 
-  let dif = total_score - par in 
   " Total: " ^ string_of_int (make_zero total_score)
 
 let par_str course = 
