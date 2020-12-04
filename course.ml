@@ -112,7 +112,7 @@ let description course hole_number =
 let extract_char_loc terrain =
   let char = String.get terrain.name 0 in 
   let (a,b) = terrain.location in
-  (Float.of_int a, Float.of_int b, char)
+  (Float.of_int a, Float.of_int b, Char.escaped char)
 
 let get_obstacle_locs course hole_number = 
   let hole = get_hole course hole_number in 
