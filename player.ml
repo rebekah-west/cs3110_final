@@ -94,9 +94,9 @@ let rec parse_acc_mult (acc : string) =
 let rec parse_pow_mult (pow : string) = 
   let parsed = parse pow in 
   match parsed with 
-  | "below average" -> 0.5
+  | "belowaverage" -> 0.5
   | "average" -> 1.0
-  | "above average" -> 1.5
+  | "aboveaverage" -> 1.5
   | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
     read_line() |> parse |> parse_pow_mult
 
@@ -184,6 +184,9 @@ let dist_from_hole hole_loc player_loc =
 let rad_from_deg degrees = 
   degrees /. 180.0 *. pi
 
+let deg_from_rad radians = 
+  radians *. 180.0 /. pi
+
 (* AF: Converting a swing to a "speed" in meters per second for calculation with 
    gravity given a players power multiplier after personal and club adjustments
    and given the power they selected to use. We represent 100 power as hitting 
@@ -209,7 +212,7 @@ let random_gaussian () =
    deviation as an Accuracy multiplier of 1. Accuracy multiplier of 1.25 
    means .8 times as much standard deviation.*)
 let adj_ang chosen_ang adj_acc = 
-  let calced = chosen_ang *. random_gaussian() /. adj_acc in
+  let calced = chosen_ang +. random_gaussian() /. adj_acc in
   match calced < 0. with
   |true -> 0.
   |false -> begin 
@@ -222,7 +225,7 @@ let adj_ang chosen_ang adj_acc =
    the calculcated accuracy multiplier from player information [adj_acc] and 
    returnsthe the final adjusted alignment in degrees *)
 let adj_align chosen_align adj_acc = 
-  let calced2 = chosen_align *. random_gaussian() /. adj_acc /. 5. in
+  let calced2 = chosen_align +. random_gaussian() /. adj_acc /. 5. in
   match calced2 < 90. with
   |false -> 90.
   |true -> begin 
@@ -232,15 +235,29 @@ let adj_align chosen_align adj_acc =
     end
 
 (* A helper that gets the initial direction a player is facing (towards
-   the hole) before any adjustment. *)
+   the hole) before any adjustment. p1 is the player location and 
+   p2 is the hole location *)
 let get_direction (p1 : float*float) (p2 : float*float) = 
   let x1 = fst p1 in
   let x2 = fst p2 in
   let y1 = snd p1 in 
   let y2 = snd p2 in 
-  ( (y2 -. y1) /. (x2 -. x1) )|> atan 
+  let degs = ( (y2 -. y1) /. (x2 -. x1) )|> atan |> deg_from_rad in 
+  if x2 > x1 && y2 < y1 then 360. +. degs else
+  if x2 < x1 then 180. +. degs
+  else
+    degs
+
 
 let m_to_yd (meters : float) = (39.3701/. 36.) *. meters 
+
+let float_abs flt = 
+  if flt > 0.0 then flt else (flt *. -1.0)
+
+let float_mod flt mod_num = 
+  ((flt /. mod_num) -. 1.) *. flt
+
+
 
 let rec bound_loc (pos : float * float)=
   match pos with 
@@ -260,20 +277,36 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   let club_pow_adj = fst (get_club_adjustments clb) in
   let club_acc_adj = snd (get_club_adjustments clb) in
   let adj_pow = (swing |> get_power) *. pow_mul *. club_pow_adj in
+  print_string "\n power";
+  print_float adj_pow;
   let adj_acc = acc_mul *. club_acc_adj in
+  print_string "\n accuracy adjustmendt";
+  print_float adj_acc;
   let chosen_ang = get_angle swing in 
+  print_string "\n chosen angle";
+  print_float chosen_ang;
   let final_ang = adj_ang chosen_ang adj_acc in 
+  print_string "\n final angle";
+  print_float final_ang;
   let chosen_align = get_align swing in 
   let final_align = adj_align chosen_align adj_acc in 
+  print_string "\n final_alignment";
+  print_float final_align;
   let theta = rad_from_deg (final_ang) in 
+  print_string "\n swing angle";
+  print_float theta;
   let init_velocity = power_to_ms adj_pow in
   let horiz_speed = (cos theta) *. init_velocity in
   let vert_speed = (sin theta) *. init_velocity in
   let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
   let horiz_dist = time_in_air *. horiz_speed in
   let horiz_dist_yd = m_to_yd horiz_dist in 
+  print_string "\n horiz dist";
+  print_float horiz_dist_yd;
   let hol_loc = get_hole_loc cours hol_num in 
   let direction = get_direction current_loc hol_loc +. final_align in 
+  print_string "\n direction";
+  print_float direction;
   let upd_loc = 
     ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
       ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
@@ -285,9 +318,9 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
     let new_loc =  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
                      ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
     in 
-    if dist_from_hole hol_loc new_loc < 1.0 then 
+    if dist_from_hole hol_loc new_loc < 30.0 then 
       hol_loc else new_loc
-  else if dist_from_hole hol_loc new_loc < 1.0 then 
+  else if dist_from_hole hol_loc new_loc < 30.0 then 
     hol_loc else new_loc
 
 
