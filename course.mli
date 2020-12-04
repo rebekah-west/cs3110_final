@@ -66,6 +66,11 @@ val difficulty : t -> string
     Raises [UnknownHole h] if [h] is not a hole identifier in [c]. *)
 val description : t -> hole_number -> string
 
+(** [get_obstacle_locs c h] is a list of obstacle type and location in hole 
+    [h] in course [c]. 
+    [] if there are no obstacles in hole [h] *)
+val get_obstacle_locs : t -> hole_number -> float*float*string list
+
 (** [weather] randomly generates the current wind *)
 val wind : unit -> wind
 

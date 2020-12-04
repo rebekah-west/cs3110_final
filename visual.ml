@@ -19,6 +19,14 @@ let get_row x_cord = Float.to_int (x_cord /. 33.33)
 let get_col y_cord = Float.to_int (y_cord /. 10.)
 let get_row_col char = function
   | (x,y) -> (get_row y, get_col x, char)
+let get_coords (x,y,c) = (get_row y, get_col x, c)
+let same_row (x1, y1, c1) (x2, y2, c2) = if x1=x2 then true else false
+
+(* [loc_sort loc loc] is a comparison function to be used in List.sort *)
+let loc_sort (x1, y1, c1) (x2, y2, c2) = 
+  if x1<x2 then ~-1
+  else if x1>x2 then 1
+  else 0
 
 let get_min_row str (x1,y1,c1) (x2,y2,c2) = 
   match str with 
@@ -104,7 +112,49 @@ let print_loc hole player =
   else print_single min max string
 
 
+let finish num string = 
+  for i=0 to num-1 do 
+    string := !string ^ "\n" ^ normal_line
+  done;
+  string := !string  ^ "\n" ^ bottom;
+  !string
+
+(* [construct_row (x,y,c)] constructs a row with the character c at y 
+   coordinate y. *)
+let construct_row string (x,y,c) = 
+  let row = ref edge in 
+  append 1 y row " ";
+  row := !row ^ c;
+  append (y+1) 48 row " ";
+  row := !row ^ edge;
+  string := !string ^ "\n" ^ !row;
+  !string
+
+let rec print_helper locs acc string = match locs with 
+  | [] -> finish (14-acc) string
+  | h1::h2::t -> 
+    if (same_row h1 h2)
+    then string := (construct_double_row h1 h2);
+
+else 
+  string := (construct_row string h1);
+print_helper (h2::t) (acc-1) string
+| h::t -> failwith "un"
+
+let print_loc hole player obstacles = 
+  let hole_loc = get_row_col "h" hole in 
+  let player_loc = get_row_col "p" player in
+  let raw_locs =  hole_loc::player_loc::obstacles in
+  let sorted_locs = List.map loc_sort raw_locs in 
+  let string = ref top in 
+  string := (print_helper sorted_locs 1 string);
+  print_string !string
 
 (** Examples:
     print_loc (400.,300.) (400.,200.);;
     print_loc (300.,300.) (400.,300.);;*)
+
+
+(* fix if at 500 you mess it up, also messes up the hole location
+   fix on top of each other 
+   show map shows every player's location at the same time *)
