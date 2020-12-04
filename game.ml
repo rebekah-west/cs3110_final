@@ -312,17 +312,16 @@ let print_score game player = print_string
      "after hole" ^ pp_string (string_of_int game.current_hole) ^ "\n")
 
 
-let print_scorecard (game:t) = 
-  for i = 0 to Array.length (game.roster) do
+(* let print_scorecard (game:t) = 
+   for i = 0 to Array.length (game.roster) do
     print_score game game.roster.(i)
-  done
+   done *)
 
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
 let switch_holes game = 
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
-  print_scorecard game;
   let new_hole = course_arr.(update_ind) in
   { roster = game.roster; 
     course = game.course;
