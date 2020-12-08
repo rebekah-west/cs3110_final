@@ -105,6 +105,7 @@ let game_roster game = game.roster
 
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
+  print_string "updating score";
   let sc = game.scores.(game.current_hole) in 
   let current_player = game.current_turn in 
   for i = 0 to (Array.length sc)-1 do 
