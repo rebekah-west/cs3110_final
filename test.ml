@@ -1,3 +1,34 @@
+(*********************************************************************)
+(* 
+Our Approach to Testing:
+We started with black box testing. Someone who did not implement each 
+function wrote unit tests for each function based of the specficiation 
+in the same spring that we implemented that function. Once the function 
+passed those tests, we did white box testing. The team member that 
+implemented the function wrote test cases to test the function knowing 
+how the code was written. We tested modules command, course, game, and  
+player using unit tests with the approach described above. We tested modules 
+help, main, parse, scorecard, and visual using utop since these modules are 
+primarily concerned with printing output to the terminal. For these 
+terminal-related modules, the implementing team member tested as they went, 
+and once they finished the initial implementation, each of the other team 
+members also tested using utop. Since we implemented a game and so many of 
+the functionalities are tied together, we also introduced some user testing
+by playing the game with our families. We believe this testing approach 
+demonstrates correctness of the program because basic functions are tested 
+through the testing suite and relationships between functions are tested
+with hours of playing the game from technical and non-technical users.
+
+please write a (potentially lengthy) comment describing your approach to testing: 
+what you tested, anything you omitted testing, and 
+why you believe that your test suite demonstrates the correctness of your system
+-1: The test plan does not explain which parts of the system were automatically tested by OUnit vs. manually tested.
+-1: The test plan does not explain what modules were tested by OUnit and how test cases were developed (black box, glass box, randomized, etc.).
+-1: The test plan does not provide an argument for why the testing approach demonstrates the correctness of the system.
+
+*)
+(*********************************************************************)
+
 open OUnit2
 open Command
 open Course
@@ -12,9 +43,9 @@ let pp_string s = "\"" ^ s ^ "\""
 
 (** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
 let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
+
 (** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
     to pretty-print each element of [lst]. *)
-
 let pp_list pp_elt lst =
   let pp_elts lst =
     let rec loop n acc = function
