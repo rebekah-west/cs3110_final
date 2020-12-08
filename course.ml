@@ -105,7 +105,20 @@ let description course hole_number =
   let hole = get_hole course hole_number in 
   hole.description
 
+(* extracts the first letter of terrain type and the location from a terrain 
+   record *)
+let extract_char_loc terrain =
+  let char = String.get terrain.name 0 in 
+  let (a,b) = terrain.location in
+  (Float.of_int a, Float.of_int b, Char.escaped char)
+
+let get_obstacle_locs course hole_number = 
+  let hole = get_hole course hole_number in 
+  let obstacles = hole.terrain in 
+  List.map extract_char_loc obstacles 
+
 let wind () = 
   failwith "unimplemented"
+
 
 let get_hole_number hole = hole.hole_number
