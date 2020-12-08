@@ -4,7 +4,6 @@ open Player
 open Parse
 open Scorecard
 
-(** [play_game f] starts the adventure in file [f]. *)
 let play_game f =
   let course = Course.from_json(Yojson.Basic.from_file(f)) in
   let players = Player.init_players () in
