@@ -16,7 +16,7 @@ open Course
 *)
 (*********************************************************************)
 
-let player_name_str player = "Player: " ^ get_player_name player 
+let player_name_str player = "Player: " ^ Player.get_player_name player 
 
 let make_zero i = if i < 0 then 0 else i
 
@@ -24,7 +24,7 @@ let get_course_par course =
   let par = ref 0 in 
   let holes = get_holes course in
   for i=0 to Array.length holes -1 do 
-    let hole_par = get_par2 holes.(i) in
+    let hole_par = get_hole_par holes.(i) in
     par := !par + hole_par
   done;
   !par

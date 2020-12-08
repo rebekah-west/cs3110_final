@@ -19,7 +19,7 @@ let parse parsbl =
   (* else if parsed = "scorecard" then print_scorecard() *)
   parsed
 
-(* for the help cmo*)
+(* for the help cmo *)
 let rec string_catcher str = 
   try int_of_string str
   with Failure _ -> begin
