@@ -45,7 +45,7 @@ val get_player_location : t -> float*float
 
 (** [update_player_location p new_loc] returns a new instande of player [p] 
     containing infomration about a new location [new_loc] *)
-val update_player_location: t -> float*float -> t
+val update_player_location: t ->float*float -> t
 
 (* [dist_from_hole loc1 loc2] calculates the cartesian distance between 
    two sets of coordinates, [loc1] and [loc2] *)

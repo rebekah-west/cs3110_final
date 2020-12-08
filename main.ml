@@ -30,12 +30,14 @@ let play_game f =
     match valid with
     | false -> Printf.printf "Congratulations! You have completed the course.";
     | true -> hole (Game.play_hole game) (hole_num+1);
-      scorecard_printer game course;
-  in hole game 1;
+      if valid then scorecard_printer game course;
+  in hole game 0;
   let winners = Array.to_list 
       (Array.map Player.get_player_name (Game.winner_of_game game)) in
   Printf.printf "The winner is %s" (pp_list pp_string winners);
-  Printf.printf "The complete scorecard is" ;
+  print_string "\n";
+  print_string "The complete scorecard is: " ;
+  scorecard_printer game course;
   Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."
 
 

@@ -32,7 +32,6 @@ let pp_player pl =
 
 let pp_array arr = pp_list pp_player (Array.to_list arr)
 
-
 (* only need to keep track of score per hole since Player.t
    keeps track of the overall score of a player*)
 type hole_score = {
@@ -278,7 +277,8 @@ let play_one_swing_of_hole game =
     course = game.course;
     scores = update_score game; 
     current_hole = game.current_hole;
-    current_turn = update_turn game updated_roster (get_hole game.course game.current_hole); 
+    current_turn = update_turn game updated_roster 
+        (get_hole game.course game.current_hole); 
     holes_played = game.holes_played;
   } 
 
@@ -315,24 +315,29 @@ let print_scorecard (game:t) =
     print_score game game.roster.(i)
   done
 
+let reset_player_loc p = update_player_location p (0., 0.)
+
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
 let switch_holes game = 
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
   let new_hole = course_arr.(update_ind) in
-  { roster = game.roster; 
+  let new_rost = Array.map reset_player_loc game.roster in 
+  { roster = new_rost; 
     course = game.course;
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; }
+    holes_played = game.holes_played@[game.current_hole]; 
+  }
 
 (* plays a hole to completion *)
-let rec play_hole game = 
+let play_hole game = 
   if someone_still_playing 
       game.roster game (Course.get_hole_loc game.course game.current_hole)
-  then play_hole (play_one_swing_of_hole game)
+  then
+    play_one_swing_of_hole game
   else switch_holes game
 
 let play_game players course = 
