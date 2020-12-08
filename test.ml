@@ -1,36 +1,6 @@
 (*********************************************************************)
 (* 
 Our Approach to Testing:
-We started with black box testing. Someone who did not implement each 
-function wrote unit tests for each function based of the specficiation 
-in the same spring that we implemented that function. Once the function 
-passed those tests, we did white box testing. The team member that 
-implemented the function wrote test cases to test the function knowing 
-how the code was written. We tested modules command, course, game, and  
-player using unit tests with the approach described above. We tested modules 
-help, main, parse, scorecard, and visual using utop since these modules are 
-primarily concerned with printing output to the terminal. For these 
-terminal-related modules, the implementing team member tested as they went, 
-and once they finished the initial implementation, each of the other team 
-members also tested using utop. Since we implemented a game and so many of 
-the functionalities are tied together, we also introduced some user testing
-by playing the game with our families. We believe this testing approach 
-demonstrates correctness of the program because basic functions are tested 
-through the testing suite and relationships between functions are tested
-with hours of playing the game from technical and non-technical users.
-
-please write a (potentially lengthy) comment describing your approach to testing: 
-what you tested, anything you omitted testing, and 
-why you believe that your test suite demonstrates the correctness of your system
--1: The test plan does not explain which parts of the system were automatically tested by OUnit vs. manually tested.
--1: The test plan does not explain what modules were tested by OUnit and how test cases were developed (black box, glass box, randomized, etc.).
--1: The test plan does not provide an argument for why the testing approach demonstrates the correctness of the system.
-
-*)
-(*********************************************************************)
-
-(*
-TEST PLAN
 
 TESTED BY OUNIT: We were able to create a player json and course json files 
 so that we could test the initial functionality of a game (before players 
@@ -41,15 +11,29 @@ TESTED MANUALLY: However, since golf is a game that relies on user input, we
 have to manually update the game by playing a swing or a hole. Therefore, we
 did a large portion of our testing through play testing. 
 
-MODULES TESTED BY OUNIT: 
-
-
 HOW TEST CASES WERE DEVELOPED:
-Initially, we wrote blackbox tests for parts of the core implimentation that we 
-did not implement ourselves. This was specifically for testing the typing and 
-accuracy of Player, Course, and Game. 
+We started with black box testing. Someone who did not implement each 
+function wrote unit tests for each function based of the specficiation 
+in the same spring that we implemented that function. Once the function 
+passed those tests, we did white box testing. The team member that 
+implemented the function wrote test cases to test the function knowing 
+how the code was written. Since we implemented a game and so many of 
+the functionalities are tied together, we also introduced some user testing
+by playing the game with our families. 
+
+MODULES TESTED BY OUNIT: 
+We tested modules command, course, game, and  player using unit tests with 
+the approach described above. We tested modules help, main, parse, scorecard, 
+and visual using utop since these modules are primarily concerned with 
+printing output to the terminal. For these terminal-related modules, the 
+implementing team member tested as they went, and once they finished the 
+initial implementation, each of the other team members also tested using utop.
 
 WHY TESTING APPROACH DEMONSTRATES CORRECTNESS OF SYSTEM:
+Our testing approach demonstrates correctness of the program because basic 
+functions are tested through the testing suite and relationships between 
+functions are tested with hours of playing the game from technical and 
+non-technical users.
 Play testing is an often overlooked but very important part of testing. It is 
 crucial in demonstating correctness because it is the only way of testing that 
 replicates how an actual game may be carried out. Through game play, you can 
@@ -57,45 +41,22 @@ see the inplementation from the user perspective and notice what inputs a user
 would be likely to put in or where an instruction may not be clear enough. Our 
 comprehensive OUNIT test adds another layer of confidence to supporting the
 correctness of the system, since it can test how the computer system actually 
-implements our functions versus how we think the computer is going to act. 
+implements our functions versus how we think the computer is going to act.
 
 *)
+(*********************************************************************)
+
 
 open OUnit2
 open Command
 open Course
 open Game
 open Player
+open Parse
 open Str
 
 let () = Printexc.record_backtrace true
 
-(** [pp_string s] pretty-prints string [s]. *)
-let pp_string s = "\"" ^ s ^ "\""
-
-(** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
-let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
-
-(** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
-    to pretty-print each element of [lst]. *)
-let pp_list pp_elt lst =
-  let pp_elts lst =
-    let rec loop n acc = function
-      | [] -> acc
-      | [h] -> acc ^ pp_elt h
-      | h1 :: (h2 :: t as t') ->
-        if n = 100 then acc ^ "..."  (* stop printing long list *)
-        else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
-    in loop 0 "" lst
-  in "[" ^ pp_elts lst ^ "]"
-
-(** [pp_player pl] pretty-prints the player [pl]. *)
-let pp_player pl = 
-  let name = get_player_name pl in 
-  pp_string name
-
-(** [pp_array arr] pretty-prints the player array [arr]. *)
-let pp_array arr = pp_list pp_player (Array.to_list arr)
 
 (* Helper functions to test swing input parsers *)
 let club_parser_helper(name : string) (input_club : string)

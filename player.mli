@@ -60,3 +60,6 @@ val dist_from_hole : float * float -> float * float -> float
    updated location post swing. *)
 val calculate_location: t -> Command.t -> Course.hole_number -> 
   Course.t -> Course.hole_location
+
+(** [pp_player pl] pretty-prints the player [pl]. *)
+val pp_player : t -> string
