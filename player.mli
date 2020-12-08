@@ -1,17 +1,12 @@
 open Command
 open Parse
-(*********************************************************************)
-(** Gian *)
-(*********************************************************************)
-
 (** This module contains all data relevant to a player and their state. 
     Throughout the course of the game of golf, the player will be moving around
-    the course and their score will be changing, a player object will contain the
-    information to track this. *)
+    the course and their score will be changing, a player object will contain 
+    the information to track this. *)
 
 (**The abstract type of values representing a player *)
 type t
-
 
 (*The type representing how much a player's strength effects their swing power*)
 type power_multiplier = float
@@ -22,7 +17,6 @@ type accuracy_multiplier = float
 (*The type representing how many additional strokes a player gets subtracted to 
   their score based on their skill level*)
 type handicap = int
-
 
 (**  [init_players] produces an array of players based on input from stdin 
      Raises: Invalid_argument if input is not one of the accepted forms *)
@@ -38,8 +32,8 @@ val get_player_name : t -> string
 *)
 val get_player_power_multiplier : t -> float
 
-(** [get_player_accuracy_multiplier p] returns the accuracy multiplier for a player [p]
-*)
+(** [get_player_accuracy_multiplier p] returns the accuracy multiplier for a 
+    player [p]*)
 val get_player_accuracy_multiplier : t -> float
 
 (** [get_player_handicap p] returns the handicap for a player [p] *)
@@ -51,7 +45,7 @@ val get_player_location : t -> float*float
 
 (** [update_player_location p new_loc] returns a new instande of player [p] 
     containing infomration about a new location [new_loc] *)
-val update_player_location: t -> float*float -> t
+val update_player_location: t ->float*float -> t
 
 (* [dist_from_hole loc1 loc2] calculates the cartesian distance between 
    two sets of coordinates, [loc1] and [loc2] *)

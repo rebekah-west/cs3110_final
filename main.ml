@@ -1,6 +1,7 @@
 open Course
 open Game
 open Player
+open Scorecard
 
 (** [pp_string s] pretty-prints string [s]. *)
 let pp_string s = "\"" ^ s ^ "\""
@@ -23,15 +24,20 @@ let play_game f =
   let course = Course.from_json(Yojson.Basic.from_file(f)) in
   let players = Player.init_players () in
   let game = Game.init_game players course in
+  scorecard_printer game course;
   let rec hole game hole_num = 
     let valid = hole_num <= (Course.num_holes course) in
     match valid with
     | false -> Printf.printf "Congratulations! You have completed the course.";
     | true -> hole (Game.play_hole game) (hole_num+1);
-  in hole game 1;
-  let winners = Array.to_list (Array.map Player.get_player_name (Game.winner_of_game game)) in
+      if valid then scorecard_printer game course;
+  in hole game 0;
+  let winners = Array.to_list 
+      (Array.map Player.get_player_name (Game.winner_of_game game)) in
   Printf.printf "The winner is %s" (pp_list pp_string winners);
-  Printf.printf "The complete scorecard is" ;
+  print_string "\n";
+  print_string "The complete scorecard is: " ;
+  scorecard_printer game course;
   Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."
 
 

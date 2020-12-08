@@ -7,6 +7,31 @@ open Visual
 (* Implementations of game and it's functions*)
 (*****************************************************)
 
+(** [pp_string s] pretty-prints string [s]. *)
+let pp_string s = "\"" ^ s ^ "\""
+
+(** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
+let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
+(** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
+    to pretty-print each element of [lst]. *)
+
+let pp_list pp_elt lst =
+  let pp_elts lst =
+    let rec loop n acc = function
+      | [] -> acc
+      | [h] -> acc ^ pp_elt h
+      | h1 :: (h2 :: t as t') ->
+        if n = 100 then acc ^ "..."  (* stop printing long list *)
+        else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
+    in loop 0 "" lst
+  in "[" ^ pp_elts lst ^ "]"
+
+let pp_player pl = 
+  let name = get_player_name pl in 
+  pp_string name
+
+let pp_array arr = pp_list pp_player (Array.to_list arr)
+
 (* only need to keep track of score per hole since Player.t
    keeps track of the overall score of a player*)
 type hole_score = {
@@ -86,18 +111,18 @@ let update_score game =
     if sc.(i).player == current_player
     then let new_hole_score = {
         hole = game.current_hole;
-        player = current_player;
-        hole_score = sc.(i).hole_score + 1;
-      } in game.scores.(game.current_hole).(i) <- new_hole_score
+        player = current_player; 
+        hole_score = sc.(i).hole_score + 1;}
+      in game.scores.(game.current_hole).(i) <- new_hole_score
   done;
   game.scores
 
-let update_turn game (hole:Course.hole) = 
-  let next_player = ref game.roster.(0) in 
+let update_turn game updated_roster (hole:Course.hole) = 
+  let next_player = ref updated_roster.(0) in 
   let next_dist = ref (dist_from_hole (get_player_location !next_player) 
                          (get_hole_loc game.course (get_hole_number hole))) in 
-  for i = 0 to (Array.length game.roster)-1 do 
-    let cur_player = game.roster.(i) in 
+  for i = 0 to (Array.length updated_roster)-1 do 
+    let cur_player = updated_roster.(i) in 
     let cur_dist = dist_from_hole (get_player_location cur_player) 
         (get_hole_loc game.course (get_hole_number hole)) in 
     if cur_dist > !next_dist && !next_dist != 0. then 
@@ -156,6 +181,16 @@ let sum_scores game player =
   done;
   !sums
 
+let get_hole_score game player hole = 
+  let hole_list = game.scores.(hole-1) in 
+  let hole = ref hole_list.(0) in
+  for i = 0 to Array.length hole_list -1 do 
+    let hole_sc = hole_list.(i) in 
+    if hole_sc.player = player then 
+      hole := hole_sc
+  done;
+  !hole.hole_score
+
 (* returns an array of all the current total scores of the player *)
 let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
 
@@ -197,6 +232,12 @@ let winner_of_game2 game =
   let curr_winner = List.hd players in 
   find_winner (List.tl scores) (List.tl players) [(curr_min, curr_winner)]
 
+
+(** [print_location player] prints the current location of the player *)
+let print_location player = print_string 
+    (Player.get_player_name player ^ "\'s new location is " ^
+     (pp_tup (Player.get_player_location player)) ^ "\n")
+
 (** [updated_rostr roster p] takes in a roster and the new player to update
     with and returns that updated roster*)
 let update_roster roster player = 
@@ -205,13 +246,9 @@ let update_roster roster player =
     if get_player_name roster.(i) = get_player_name player then 
       new_roster.(i) <- player else
       new_roster.(i) <- roster.(i)
+
   done;
   new_roster
-
-(** [print_location player] prints the current location of the player *)
-let print_location player = print_string 
-    (Player.get_player_name player ^ "\'s new location is " ^
-     (pp_tup (Player.get_player_location player)) ^ "\n")
 
 (* [print_init_loc g] prints the location of the player who is about to swing 
    along with the location of the hole *)
@@ -241,7 +278,8 @@ let play_one_swing_of_hole game =
     course = game.course;
     scores = update_score game; 
     current_hole = game.current_hole;
-    current_turn = update_turn game (get_hole game.course game.current_hole); 
+    current_turn = update_turn game updated_roster 
+        (get_hole game.course game.current_hole); 
     holes_played = game.holes_played;
   } 
 
@@ -273,31 +311,34 @@ let print_score game player = print_string
      (pp_string (string_of_int (sum_scores game player))) ^ 
      "after hole" ^ pp_string (string_of_int game.current_hole) ^ "\n")
 
-
 let print_scorecard (game:t) = 
   for i = 0 to Array.length (game.roster) do
     print_score game game.roster.(i)
   done
+
+let reset_player_loc p = update_player_location p (0., 0.)
 
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
 let switch_holes game = 
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
-  print_scorecard game;
   let new_hole = course_arr.(update_ind) in
-  { roster = game.roster; 
+  let new_rost = Array.map reset_player_loc game.roster in 
+  { roster = new_rost; 
     course = game.course;
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; }
+    holes_played = game.holes_played@[game.current_hole]; 
+  }
 
 (* plays a hole to completion *)
-let rec play_hole game = 
+let play_hole game = 
   if someone_still_playing 
       game.roster game (Course.get_hole_loc game.course game.current_hole)
-  then play_hole (play_one_swing_of_hole game)
+  then
+    play_one_swing_of_hole game
   else switch_holes game
 
 let play_game players course = 

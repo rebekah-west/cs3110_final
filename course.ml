@@ -55,14 +55,12 @@ let float_of_int_tuple tup =
   let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
   ret 
 
-
 (* [terrain_of_json j] creates a terrain object from json [j] *)
 let terrain_of_json j =
   let open Yojson.Basic.Util in {
     name = j |> member "name" |> to_string;
     location = j |> member "location" |> to_string |> tuple_of_string;
-    size = j |> member "size" |> to_string;
-  }
+    size = j |> member "size" |> to_string;}
 
 (* [hole_of_json j] creates a hole object from json [j] *)
 let hole_of_json j =
@@ -72,15 +70,13 @@ let hole_of_json j =
     hole_location = j |> member "hole_location" |> to_string |> tuple_of_string 
                     |> float_of_int_tuple;
     description = j |> member "description" |> to_string;
-    terrain = j |> member "terrain" |> to_list |> List.map terrain_of_json;
-  }
-
+    terrain = j |> member "terrain" |> to_list |> List.map terrain_of_json;}
 
 let from_json j =
   let open Yojson.Basic.Util in {
-    holes = j |> member "holes" |> to_list |> Array.of_list |> Array.map hole_of_json;
-    difficulty = j |> member "difficulty" |> to_string;
-  }
+    holes = j |> member "holes" |> to_list |> Array.of_list 
+            |> Array.map hole_of_json;
+    difficulty = j |> member "difficulty" |> to_string;}
 
 let start_hole course = (course.holes).(0).hole_number
 
@@ -100,6 +96,8 @@ let get_hole_loc course hole_number =
 let get_par course hole_number =  
   let hole = get_hole course hole_number in 
   hole.par_number
+
+let get_par2 hole = hole.par_number
 
 let difficulty course = course.difficulty
 

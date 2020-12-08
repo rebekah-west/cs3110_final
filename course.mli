@@ -1,7 +1,3 @@
-(*********************************************************************)
-(** Rebekah *)
-(*********************************************************************)
-
 (** 
    Representation of static course data.
 
@@ -58,6 +54,10 @@ val get_hole_number: hole -> int
 (** [get_par h] returns the par of hole [h] 
     Raises: UnknownHole h if h is not a hole number in course [t]*)
 val get_par: t -> hole_number -> int
+
+(** [get_par h] returns the par of hole [h] 
+    Raises: UnknownHole h if h is not a hole number in course [t]*)
+val get_par2: hole -> int
 
 (** [difficulty c] is a representation of how difficult course [c] is. *)
 val difficulty : t -> string
