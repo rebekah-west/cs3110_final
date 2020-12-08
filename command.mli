@@ -1,12 +1,6 @@
 (*********************************************************************)
-(** How much should we place in .mli versus .ml ? *)
-(** When a function takes user input in the body, should it take type unit? *)
+(*Parsing of player commands.*)
 (*********************************************************************)
-
-
-(**
-   Parsing of player commands.
-*)
 
 (** The type [t] contains all the information relevant to a swing *)
 type t 
@@ -21,21 +15,18 @@ type club =
   | SandWedge
 
 (** The type [power] represents how hard the golf ball is hit. 
-    Requires: Must be an int between 0 and 100
-*)
+    Requires: Must be an int between 0 and 100 *)
 type power = int
 
 (** The type [angle] represents the vertical angle from the ground the ball 
     will travel 
-    Requires: Must be an ine between 0 and 90
-*)
+    Requires: Must be an int between 0 and 90 *)
 type angle = int
 
 (** The type [alignment] represents the offset the player takes from being
     pointed directly at the hole. Negative alignment implies turning left of 
     the hole and positive alignment implies aiming to the right
-    Requires: Must be an int between -90 and 90 
-*)
+    Requires: Must be an int between -90 and 90  *)
 type alignment = int
 
 
@@ -54,50 +45,41 @@ exception Malformed
 exception InvalidInput
 
 (**Raised when a user gives an input outside of the range of 
-   acceptable values*)
+   acceptable values *)
 exception ValueOutOfRange
 
 
 (* [parse_club clb] evaluates the type of club a player wishes to use on their 
    turn represented by string [clb]
-   Requires: A valid input string which represents a club
-   Raises: A Malformed exception if the string passed is not a valid
-   representation of a club or an [Empty] exception if no argument is passed
-*) 
+   Requires: A valid input string which represents a club *) 
 val parse_club : string -> club
 
 (* [parse_power pow] evaluates the power a player wishes to use on their 
    turn represented by int [pow]
-   Requires: A valid input, an int between 0 and 100
-*)
+   Requires: A valid input, an int between 0 and 100 *)
 val parse_power : int -> power
 
 (* [parse_angle ang] evaluates the angle a player wishes to use on their 
    turn represented by int [ang]
-   Requires: A valid input, an int betwwen 0 and 90
-*)
+   Requires: A valid input, an int betwwen 0 and 90 *)
 val parse_angle : int -> angle
 
 (* [parse_alignment degrees] evaluates the angle a player wishes to use 
    to offset themselves from the initial positioning of being
    directly pointed at the hole. Takes in an int [degrees] and outputs the
    corresponding alignment
-   Requires: A valid input, an int between -90 and 90
-*)
+   Requires: A valid input, an int between -90 and 90 *)
 val parse_alignment : int -> alignment
 
 (** [parse_swing] prompts the users for various inputs (which club they want
     to use, how much power they want to swing with, the vertical angle, and the 
     alignment) and creates a type t for the program to use going forward 
-    Examples:
-    Requires:
-    Raises:
-*)
+    Examples: sequential user input of driver, 90, 45, 0 results in 
+    {club: driver; power: 90; angle: 45; alignment: 0;}
+    Requires: A valid input for each of club, power, angle, and alignment as 
+    described above.
+    If any input is invalid, the user will be prompted to try again. *)
 val parse_swing : unit -> t
-
-(* [get_command comm] is the command t contained within [comm] if 
-   the result is legal and throws a "Not_Legal" exception otherwise.*)
-val get_command : command -> t
 
 (** [get_power t] returns the power associated with swing [t] *)
 val get_power : t -> float

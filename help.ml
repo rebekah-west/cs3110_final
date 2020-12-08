@@ -91,21 +91,25 @@ let handicap_explanation =
   subtracted from their final score. \n"
 
 (*for clubs menu*)
-let driver_explanation = "The driver is a club that will increase your power
-by 50% but will result in a decrease in a 20% decrease inyour accuracy. It is 
-best used for very long shots. \n"
-let nine_iron_explanation = "The Nine Iron will decrease your power by 10% but
-increase your accuracy by 10%. It is best for mid-long range shots.\n"
-let eight_iron_explanation = "The Eight Iron will slightly decrease your power 
-by 20% but increase your accuracy by 20%. It is best used for mid-long 
-range shots.\n"
-let putter_explanation = "The putter will decrease your power by 50% but
- increase your accuracy by 30%. It is best for shots very close to the hole.\n"
-let sand_wedge_explanation = "The sand wedge will decrease your power by 20%
-but increase your power by 10%. It is best for mid-ranged shots.\n"
-let pitching_wedge_explanation = "The pitching wedge will decrease your power 
-by 30% but increase your accuracy by 50%. It is best used for short to 
-mid-ranged shots.\n"
+let driver_explanation = 
+  "The driver is a club that will increase your power by 50% but will result 
+  in a decrease in a 20% decrease in your accuracy. It is best used for very 
+  long shots. \n"
+let nine_iron_explanation = 
+  "The Nine Iron will decrease your power by 10% but increase your accuracy 
+  by 10%. It is best for mid-long range shots.\n"
+let eight_iron_explanation = 
+  "The Eight Iron will slightly decrease your power by 20% but increase your 
+  accuracy by 20%. It is best used for mid-long range shots.\n"
+let putter_explanation = 
+  "The putter will decrease your power by 50% but increase your accuracy 
+  by 30%. It is best for shots very close to the hole.\n"
+let sand_wedge_explanation = 
+  "The sand wedge will decrease your power by 20% but increase your power 
+  by 10%. It is best for mid-ranged shots.\n"
+let pitching_wedge_explanation = 
+  "The pitching wedge will decrease your power by 30% but increase your 
+  accuracy by 50%. It is best used for short to mid-ranged shots.\n"
 
 (* for player input help menu*)
 let power_explanation = 
@@ -298,26 +302,19 @@ let player_input_menu_parser selection =
   | 1 -> Printf.printf "Showing explanation for number of players... \n %s" 
            num_players_explanation;
     Printf.printf "\n Please enter another selection from the player input menu >";
-
   | 2 -> Printf.printf "Showing explanation for names... \n %s" 
            name_explanation;
     Printf.printf "\n Please enter another selection from the player input menu >";
-
   | 3 -> Printf.printf "Showing explanation for skill level options... \n %s" 
            skill_explanation;
     Printf.printf "\n Please enter another selection from the player input menu >";
-
   | 4 -> Printf.printf "Showing an explanation of strength options... \n %s" 
            strength_explanation;
     Printf.printf "\n Please enter another selection from the player input menu >";
-
   | 5 -> Printf.printf "Showing an explanation of handicap... \n %s"
            handicap_explanation;
     Printf.printf "\n Please enter another selection from the player input menu >";
-
-  | 6 -> Printf.printf "Going back to the main menu... \n";
-    ()
-
+  | 6 -> Printf.printf "Going back to the main menu... \n"; ()
   | _ -> Printf.printf "Unknown selection, please enter another selection> ";
     ()
 
@@ -346,27 +343,20 @@ let main_menu_parser selection =
   match selection with
   | 1 -> Printf.printf "Showing game explanation... \n \n %s" game_explanation;
     Printf.printf "\n Please enter another selection from the menu >";
-
   | 2 -> Printf.printf "Showing course selection explanation... \n \n %s" 
            course_selection_explanation;
     Printf.printf "\n Please enter another selection from the menu >";
-
   | 3 -> Printf.printf "Going to the player initialization input help menu... \n";
     player_input_menu_init()
-
   | 4 -> Printf.printf "Going to the swing input help menu... \n";
     swing_input_menu_init()
-
   | 5 -> Printf.printf "Showing an explanation of who goes first... \n %s"
            who_goes_first;
     Printf.printf "\n Please enter another selection from the menu >";
-
   | 6 -> Printf.printf "Showing an explanation of scoring... \n"; 
     scoring_menu()
-
   | 7 -> Printf.printf "Going back to the game... \n"; ()
-
-  | _ -> Printf.printf "Unknown selection, please enter another selection> ";
+  | _ -> Printf.printf "Unknown selection, please enter another selection> "; 
     ()
 
 let main_menu_disp (header : bool) = 

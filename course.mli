@@ -1,20 +1,23 @@
+(*********************************************************************)
 (** 
-   Representation of static course data.
+   Representation of course data.
 
    This module represents the data stored in course files, including
    the holes and terrain.  It handles loading of that data from JSON as well
    as querying the data.
 *)
+(*********************************************************************)
 
-(** The abstract type of values representing the course. *)
+(** The abstract type representing the course. *)
 type t
 
+(** The abstract type representing a single hole. *)
 type hole
 
 (** The type of hole identifiers. *)
 type hole_number = int
 
-(** *)
+(** The type of hole location *)
 type hole_location = float * float
 
 (** The type of terrain obstacles *)
@@ -51,19 +54,19 @@ val get_hole_loc : t -> hole_number -> hole_location
 (** [get_hole_number h] returns the number of hole [h] *)
 val get_hole_number: hole -> int
 
-(** [get_par h] returns the par of hole [h] 
+(** [get_par c h] returns the par of hole with hole_number [h] in course [c] 
     Raises: UnknownHole h if h is not a hole number in course [t]*)
 val get_par: t -> hole_number -> int
 
-(** [get_par h] returns the par of hole [h] 
+(** [get_hole_par h] returns the par of hole [h] 
     Raises: UnknownHole h if h is not a hole number in course [t]*)
-val get_par2: hole -> int
+val get_hole_par: hole -> int
 
 (** [difficulty c] is a representation of how difficult course [c] is. *)
 val difficulty : t -> string
 
 (** [description c h] is the description of hole [h] in course [c]. 
-    Raises [UnknownHole h] if [h] is not a hole identifier in [c]. *)
+    Raises: [UnknownHole h] if [h] is not a hole identifier in [c]. *)
 val description : t -> hole_number -> string
 
 (** [get_obstacle_locs c h] is a list of obstacle type and location in hole 

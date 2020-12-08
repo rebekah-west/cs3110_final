@@ -52,9 +52,6 @@ type t = {
   accuracy_multiplier : float;
   handicap : int ; 
   location : (float * float);
-  (*may be helpful based on everyone else's implementations *)
-  (* current_hole : int or string ; <- to get hole location of a player
-     hole_strokes : int or int list; <- to get score at every hole*)
 }
 
 (** [player_from_json j] reads in the player from the json *)
@@ -77,8 +74,7 @@ let read_players j =
 
 (* [parse_acc_mult str] returns the accuracy multiplier based on how comfortable
    someone indicates they are with golf
-   Raises: None
-*)
+   Raises: None *)
 let rec parse_acc_mult (acc : string) = 
   let parsed = parse acc in 
   match parsed with 
@@ -90,7 +86,8 @@ let rec parse_acc_mult (acc : string) =
 
 (* [parse_pow_mult str] returns the power multiplier based on how strong
    someone indicates they are
-   Raises: Invalid_argument if the string is not one of the suggested strengths*)
+   Raises: Invalid_argument if the string is not one of the suggested 
+   strengths *)
 let rec parse_pow_mult (pow : string) = 
   let parsed = parse pow in 
   match parsed with 
@@ -110,8 +107,8 @@ let rec parse_name (name : string) =
   end
   else parsed_name
 
-(* [create_player entry] prompts user for input, parses it, and returns type 
-   Player.t *)
+(* [create_player entry] prompts user for input, parses it, and 
+   returns type Player.t *)
 let create_player entry =
   Printf.printf "\nWelcome new player. Please enter your name.\n";
   let name = read_line () |> parse_name in
@@ -135,19 +132,6 @@ let init_players () =
   let num_players = read_line () |> parse |> string_catcher in
   let player_array = Array.make num_players 0. in
   Array.map create_player player_array
-
-
-(*
--needs to communicate with command about where the ball lands
--we need to assume the player is just a point in space
--we assume they are on their ball or a foot to the left or something
-*)
-
-
-(*perhaps uses a hole score tracked separately from overall score to help
-  with a hole-by-hole scorecard?)
-  let update_score player =
-  failwith "Unimplemented" *)
 
 let get_player_name t = t.player_name
 
@@ -187,12 +171,12 @@ let rad_from_deg degrees =
 let deg_from_rad radians = 
   radians *. 180.0 /. pi
 
-(* AF: Converting a swing to a "speed" in meters per second for calculation with 
-   gravity given a players power multiplier after personal and club adjustments
-   and given the power they selected to use. We represent 100 power as hitting 
-   a ball with an initial velocity of 50 m/s. This is because if a player sets 
-   an "optimal" angle, given no multipliers this would lead to a 279 yard drive
-   which we find to be a reasonable average. 
+(* AF: Converting a swing to a "speed" in meters per second for calculation 
+   with gravity given a players power multiplier after personal and club 
+   adjustments and given the power they selected to use. We represent 100 
+   power as hitting a ball with an initial velocity of 50 m/s. This is 
+   because if a player sets an "optimal" angle, given no multipliers this 
+   would lead to a 279 yard drive which we find to be a reasonable average. 
    Example: power_to_ms 30 converts to an initial velocity of 15 m/s*)
 let power_to_ms adj_pow =
   adj_pow /. 2.0 
@@ -204,7 +188,7 @@ let random_gaussian () =
   sqrt (-2. *. log (Random.float 1.)) *. cos (2. *. pi *. Random.float 1.)
 
 (* Adjust angle based on a player's accuracy multiplier [adj_acc] and their
-   chosen angle to hit the ball [chosen_ang], the adjustment is a Normal Random 
+   chosen angle to hit the ball [chosen_ang], the adjustment is a Normal Random
    variable with mean 0 and standard deviation equal to the inverse of the
    accuracy multiplier. The adjustment is in degrees, it will never result in
    the angle being less than 0 or greater than 90.

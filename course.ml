@@ -1,14 +1,9 @@
-(** AF:
-    RI:
-*)
-type hole_number = int
-type hole_location = float * float
+(*****************************************************)
+(* Implementations of functions related to a course *)
+(*****************************************************)
 
-
-(** AF:
-    RI:
-    will be implmented later as an extra feature
-*)
+(* AF: The variant type terrain_type represents the 3 different types of 
+    potential terrain in a golf course: lake, tree, and sand. *)
 type terrain_type =
   | Lake
   | Tree
@@ -20,9 +15,9 @@ type terrain = {
   size: string;
 }
 
-(** AF:
-    RI:
-*)
+type hole_number = int
+type hole_location = float * float
+
 type hole = {
   hole_number: hole_number;
   par_number: int;
@@ -31,10 +26,6 @@ type hole = {
   terrain: terrain list
 }
 
-
-(** AF:
-    RI:
-*)
 type t = {
   holes: hole array;
   difficulty: string;
@@ -45,15 +36,19 @@ type wind = int * float
 
 exception UnknownHole of hole_number
 
-(* [tuple_of_string string] creates a tuple from string [string] *)
+(* [tuple_of_string string] creates an integer tuple from string [string] *)
 let tuple_of_string string = 
   let lst = String.split_on_char ',' string in
-  (int_of_string (List.hd lst), int_of_string (List.nth lst 1))
+  match lst with 
+  | [] -> failwith "empty string"
+  | [h] -> failwith "only one element in the string"
+  | h::[t] -> (int_of_string h, int_of_string t)
+  | _ -> failwith "too many elements"
 
 (* [float_of_int_tuple tup] converts an integer tuple to a float tuple. *)
 let float_of_int_tuple tup = 
-  let ret = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
-  ret 
+  let float_tup = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
+  float_tup 
 
 (* [terrain_of_json j] creates a terrain object from json [j] *)
 let terrain_of_json j =
@@ -67,7 +62,7 @@ let hole_of_json j =
   let open Yojson.Basic.Util in {
     hole_number = j |> member "hole_number" |> to_int;
     par_number = j |> member "par_number" |> to_int;
-    hole_location = j |> member "hole_location" |> to_string |> tuple_of_string 
+    hole_location = j |> member "hole_location" |> to_string |> tuple_of_string
                     |> float_of_int_tuple;
     description = j |> member "description" |> to_string;
     terrain = j |> member "terrain" |> to_list |> List.map terrain_of_json;}
@@ -76,7 +71,8 @@ let from_json j =
   let open Yojson.Basic.Util in {
     holes = j |> member "holes" |> to_list |> Array.of_list 
             |> Array.map hole_of_json;
-    difficulty = j |> member "difficulty" |> to_string;}
+    difficulty = j |> member "difficulty" |> to_string;
+  }
 
 let start_hole course = (course.holes).(0).hole_number
 
@@ -97,7 +93,7 @@ let get_par course hole_number =
   let hole = get_hole course hole_number in 
   hole.par_number
 
-let get_par2 hole = hole.par_number
+let get_hole_par hole = hole.par_number
 
 let difficulty course = course.difficulty
 

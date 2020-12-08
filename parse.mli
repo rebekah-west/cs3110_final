@@ -13,5 +13,5 @@ val remove_blanks : parsable -> string
    into a string that can be interpretted by the game *)
 val parse : parsable -> string 
 
-(*TODO*)
+(* [string_catcher s] checks if strnig [s] can be transformed into an int *)
 val string_catcher : string -> int 
