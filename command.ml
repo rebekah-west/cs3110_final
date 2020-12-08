@@ -103,9 +103,6 @@ let parse_swing () =
     alignment = alignment;
   } in swing
 
-let get_command command = 
-  failwith "Unimplemented"
-
 let get_power t = t.power |> float_of_int
 
 let get_club t = t.club

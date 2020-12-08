@@ -1,13 +1,11 @@
 (*********************************************************************)
-(** Jenna *)
-(*********************************************************************)
-
 (** 
    Representation of a game being played.
 
    This module represents the scorecard for a specific game, as well as 
    tracks game functionality such as whose turn is next and who is winnning
 *)
+(*********************************************************************)
 
 (** The abstract type of values representing games. *)
 type t
@@ -15,7 +13,7 @@ type t
 (** the type of the game scorecard *)
 type scorecard
 
-(** the type of the a score for one player at one hole*)
+(** the type of the score for one player at one hole *)
 type hole_score
 
 (* exception if the hole is not a valid representation *)
