@@ -6,6 +6,7 @@ open Visual
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
+
 (** [pp_string s] pretty-prints string [s]. *)
 let pp_string s = "\"" ^ s ^ "\""
 
@@ -111,9 +112,9 @@ let update_score game =
     if sc.(i).player == current_player
     then let new_hole_score = {
         hole = game.current_hole;
-        player = current_player;
-        hole_score = sc.(i).hole_score + 1;
-      } in game.scores.(game.current_hole).(i) <- new_hole_score
+        player = current_player; 
+        hole_score = sc.(i).hole_score + 1;}
+      in game.scores.(game.current_hole).(i) <- new_hole_score
   done;
   game.scores
 
@@ -250,8 +251,6 @@ let update_roster roster player =
   done;
   new_roster
 
-
-
 (* [print_init_loc g] prints the location of the player who is about to swing 
    along with the location of the hole *)
 let print_init_locs game = 
@@ -310,7 +309,6 @@ let print_score game player = print_string
     (Player.get_player_name player ^ "\'s score is " ^
      (pp_string (string_of_int (sum_scores game player))) ^ 
      "after hole" ^ pp_string (string_of_int game.current_hole) ^ "\n")
-
 
 let print_scorecard (game:t) = 
   for i = 0 to Array.length (game.roster) do

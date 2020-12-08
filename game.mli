@@ -1,7 +1,3 @@
-(*********************************************************************)
-(** Jenna *)
-(*********************************************************************)
-
 (** 
    Representation of a game being played.
 
@@ -68,7 +64,6 @@ val sum_scores: t-> Player.t -> int
     furthest from hole is up. At the start of any other hole, the player with
     honors, who won the last hole, wins *)
 val update_turn: t -> Player.t array -> Course.hole -> Player.t
-
 
 (** [winner_of_hole gm h] returns  the player who won the hole [h], 
     If it is a tie, all players with lowest score listed 

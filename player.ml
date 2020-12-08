@@ -97,7 +97,7 @@ let rec parse_pow_mult (pow : string) =
   | "belowaverage" -> 0.5
   | "average" -> 1.0
   | "aboveaverage" -> 1.5
-  | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
+  | _ -> Printf.printf "You must enter below average, average, or above average,please check your spelling and try again. \n"; 
     read_line() |> parse |> parse_pow_mult
 
 let rec parse_name (name : string) = 
@@ -110,7 +110,8 @@ let rec parse_name (name : string) =
   end
   else parsed_name
 
-(* [create_player entry] prompts user for input, parses it, and returns type Player.t *)
+(* [create_player entry] prompts user for input, parses it, and returns type 
+   Player.t *)
 let create_player entry =
   Printf.printf "\nWelcome new player. Please enter your name.\n";
   let name = read_line () |> parse_name in
