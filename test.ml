@@ -57,14 +57,15 @@ let pp_list pp_elt lst =
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
 
+(** [pp_player pl] pretty-prints the player [pl]. *)
 let pp_player pl = 
   let name = get_player_name pl in 
   pp_string name
 
+(** [pp_array arr] pretty-prints the player array [arr]. *)
 let pp_array arr = pp_list pp_player (Array.to_list arr)
 
-(* A helper function to test parse_club by comparing expected output to 
-   actual output*)
+(* Helper functions to test swing input parsers *)
 let club_parser_helper(name : string) (input_club : string)
     (expected_output : Command.club) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_club input_club))
@@ -82,7 +83,7 @@ let power_parser_helper(name : string)(input_power : int)
   name >:: (fun _ -> assert_equal expected_output (parse_power input_power))
 
 (* A helper function to test parse_swing by seeing if proper exceptions are
-   thrown at run time*)
+   thrown at run tim e*)
 let swing_parser_exn_helper
     (name : string) (input_power : int) (expected_output : exn) : test = 
   name >:: (fun _ -> assert_raises expected_output 
@@ -174,15 +175,11 @@ let command_tests =
 
     alignment_parser_helper "int 5 to alignment 5" 5 5;
     alignment_parser_helper "int -5 to alignment -5" (-5) (-5);
-
     alignment_parser_helper "int 1 to alignment 1, edge case" 1 1;
     alignment_parser_helper "int -1 to alignment -1, edge case" (-1) (-1);
-
     alignment_parser_helper "int 0 to alignment 0, edge case" 0 0;
-
     alignment_parser_helper "int 90 to alignment 90, edge case" 90 90;
     alignment_parser_helper "int -90 to alignment -90, edge case" (-90) (-90);
-
     alignment_parser_helper "int 89 to alignment 89" 89 89;
     alignment_parser_helper "int -89 to alignment -89" (-89) (-89);
   ]
@@ -192,7 +189,7 @@ let robert_trent = Course.from_json (Yojson.Basic.from_file "RobertTrent.json")
 let pebble = Course.from_json (Yojson.Basic.from_file "PebbleBeach.json")
 
 (* course testing helper functions  *)
-let start_hole_test (name: string) (course:Course.t) (output:Course.hole_number) 
+let start_hole_test (name:string) (course:Course.t) (output:Course.hole_number)
   = name >:: (fun _ -> assert_equal output (start_hole course))
 let num_holes_test (name: string) (course:Course.t) (output:int) = 
   name >:: (fun _ -> assert_equal output (num_holes course))
@@ -220,8 +217,8 @@ let course_tests =
     num_holes_test "Robert Trent num_holes is 2" robert_trent 2;
     num_holes_test "Pebble Beach num_holes is 3" pebble 3;
     hole_loc_test "Robert Trent hole 1 at 230,45" robert_trent 1 (230.,45.); 
-    hole_loc_test "Pebble Beach hole 1 located at 430,45" pebble 1 (430.,45.); 
-    hole_loc_test "Pebble Beach hole 3 located at 530,65" pebble 3 (530.,65.); 
+    hole_loc_test "Pebble Beach hole 1 located at 430,45" pebble 1 (430.,45.);
+    hole_loc_test "Pebble Beach hole 3 located at 530,65" pebble 3 (530.,65.);
     holes_array_test "Pebble has 3 holes" pebble 3;
     holes_array_test "Trent has 2 holes" robert_trent 2;
     par_test "Trent hole 1 has par 3" robert_trent 1 3;
@@ -237,20 +234,22 @@ let course_tests =
       "Avoid the ocean on this beautiful hole!";
     description_exceptions_test "Robert Trent not there" robert_trent
       76 (UnknownHole 76);
-    (* can i even test wind?? not really i think? *)
-    (* test that wind is an int *)
   ]
 
+(* read players from a json to use in testing functions in the player 
+   module *)
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
 let first_player = test_players.(0)
-
 let test_player_input = Player.init_players ()
-
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
+let jenna = test_players.(0)
+let gian = test_players.(2)
+let rt_hole1 = get_hole_loc robert_trent 1 (*Robert Trent hole 1 at 230,45*)
+let pb_hole1 = get_hole_loc pebble 1  (*Pebble Beach hole 1 at 430,45*)
 
-
-let player_name_test (name : string) (input : Player.t) (exp_output : string) : 
+(* Helper functions for the player module *)
+let player_name_test (name: string) (input: Player.t) (exp_output: string) :
   test = name >:: (fun _ -> 
     assert_equal exp_output (Player.get_player_name input) ~printer:pp_string)
 
@@ -273,16 +272,8 @@ let player_location_test (name : string) (input : Player.t)
 let dist_from_hole_test (name : string) (player_loc : float * float ) 
     (hole_loc : float * float ) (exp_output : float) : test = 
   name >:: (fun _ -> assert_equal true 
-               ( (exp_output -.(Player.dist_from_hole player_loc hole_loc)) 
-                 < (0.001)) )
-
-let jenna = test_players.(0)
-let gian = test_players.(2)
-
-(*"Robert Trent hole 1 at 230,45"*)
-let rt_hole1 = get_hole_loc robert_trent 1
-(*"Pebble Beach hole 1 located at 430,45"*)
-let pb_hole1 = get_hole_loc pebble 1 
+               ((exp_output -.(Player.dist_from_hole player_loc hole_loc))
+                < (0.001)) )
 
 let player_tests =
   [
@@ -300,6 +291,8 @@ let player_tests =
     dist_from_hole_test "Hole 1 pebble beach" (0.,0.) (430.,45.) 432.348;
   ]
 
+
+(* Helper functions to test the game module *)
 let current_hole_test (name : string) (input_game : Game.t)
     (expected_output : Course.hole_number) : test = 
   name >:: (fun _ -> assert_equal expected_output (current_hole input_game))
@@ -340,7 +333,8 @@ let initial_game_tests =
     current_hole_test "The game starts at hole 1" initialized_game 1;
     current_turn_test "Game starts with the player who was first in the lineup"
       initialized_game (get_player_name first_player);
-    current_turn_valid_player "Is the player returned by current turn a valid player" 
+    current_turn_valid_player 
+      "Is the player returned by current turn a valid player" 
       initialized_game (game_roster initialized_game);
     played_test "Ensure the game starts with no holes played" 
       initialized_game [];
@@ -356,8 +350,9 @@ let swing1_game_tests = [
   current_hole_test "The game stays at hole 1" swing1_game 1;
   current_turn_test "Game moves to next player in lineup"
     swing1_game (get_player_name test_players.(1));
-  current_turn_valid_player "Is the player updated to a valid player
-       after swing one" swing1_game (game_roster swing1_game);
+  current_turn_valid_player 
+    "Is the player updated to a valid player after swing one" swing1_game 
+    (game_roster swing1_game);
   played_test "played should still be empty after one swing" 
     swing1_game [];
 ]
@@ -369,8 +364,9 @@ let swing2_game_tests = [
   current_hole_test "Second swing: The game stays at hole 1" swing2_game 1;
   current_turn_test "Second swing: Game moves to next player in lineup"
     swing2_game (get_player_name test_players.(2));
-  current_turn_valid_player "Second swing: Is the player updated to a valid 
-  player" swing2_game (game_roster swing2_game);
+  current_turn_valid_player 
+    "Second swing: Is the player updated to a valid player" swing2_game 
+    (game_roster swing2_game);
   played_test "Second swing: played should still be empty" 
     swing2_game [];
 ]
@@ -380,7 +376,6 @@ let suite =
     command_tests;
     course_tests;
     player_tests;
-    (* make sure game tests is last  *)
     initial_game_tests;
     swing1_game_tests;
     swing2_game_tests;
