@@ -1,19 +1,21 @@
+(*****************************************************)
+(* Implementations of game and it's functions*)
+(*****************************************************)
+
 open Course
 open Player
 open Command
 open Str
 open Visual
-(*****************************************************)
-(* Implementations of game and it's functions*)
-(*****************************************************)
+
 (** [pp_string s] pretty-prints string [s]. *)
 let pp_string s = "\"" ^ s ^ "\""
 
 (** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
 let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
+
 (** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
     to pretty-print each element of [lst]. *)
-
 let pp_list pp_elt lst =
   let pp_elts lst =
     let rec loop n acc = function
@@ -25,15 +27,17 @@ let pp_list pp_elt lst =
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
 
+(** [pp_player pl] pretty-prints the player [pl]. *)
 let pp_player pl = 
-  let name = get_player_name pl in 
+  let name = Player.get_player_name pl in 
   pp_string name
 
+(** [pp_array arr] pretty-prints the player array [arr]. *)
 let pp_array arr = pp_list pp_player (Array.to_list arr)
 
 
-(* only need to keep track of score per hole since Player.t
-   keeps track of the overall score of a player*)
+(* keeps track of score per hole 
+   Player.t keeps track of the overall score of a player *)
 type hole_score = {
   hole: Course.hole_number;
   player: Player.t;
@@ -54,20 +58,19 @@ type t = {
 exception InvalidHole
 exception InvalidScore
 
-(** [pp_tup] transforms a float tuple to a string for printing *)
-let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
 
-(** [current_hole game] returns the hole currently being played *)
+
+(* [current_hole game] returns the hole currently being played *)
 let current_hole game = game.current_hole
 
-(** [init_hole_score player hole] initializes a 0 score for that player and
+(* [init_hole_score hole player] initializes a 0 score for that player and
     that hole *)
 let init_hole_score hole player = {
   hole = hole;
   player = player;
   hole_score = 0 - get_player_handicap player; }
 
-(** [init_scorecard players hole] initializes a 0 score for every player
+(* [init_scorecard players hole] initializes a 0 score for every player
     on hole [hole] *)
 let init_scorecard (players: Player.t array) hole = 
   Array.map (init_hole_score hole) players 
@@ -77,7 +80,7 @@ let create_scorecard (players: Player.t array) (course: Course.t) =
   let hole_array = (Array.map get_hole_number (get_holes course)) in
   Array.map (init_scorecard players) hole_array
 
-(** required: there must be at least one hole with*)
+(* required: there must be at least one hole and one player *)
 let init_game (players: Player.t array ) (course: Course.t) = 
   let scores = create_scorecard players course in
   let current_hole = Course.start_hole course in
@@ -132,7 +135,8 @@ let update_turn game updated_roster (hole:Course.hole) =
   done;
   !next_player
 
-(* get the integer score of the best score for a specific hole  *)
+(* [winning_score game hole] gets the integer score of the best score 
+   for a specific hole  *)
 let winning_score game hole = 
   let scorecard = game.scores.(hole) in 
   let lowest_score = scorecard.(0).hole_score in 
@@ -166,7 +170,7 @@ let winner_of_hole game hole =
   let scorecard = game.scores.(hole) in 
   winner_add winner_array scorecard lowest_score
 
-(* returns the total score for a player for all holes played so far  *)
+(* returns the total score for a player for all holes played so far *)
 let sum_scores game player = 
   let sc = game.scores in 
   let sums = ref 0 in
@@ -238,8 +242,8 @@ let print_location player = print_string
     (Player.get_player_name player ^ "\'s new location is " ^
      (pp_tup (Player.get_player_location player)) ^ "\n")
 
-(** [updated_rostr roster p] takes in a roster and the new player to update
-    with and returns that updated roster*)
+(** [update_roster roster p] takes in a roster and the new player to update
+    with and returns that updated roster *)
 let update_roster roster player = 
   let new_roster = Array.make (Array.length roster) roster.(0) in
   for i = 0 to (Array.length roster)-1 do
@@ -249,8 +253,6 @@ let update_roster roster player =
 
   done;
   new_roster
-
-
 
 (* [print_init_loc g] prints the location of the player who is about to swing 
    along with the location of the hole *)
@@ -303,8 +305,6 @@ let rec someone_still_playing roster game hol_loc =
       if (get_player_location h != hol_loc) && (player_score <= 10)
       then true else (someone_still_playing (Array.of_list t) game hol_loc)
     end
-
-let pp_string s = "\"" ^ s ^ "\""
 
 let print_score game player = print_string 
     (Player.get_player_name player ^ "\'s score is " ^

@@ -16,7 +16,7 @@ open Course
 *)
 (*********************************************************************)
 
-let player_name_str player = "Player: " ^ get_player_name player 
+let player_name_str player = "Player: " ^ Player.get_player_name player 
 
 let make_zero i = if i < 0 then 0 else i
 

@@ -32,7 +32,8 @@ let play_game f =
     | true -> hole (Game.play_hole game) (hole_num+1);
       scorecard_printer game course;
   in hole game 1;
-  let winners = Array.to_list (Array.map Player.get_player_name (Game.winner_of_game game)) in
+  let winners = Array.to_list 
+      (Array.map Player.get_player_name (Game.winner_of_game game)) in
   Printf.printf "The winner is %s" (pp_list pp_string winners);
   Printf.printf "The complete scorecard is" ;
   Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."

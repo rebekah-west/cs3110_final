@@ -22,9 +22,10 @@ exception InvalidHole
 (*the exception if the score is not the actual score of a player in the game *)
 exception InvalidScore
 
-(** [init_scorecard p c] is the initial state of the scorecard 
-    when players p play a game on course c. In this game the players are 
-    currently located at hole 1, and they all have scores of 0 *)
+(** [init_game p c] is the initial state of the game when players p play 
+    a game on course c. In this game the players are currently located at 
+    hole 1, and they all have scores of 0.
+    Requires: there must be at least one player in the player array *)
 val init_game: Player.t array -> Course.t -> t
 
 (** [current_hole gm] is the identifier of the hole on which the players are
@@ -61,12 +62,11 @@ val update_score: t -> scorecard
     that hole as 0 *)
 val sum_scores: t-> Player.t -> int
 
-(** [update turn gm] is attempting to update the turn after a player swings. 
+(** [update turn game players course] updates the turn after a player swings.
     During the first hole, players go in order of lineup. After that, player 
     furthest from hole is up. At the start of any other hole, the player with
     honors, who won the last hole, wins *)
 val update_turn: t -> Player.t array -> Course.hole -> Player.t
-
 
 (** [winner_of_hole gm h] returns  the player who won the hole [h], 
     If it is a tie, all players with lowest score listed 
