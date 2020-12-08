@@ -29,6 +29,38 @@ why you believe that your test suite demonstrates the correctness of your system
 *)
 (*********************************************************************)
 
+(*
+TEST PLAN
+
+TESTED BY OUNIT: We were able to create a player json and course json files 
+so that we could test the initial functionality of a game (before players 
+started playing it). THis meant we could automatically test that our game was 
+building correctly. 
+
+TESTED MANUALLY: However, since golf is a game that relies on user input, we
+have to manually update the game by playing a swing or a hole. Therefore, we
+did a large portion of our testing through play testing. 
+
+MODULES TESTED BY OUNIT: 
+
+
+HOW TEST CASES WERE DEVELOPED:
+Initially, we wrote blackbox tests for parts of the core implimentation that we 
+did not implement ourselves. This was specifically for testing the typing and 
+accuracy of Player, Course, and Game. 
+
+WHY TESTING APPROACH DEMONSTRATES CORRECTNESS OF SYSTEM:
+Play testing is an often overlooked but very important part of testing. It is 
+crucial in demonstating correctness because it is the only way of testing that 
+replicates how an actual game may be carried out. Through game play, you can 
+see the inplementation from the user perspective and notice what inputs a user 
+would be likely to put in or where an instruction may not be clear enough. Our 
+comprehensive OUNIT test adds another layer of confidence to supporting the
+correctness of the system, since it can test how the computer system actually 
+implements our functions versus how we think the computer is going to act. 
+
+*)
+
 open OUnit2
 open Command
 open Course

@@ -94,7 +94,7 @@ let rec parse_pow_mult (pow : string) =
   | "belowaverage" -> 0.5
   | "average" -> 1.0
   | "aboveaverage" -> 1.5
-  | _ -> Printf.printf "You must enter below average, average, or above average, please check your spelling and try again. \n"; 
+  | _ -> Printf.printf "You must enter below average, average, or above average,please check your spelling and try again. \n"; 
     read_line() |> parse |> parse_pow_mult
 
 let rec parse_name (name : string) = 
@@ -151,7 +151,6 @@ let update_player_location p new_loc=
     handicap = p.handicap;
     location = new_loc;
   } in p
-
 
 open Float
 
@@ -294,14 +293,17 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   print_float direction;
   let upd_loc = 
     ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
-      ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
+      ( (direction |> rad_from_deg |> sin) 
+        *. horiz_dist_yd +. snd current_loc) ) 
   in 
   let new_loc = bound_loc upd_loc in 
   (*the case of rolling*)
   if chosen_ang = 0. then 
     let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
-    let new_loc =  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
-                     ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd +. snd current_loc) ) 
+    let new_loc =  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd 
+                     +. fst current_loc ,  
+                     ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd 
+                       +. snd current_loc) ) 
     in 
     if dist_from_hole hol_loc new_loc < 30.0 then 
       hol_loc else new_loc

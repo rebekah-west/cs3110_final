@@ -1,7 +1,6 @@
 (*****************************************************)
 (* Implementations of game and it's functions*)
 (*****************************************************)
-
 open Course
 open Player
 open Command
@@ -34,7 +33,6 @@ let pp_player pl =
 
 (** [pp_array arr] pretty-prints the player array [arr]. *)
 let pp_array arr = pp_list pp_player (Array.to_list arr)
-
 
 (* keeps track of score per hole 
    Player.t keeps track of the overall score of a player *)
@@ -114,9 +112,9 @@ let update_score game =
     if sc.(i).player == current_player
     then let new_hole_score = {
         hole = game.current_hole;
-        player = current_player;
-        hole_score = sc.(i).hole_score + 1;
-      } in game.scores.(game.current_hole).(i) <- new_hole_score
+        player = current_player; 
+        hole_score = sc.(i).hole_score + 1;}
+      in game.scores.(game.current_hole).(i) <- new_hole_score
   done;
   game.scores
 
@@ -257,14 +255,15 @@ let update_roster roster player =
 (* [print_init_loc g] prints the location of the player who is about to swing 
    along with the location of the hole *)
 let print_init_locs game = 
-  let hole = current_hole game in 
-  let hole_loc = Course.get_hole_loc game.course hole in 
+  let hole_num = current_hole game in 
+  let hole_loc = Course.get_hole_loc game.course hole_num in 
   let pl_loc = Player.get_player_location game.current_turn in
   let pl_name = Player.get_player_name game.current_turn in 
+  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
   print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
   print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
   print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n");
-  Visual.print_loc hole_loc pl_loc
+  Visual.print_loc hole_loc pl_loc obstacle_locs
 
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
@@ -281,7 +280,8 @@ let play_one_swing_of_hole game =
     course = game.course;
     scores = update_score game; 
     current_hole = game.current_hole;
-    current_turn = update_turn game updated_roster (get_hole game.course game.current_hole); 
+    current_turn = update_turn game updated_roster 
+        (get_hole game.course game.current_hole); 
     holes_played = game.holes_played;
   } 
 
@@ -311,11 +311,12 @@ let print_score game player = print_string
      (pp_string (string_of_int (sum_scores game player))) ^ 
      "after hole" ^ pp_string (string_of_int game.current_hole) ^ "\n")
 
-
 let print_scorecard (game:t) = 
   for i = 0 to Array.length (game.roster) do
     print_score game game.roster.(i)
   done
+
+let reset_player_loc p = update_player_location p (0., 0.)
 
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
@@ -323,18 +324,21 @@ let switch_holes game =
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
   let new_hole = course_arr.(update_ind) in
-  { roster = game.roster; 
+  let new_rost = Array.map reset_player_loc game.roster in 
+  { roster = new_rost; 
     course = game.course;
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; }
+    holes_played = game.holes_played@[game.current_hole]; 
+  }
 
 (* plays a hole to completion *)
-let rec play_hole game = 
+let play_hole game = 
   if someone_still_playing 
       game.roster game (Course.get_hole_loc game.course game.current_hole)
-  then play_hole (play_one_swing_of_hole game)
+  then
+    play_one_swing_of_hole game
   else switch_holes game
 
 let play_game players course = 

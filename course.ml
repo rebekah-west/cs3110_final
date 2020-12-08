@@ -50,14 +50,12 @@ let float_of_int_tuple tup =
   let float_tup = (tup |> fst |> float_of_int, tup |> snd |> float_of_int) in 
   float_tup 
 
-
 (* [terrain_of_json j] creates a terrain object from json [j] *)
 let terrain_of_json j =
   let open Yojson.Basic.Util in {
     name = j |> member "name" |> to_string;
     location = j |> member "location" |> to_string |> tuple_of_string;
-    size = j |> member "size" |> to_string;
-  }
+    size = j |> member "size" |> to_string;}
 
 (* [hole_of_json j] creates a hole object from json [j] *)
 let hole_of_json j =
@@ -67,9 +65,7 @@ let hole_of_json j =
     hole_location = j |> member "hole_location" |> to_string |> tuple_of_string
                     |> float_of_int_tuple;
     description = j |> member "description" |> to_string;
-    terrain = j |> member "terrain" |> to_list |> List.map terrain_of_json;
-  }
-
+    terrain = j |> member "terrain" |> to_list |> List.map terrain_of_json;}
 
 let from_json j =
   let open Yojson.Basic.Util in {
@@ -105,7 +101,20 @@ let description course hole_number =
   let hole = get_hole course hole_number in 
   hole.description
 
+(* extracts the first letter of terrain type and the location from a terrain 
+   record *)
+let extract_char_loc terrain =
+  let char = String.get terrain.name 0 in 
+  let (a,b) = terrain.location in
+  (Float.of_int a, Float.of_int b, Char.escaped char)
+
+let get_obstacle_locs course hole_number = 
+  let hole = get_hole course hole_number in 
+  let obstacles = hole.terrain in 
+  List.map extract_char_loc obstacles 
+
 let wind () = 
   failwith "unimplemented"
+
 
 let get_hole_number hole = hole.hole_number
