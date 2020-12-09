@@ -39,8 +39,7 @@ let pp_array arr = pp_list pp_player (Array.to_list arr)
 type hole_score = {
   hole: Course.hole_number;
   player: Player.t;
-  hole_score: int;
-}
+  hole_score: int;}
 
 type scorecard = hole_score array array
 
@@ -50,8 +49,7 @@ type t = {
   current_hole: Course.hole_number;
   current_turn: Player.t;
   scores: scorecard;
-  holes_played: Course.hole_number list;
-}
+  holes_played: Course.hole_number list;}
 
 exception InvalidHole
 exception InvalidScore
@@ -260,11 +258,11 @@ let print_init_locs game =
   let hole_loc = Course.get_hole_loc game.course hole_num in 
   let pl_loc = Player.get_player_location game.current_turn in
   let pl_name = Player.get_player_name game.current_turn in 
-  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
+  (* let obstacle_locs = Course.get_obstacle_locs game.course hole_num in *)
   print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
   print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
-  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n");
-  Visual.print_loc hole_loc pl_loc obstacle_locs
+  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
+(* Visual.print_loc hole_loc pl_loc obstacle_locs *)
 
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)

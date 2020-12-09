@@ -22,19 +22,15 @@ let pp_list pp_elt lst =
 (** [play_game f] starts the adventure in file [f]. *)
 let play_game f =
   let course = Course.from_json(Yojson.Basic.from_file(f)) in
-  Printf.printf "made course";
   let players = Player.init_players () in
-  Printf.printf "initialized players";
   let game = (Game.init_game players course) in
-  Printf.printf "init game";
   scorecard_printer game course;
-  Printf.printf "printed scorecard";
   let rec hole game hole_num = 
     let valid = (hole_num ) <= (Course.num_holes course) in
     match valid with
     | false -> Printf.printf "Congratulations! You have completed the course.";
     | true -> hole (Game.play_hole game) (hole_num+1)
-  in hole game 0;
+  in hole game 1;
   (* for i=0 to Array.length (Course.get_holes course)-1 do 
      game := (Game.play_hole !game)
      done; *)
