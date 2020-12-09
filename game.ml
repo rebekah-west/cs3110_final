@@ -83,6 +83,7 @@ let init_game (players: Player.t array ) (course: Course.t) =
   let scores = create_scorecard players course in
   let current_hole = Course.start_hole course in
   let frst_up = players.(0) in 
+
   let first = {
     roster=players; 
     course=course;
@@ -249,7 +250,6 @@ let update_roster roster player =
     if get_player_name roster.(i) = get_player_name player then 
       new_roster.(i) <- player else
       new_roster.(i) <- roster.(i)
-
   done;
   new_roster
 
@@ -276,15 +276,13 @@ let play_one_swing_of_hole game =
   let updated_player = update_player_location game.current_turn new_loc in
   print_location updated_player;
   let updated_roster = update_roster game.roster updated_player in
-  {
-    roster = updated_roster; 
-    course = game.course;
-    scores = update_score game; 
-    current_hole = game.current_hole;
-    current_turn = update_turn game updated_roster 
-        (get_hole game.course game.current_hole); 
-    holes_played = game.holes_played;
-  } 
+  {roster = updated_roster; 
+   course = game.course;
+   scores = update_score game; 
+   current_hole = game.current_hole;
+   current_turn = update_turn game updated_roster 
+       (get_hole game.course game.current_hole); 
+   holes_played = game.holes_played;} 
 
 (* [get_player_score] p game gets the current score for a player on the current
    hole *) 
