@@ -127,13 +127,11 @@ let create_player entry =
   Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
   let handicap = read_line () |> Parse.string_catcher in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
-  let p = {
-    player_name = name; 
-    power_multiplier = pow_mult; 
-    accuracy_multiplier = acc_mult;
-    handicap = handicap;
-    location = (0., 0.);
-  } in p
+  {player_name = name; 
+   power_multiplier = pow_mult; 
+   accuracy_multiplier = acc_mult;
+   handicap = handicap;
+   location = (0., 0.);}
 
 let init_players () =
   Printf.printf "How many players will be participating today? Enter an int \n";
@@ -152,13 +150,11 @@ let get_player_handicap t = t.handicap
 let get_player_location t = t.location
 
 let update_player_location p new_loc= 
-  let p = {
-    player_name = p.player_name; 
+  { player_name = p.player_name; 
     power_multiplier = p.power_multiplier; 
     accuracy_multiplier = p.accuracy_multiplier ;
     handicap = p.handicap;
-    location = new_loc;
-  } in p
+    location = new_loc;} 
 
 open Float
 

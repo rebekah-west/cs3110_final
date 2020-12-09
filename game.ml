@@ -85,12 +85,12 @@ let init_game (players: Player.t array ) (course: Course.t) =
   let frst_up = players.(0) in 
 
   let first = {
-    roster=players; 
-    course=course;
-    scores=scores; 
-    current_hole=current_hole;
-    current_turn= frst_up; 
-    holes_played=[];
+    roster = players; 
+    course = course;
+    scores = scores; 
+    current_hole = current_hole;
+    current_turn = frst_up; 
+    holes_played = [];
   } in first
 
 let current_hole game = game.current_hole
@@ -329,8 +329,7 @@ let switch_holes game =
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; 
-  }
+    holes_played = game.holes_played@[game.current_hole]; }
 
 (* plays a hole to completion *)
 let play_hole game = 

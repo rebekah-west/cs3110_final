@@ -41,8 +41,7 @@ TESTED MANUALLY: However, since golf is a game that relies on user input, we
 have to manually update the game by playing a swing or a hole. Therefore, we
 did a large portion of our testing through play testing. 
 
-MODULES TESTED BY OUNIT: 
-
+MODULES TESTED BY OUNIT: We tested modules help, main, parse, scorecard, and visual 
 
 HOW TEST CASES WERE DEVELOPED:
 Initially, we wrote blackbox tests for parts of the core implimentation that we 

@@ -71,8 +71,7 @@ let from_json j =
   let open Yojson.Basic.Util in {
     holes = j |> member "holes" |> to_list |> Array.of_list 
             |> Array.map hole_of_json;
-    difficulty = j |> member "difficulty" |> to_string;
-  }
+    difficulty = j |> member "difficulty" |> to_string;}
 
 let start_hole course = (course.holes).(0).hole_number
 
