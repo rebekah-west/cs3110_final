@@ -14,8 +14,7 @@ open Visual
 type hole_score = {
   hole: Course.hole_number;
   player: Player.t;
-  hole_score: int;
-}
+  hole_score: int;}
 
 type scorecard = hole_score array array
 
@@ -25,8 +24,7 @@ type t = {
   current_hole: Course.hole_number;
   current_turn: Player.t;
   scores: scorecard;
-  holes_played: Course.hole_number list;
-}
+  holes_played: Course.hole_number list;}
 
 exception InvalidHole
 exception InvalidScore
@@ -58,13 +56,14 @@ let init_game (players: Player.t array ) (course: Course.t) =
   let scores = create_scorecard players course in
   let current_hole = Course.start_hole course in
   let frst_up = players.(0) in 
+
   let first = {
-    roster=players; 
-    course=course;
-    scores=scores; 
-    current_hole=current_hole;
-    current_turn= frst_up; 
-    holes_played=[];
+    roster = players; 
+    course = course;
+    scores = scores; 
+    current_hole = current_hole;
+    current_turn = frst_up; 
+    holes_played = [];
   } in first
 
 let current_hole game = game.current_hole
@@ -81,6 +80,7 @@ let game_roster game = game.roster
 
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
+  print_string "updating score";
   let sc = game.scores.(game.current_hole) in 
   let current_player = game.current_turn in 
   for i = 0 to (Array.length sc)-1 do 
@@ -223,7 +223,6 @@ let update_roster roster player =
     if get_player_name roster.(i) = get_player_name player then 
       new_roster.(i) <- player else
       new_roster.(i) <- roster.(i)
-
   done;
   new_roster
 
@@ -234,11 +233,11 @@ let print_init_locs game =
   let hole_loc = Course.get_hole_loc game.course hole_num in 
   let pl_loc = Player.get_player_location game.current_turn in
   let pl_name = Player.get_player_name game.current_turn in 
-  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
+  (* let obstacle_locs = Course.get_obstacle_locs game.course hole_num in *)
   print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
   print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
-  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n");
-  Visual.print_loc hole_loc pl_loc obstacle_locs
+  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
+(* Visual.print_loc hole_loc pl_loc obstacle_locs *)
 
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
@@ -250,15 +249,13 @@ let play_one_swing_of_hole game =
   let updated_player = update_player_location game.current_turn new_loc in
   print_location updated_player;
   let updated_roster = update_roster game.roster updated_player in
-  {
-    roster = updated_roster; 
-    course = game.course;
-    scores = update_score game; 
-    current_hole = game.current_hole;
-    current_turn = update_turn game updated_roster 
-        (get_hole game.course game.current_hole); 
-    holes_played = game.holes_played;
-  } 
+  {roster = updated_roster; 
+   course = game.course;
+   scores = update_score game; 
+   current_hole = game.current_hole;
+   current_turn = update_turn game updated_roster 
+       (get_hole game.course game.current_hole); 
+   holes_played = game.holes_played;} 
 
 (* [get_player_score] p game gets the current score for a player on the current
    hole *) 
@@ -305,8 +302,7 @@ let switch_holes game =
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; 
-  }
+    holes_played = game.holes_played@[game.current_hole]; }
 
 (* plays a hole to completion *)
 let play_hole game = 
