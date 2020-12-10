@@ -4,35 +4,10 @@
 open Course
 open Player
 open Command
+open Parse
 open Str
 open Visual
 
-(** [pp_string s] pretty-prints string [s]. *)
-let pp_string s = "\"" ^ s ^ "\""
-
-(** [pp_int (k,v)] pretty-prints the tuple [(k,v)]. *)
-let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
-
-(** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
-    to pretty-print each element of [lst]. *)
-let pp_list pp_elt lst =
-  let pp_elts lst =
-    let rec loop n acc = function
-      | [] -> acc
-      | [h] -> acc ^ pp_elt h
-      | h1 :: (h2 :: t as t') ->
-        if n = 100 then acc ^ "..."  (* stop printing long list *)
-        else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
-    in loop 0 "" lst
-  in "[" ^ pp_elts lst ^ "]"
-
-(** [pp_player pl] pretty-prints the player [pl]. *)
-let pp_player pl = 
-  let name = Player.get_player_name pl in 
-  pp_string name
-
-(** [pp_array arr] pretty-prints the player array [arr]. *)
-let pp_array arr = pp_list pp_player (Array.to_list arr)
 
 (* keeps track of score per hole 
    Player.t keeps track of the overall score of a player *)
