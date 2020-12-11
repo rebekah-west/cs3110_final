@@ -11,6 +11,9 @@ let play_game f =
   scorecard_printer !game course;
   let counter = ref 0 in 
   for i=0 to Array.length (Course.get_holes course)-1 do 
+    let cur_hole = get_hole_number ((Course.get_holes course).(i)) in 
+    print_string ("Hole " ^ (string_of_int cur_hole ) ^ "\n" );
+    print_string (description course cur_hole);
     game := (Game.play_hole !game);
     if !counter < Array.length (Course.get_holes course)-1 then
       scorecard_printer !game course;

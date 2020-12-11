@@ -165,15 +165,17 @@ let get_hole_score game player hole =
   let hole = ref hole_list.(0) in
   for i = 0 to Array.length hole_list -1 do 
     let hole_sc = hole_list.(i) in 
-    if hole_sc.player = player then 
+    if get_player_name hole_sc.player = get_player_name player then 
       hole := hole_sc
   done;
   !hole.hole_score
 
 (* returns an array of all the current total scores of the player *)
-let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
+let scores_list g p = 
+  Array.to_list (Array.map (sum_scores g) p )
 
-let winning_score_game score_lst= List.fold_left min 180 score_lst
+let winning_score_game score_lst= 
+  List.fold_left min 180 score_lst
 
 (* returns a list of winners  *)
 let winner_of_game game = 
