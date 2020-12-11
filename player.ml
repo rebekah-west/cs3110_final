@@ -54,6 +54,15 @@ type t = {
   location : (float * float);
 }
 
+let pp_player pl = 
+  let name = pl.player_name in
+  let power = string_of_float pl.power_multiplier in 
+  let acc = string_of_float pl.accuracy_multiplier in 
+  let handicap = string_of_int pl.handicap in 
+  let loc = Parse.pp_tup pl.location in  
+  "{ \nName: " ^ name ^ "\nPower: " ^ power ^ "\nAccuracy: " ^ acc 
+  ^ "\nHandicap: " ^ handicap ^ "\nLocation: " ^ loc ^ "\n}"
+
 (** [player_from_json j] reads in the player from the json *)
 let player_from_json j =
   let open Yojson.Basic.Util in {
@@ -120,14 +129,13 @@ let create_player entry =
   Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
   let handicap = read_line () |> parse |> string_catcher in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
-  let x = 
-    { 
-      player_name = name; 
-      power_multiplier = pow_mult; 
-      accuracy_multiplier = acc_mult;
-      handicap = handicap;
-      location = (0., 0.);
-    } in x
+  { 
+    player_name = name; 
+    power_multiplier = pow_mult; 
+    accuracy_multiplier = acc_mult;
+    handicap = handicap;
+    location = (0., 0.);
+  }
 
 let init_players () =
   Printf.printf "How many players will be participating today? Enter an int \n";
@@ -309,9 +317,4 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
       hol_loc else new_loc
   else if dist_from_hole hol_loc new_loc < 30.0 then 
     hol_loc else new_loc
-
-let pp_player pl = 
-  let name = get_player_name pl in 
-  Parse.pp_string name
-
 
