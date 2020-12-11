@@ -106,7 +106,7 @@ let game_roster game = game.roster
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
   print_string "updating score";
-  let sc = game.scores.(game.current_hole) in 
+  let sc = game.scores.(game.current_hole - 1) in 
   let current_player = game.current_turn in 
   for i = 0 to (Array.length sc)-1 do 
     if sc.(i).player == current_player
@@ -114,7 +114,7 @@ let update_score game =
         hole = game.current_hole;
         player = current_player; 
         hole_score = sc.(i).hole_score + 1;}
-      in game.scores.(game.current_hole).(i) <- new_hole_score
+      in game.scores.(game.current_hole - 1).(i) <- new_hole_score
   done;
   game.scores
 
@@ -271,12 +271,13 @@ let play_one_swing_of_hole game =
   let command = parse_swing () in 
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 
+  let new_score = update_score game in 
   let updated_player = update_player_location game.current_turn new_loc in
   print_location updated_player;
   let updated_roster = update_roster game.roster updated_player in
   {roster = updated_roster; 
    course = game.course;
-   scores = update_score game; 
+   scores = new_score ;
    current_hole = game.current_hole;
    current_turn = update_turn game updated_roster 
        (get_hole game.course game.current_hole); 
