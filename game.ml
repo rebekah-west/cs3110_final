@@ -79,16 +79,15 @@ let game_roster game = game.roster
 
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
-  print_string "updating score";
-  let sc = game.scores.(game.current_hole) in 
+  let sc = game.scores.(game.current_hole - 1) in 
   let current_player = game.current_turn in 
   for i = 0 to (Array.length sc)-1 do 
-    if sc.(i).player == current_player
+    if get_player_name (sc.(i).player) == get_player_name (current_player)
     then let new_hole_score = {
         hole = game.current_hole;
         player = current_player; 
         hole_score = sc.(i).hole_score + 1;}
-      in game.scores.(game.current_hole).(i) <- new_hole_score
+      in game.scores.(game.current_hole - 1).(i) <- new_hole_score
   done;
   game.scores
 
@@ -142,6 +141,12 @@ let winner_of_hole game hole =
   let scorecard = game.scores.(hole) in 
   winner_add winner_array scorecard lowest_score
 
+(* sum_score_helper to make sure loop isn't too nested *)
+let sum_score_helper cur_sc player sums= 
+  if get_player_name(cur_sc.player) = get_player_name player then
+    let update_sc = !sums+ cur_sc.hole_score
+    in sums := update_sc 
+
 (* returns the total score for a player for all holes played so far *)
 let sum_scores game player = 
   let sc = game.scores in 
@@ -150,10 +155,8 @@ let sum_scores game player =
     let sc_per_hole = sc.(i) in 
     for j = 0 to (Array.length sc_per_hole)-1 do 
       let cur_sc = sc_per_hole.(j) in
-      if cur_sc.player = player then
-        let update_sc = !sums+ cur_sc.hole_score
-        in sums := update_sc 
-    done;
+      sum_score_helper cur_sc player sums
+    done; 
   done;
   !sums
 
@@ -245,12 +248,13 @@ let play_one_swing_of_hole game =
   let command = parse_swing () in 
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 
+  let new_score = update_score game in 
   let updated_player = update_player_location game.current_turn new_loc in
   print_location updated_player;
   let updated_roster = update_roster game.roster updated_player in
   {roster = updated_roster; 
    course = game.course;
-   scores = update_score game; 
+   scores = new_score ;
    current_hole = game.current_hole;
    current_turn = update_turn game updated_roster 
        (get_hole game.course game.current_hole); 
@@ -259,7 +263,7 @@ let play_one_swing_of_hole game =
 (* [get_player_score] p game gets the current score for a player on the current
    hole *) 
 let get_player_score p game = 
-  let hole_sc = game.scores.(game.current_hole) in 
+  let hole_sc = game.scores.(game.current_hole-1) in 
   let score = ref 0 in 
   for i =0 to (Array.length hole_sc)-1 do 
     if hole_sc.(i).player == p
@@ -267,7 +271,8 @@ let get_player_score p game =
   done;
   !score
 
-(** [someone_still_playing roster] *)
+(** [someone_still_playing roster game hole_loc returns true if someone is 
+    still playing that hole and false if not] *)
 let rec someone_still_playing roster game hol_loc =
   match Array.to_list roster with 
   | [] -> false
@@ -304,17 +309,22 @@ let switch_holes game =
     holes_played = game.holes_played@[game.current_hole]; 
   }
 (* plays a hole to completion *)
-let play_hole game = 
-  if someone_still_playing 
-      game.roster game (Course.get_hole_loc game.course game.current_hole)
+let rec play_hole game = 
+  let still = someone_still_playing 
+      game.roster game (Course.get_hole_loc game.course game.current_hole) in
+  if still 
   then
-    play_one_swing_of_hole game
-  else switch_holes game
+    play_hole (play_one_swing_of_hole game)
+  else 
+  if game.current_hole < Array.length (get_holes game.course) then 
+    let new_game = switch_holes game 
+    in play_hole (play_one_swing_of_hole new_game)
+  else game
 
 let play_game players course = 
   let game = init_game players course in 
   let game_update = ref game in 
   for i = 0 to (Array.length (get_holes course))-1 do
-    game_update := (play_hole game)
+    game_update := (play_hole !game_update);
   done;
   !game_update

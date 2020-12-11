@@ -65,7 +65,7 @@ let scorecard_player game player course =
     s3 := !s3 ^ hole3_5; s4 := !s4 ^ add4;
     s5 := !s5 ^ hole3_5;
   done;
-  print_string ( player_name ^ "\n") ;
+  print_string ( "\n" ^ player_name ^ "\n") ;
   print_string (!s1 ^ "\n"); 
   print_string (!s2 ^ "\n");
   print_string (!s3 ^ "\n"); 
