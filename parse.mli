@@ -29,9 +29,6 @@ val for_int_output : string-> int
    be a string*)
 val for_string_output : string -> string
 
-(** [string_catcher s] checks if strnig [s] can be transformed into an int *)
-val string_catcher : string -> int 
-
 (** [pp_string s] pretty-prints string [s]. *)
 val pp_string : string -> string
 
