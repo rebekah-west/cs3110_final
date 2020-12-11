@@ -76,26 +76,24 @@ let read_players j =
    someone indicates they are with golf
    Raises: None *)
 let rec parse_acc_mult (acc : string) = 
-  let parsed = parse acc in 
-  match parsed with 
+  match acc with 
   | "beginner" -> 0.5
   | "intermediate" -> 1.0
   | "advanced" -> 1.5
-  | _ -> Printf.printf "You must enter beginner, intermediate, or advanced, please check your spelling and try again. \n"; 
-    read_line() |> parse |> parse_acc_mult
+  | _ -> let bia_message = "You must enter beginner, intermediate, or advanced, please check your spelling and try again. \n" in
+    (for_string_output bia_message) |> parse_acc_mult
 
 (* [parse_pow_mult str] returns the power multiplier based on how strong
    someone indicates they are
    Raises: Invalid_argument if the string is not one of the suggested 
    strengths *)
-let rec parse_pow_mult (pow : string) = 
-  let parsed = parse pow in 
-  match parsed with 
+let rec parse_pow_mult (pow : string)= 
+  match pow with 
   | "belowaverage" -> 0.5
   | "average" -> 1.0
   | "aboveaverage" -> 1.5
-  | _ -> Printf.printf "You must enter below average, average, or above average,please check your spelling and try again. \n"; 
-    read_line() |> parse |> parse_pow_mult
+  | _ -> let pow_message =  "You must enter below average, average, or above average,please check your spelling and try again. \n" in 
+    (for_string_output pow_message) |> parse_pow_mult
 
 let rec parse_name (name : string) = 
   let parsed_name = parse name in
@@ -107,25 +105,25 @@ let rec parse_name (name : string) =
   end
   else parsed_name
 
-(* for the help cmo *)
-let rec string_catcher str = 
-  try int_of_string str
-  with Failure _ -> begin
+(* for the help cmo
+   let rec string_catcher str = 
+   try int_of_string str
+   with Failure _ -> begin
       Printf.printf "Your input was not recognized, please try again> ";
       read_line () |> parse |> string_catcher
-    end
+    end *)
 
 (* [create_player entry] prompts user for input, parses it, and 
    returns type Player.t *)
 let create_player entry =
-  Printf.printf "\nWelcome new player. Please enter your name.\n";
-  let name = read_line () |> parse_name in
-  Printf.printf "For golf, are you beginner, intermediate, or advanced?\n";
-  let acc_mult = read_line () |> parse_acc_mult in
-  Printf.printf "How strong are you? (below average, average, above average)\n";
-  let pow_mult = read_line () |> parse_pow_mult in
-  Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
-  let handicap = read_line () |> Parse.string_catcher in
+  let name_message = "\nWelcome new player. Please enter your name.\n" in 
+  let name = (for_string_output name_message) |> parse_name in
+  let level_message = "For golf, are you beginner, intermediate, or advanced?\n" in
+  let acc_mult =  parse_acc_mult (for_string_output level_message) in
+  let strength_message =  "How strong are you? (below average, average, above average)\n" in 
+  let pow_mult = parse_pow_mult (for_string_output strength_message) in
+  let handicap_message = "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n"; in 
+  let handicap = for_int_output handicap_message in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
   {player_name = name; 
    power_multiplier = pow_mult; 
@@ -134,8 +132,9 @@ let create_player entry =
    location = (0., 0.);}
 
 let init_players () =
-  Printf.printf "How many players will be participating today? Enter an int \n";
-  let num_players = read_line () |> parse |> string_catcher in
+  let message = "How many players will be participating today? Enter an int \n"; in 
+  let num_players = Parse.for_int_output message in 
+  (* let num_players = read_line () |> parse |> string_catcher in *)
   let player_array = Array.make num_players 0. in
   Array.map create_player player_array
 
@@ -256,6 +255,39 @@ let rec bound_loc (pos : float * float)=
   | (x , y) when y < 0. -> bound_loc (x, 0.)
   | _ -> failwith "unknown location"
 
+let update_loc direction horiz_dist_yd current_loc = 
+  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd 
+    +. fst current_loc ,  
+    ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd 
+      +. snd current_loc) ) 
+
+(* Calculate the final location on the ball based on the current location 
+   of a player and whether it was a normal swing or a putt *)
+let get_final_loc current_loc hol_loc chosen_ang adj_pow direction horiz_dist_yd = 
+  let upd_loc = update_loc direction horiz_dist_yd current_loc
+  in 
+  let new_loc = bound_loc upd_loc in 
+  (*the case of rolling*)
+  if chosen_ang = 0. then 
+    let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
+    let new_loc =  update_loc direction horiz_dist_yd current_loc
+    in 
+    if dist_from_hole hol_loc new_loc < 30.0 then 
+      hol_loc else new_loc
+  else if dist_from_hole hol_loc new_loc < 30.0 then 
+    hol_loc else new_loc
+
+(* Calculate the horizontal distance travelled in the cartesian plane in 
+   yards based on an initial velocity of the ball and and angle of direciton 
+   theta *)
+let horizontal_distance_yd theta init_velocity = 
+  let horiz_speed = (cos theta) *. init_velocity in
+  let vert_speed = (sin theta) *. init_velocity in
+  let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
+  let horiz_dist = time_in_air *. horiz_speed in
+  let horiz_dist_yd = m_to_yd horiz_dist in 
+  horiz_dist_yd
+
 let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
     (cours : Course.t)= 
   let current_loc = t.location in
@@ -265,54 +297,18 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   let club_pow_adj = fst (get_club_adjustments clb) in
   let club_acc_adj = snd (get_club_adjustments clb) in
   let adj_pow = (swing |> get_power) *. pow_mul *. club_pow_adj in
-  print_string "\n power";
-  print_float adj_pow;
   let adj_acc = acc_mul *. club_acc_adj in
-  print_string "\n accuracy adjustmendt";
-  print_float adj_acc;
   let chosen_ang = get_angle swing in 
-  print_string "\n chosen angle";
-  print_float chosen_ang;
   let final_ang = adj_ang chosen_ang adj_acc in 
-  print_string "\n final angle";
-  print_float final_ang;
   let chosen_align = get_align swing in 
   let final_align = adj_align chosen_align adj_acc in 
-  print_string "\n final_alignment";
-  print_float final_align;
   let theta = rad_from_deg (final_ang) in 
-  print_string "\n swing angle";
-  print_float theta;
   let init_velocity = power_to_ms adj_pow in
-  let horiz_speed = (cos theta) *. init_velocity in
-  let vert_speed = (sin theta) *. init_velocity in
-  let time_in_air = ( vert_speed /. 9.8 ) *. 2.0 in
-  let horiz_dist = time_in_air *. horiz_speed in
-  let horiz_dist_yd = m_to_yd horiz_dist in 
-  print_string "\n horiz dist";
-  print_float horiz_dist_yd;
+  let horiz_dist_yd = horizontal_distance_yd theta init_velocity in 
   let hol_loc = get_hole_loc cours hol_num in 
   let direction = get_direction current_loc hol_loc +. final_align in 
-  print_string "\n direction";
-  print_float direction;
-  let upd_loc = 
-    ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd +. fst current_loc ,  
-      ( (direction |> rad_from_deg |> sin) 
-        *. horiz_dist_yd +. snd current_loc) ) 
-  in 
-  let new_loc = bound_loc upd_loc in 
-  (*the case of rolling*)
-  if chosen_ang = 0. then 
-    let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
-    let new_loc =  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd 
-                     +. fst current_loc ,  
-                     ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd 
-                       +. snd current_loc) ) 
-    in 
-    if dist_from_hole hol_loc new_loc < 30.0 then 
-      hol_loc else new_loc
-  else if dist_from_hole hol_loc new_loc < 30.0 then 
-    hol_loc else new_loc
+  get_final_loc current_loc hol_loc chosen_ang adj_pow direction horiz_dist_yd
+
 
 
 

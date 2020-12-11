@@ -113,9 +113,13 @@ let pitching_wedge_explanation =
 
 (* for player input help menu*)
 let power_explanation = 
-  "Power impacts how far the golf ball will travel on that swing. \n"
+  "Power impacts how far the golf ball will travel on that swing. An average 
+  player who hits the ball with 100 power on a 45 degree angle will travel
+  roughly 270 yards using a club that has no power adjustment. \n"
 let angle_explanation = 
-  "Angle impacts how arced the path travelled by the golf ball will be. \n"
+  "Angle impacts how arced the path travelled by the golf ball will be. A 45 
+  degree angle is the 'optimal' angle as it will result in the greatest
+  distance travelled with power held constant. \n"
 let alignment_explanation = 
   "Alignment impacts which direction the golf ball will travel on that swing. 
   A negative number represents aiming to the left of the hole, 0 represents 
