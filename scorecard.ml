@@ -1,4 +1,3 @@
-open Str
 open Game
 open Player
 open Course

@@ -2,7 +2,6 @@ open Yojson.Basic.Util
 open Command
 open Course 
 open Parse
-open Str
 open Random
 
 (*****************************************************)
