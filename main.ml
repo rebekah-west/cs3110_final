@@ -9,8 +9,12 @@ let play_game f =
   let players = Player.init_players () in
   let game = ref (Game.init_game players course) in
   scorecard_printer !game course;
+  let counter = ref 0 in 
   for i=0 to Array.length (Course.get_holes course)-1 do 
-    game := (Game.play_hole !game)
+    game := (Game.play_hole !game);
+    if !counter < Array.length (Course.get_holes course)-1 then
+      scorecard_printer !game course;
+    counter := !counter + 1
   done;
   let winners = Array.to_list 
       (Array.map Player.get_player_name (Game.winner_of_game !game)) in

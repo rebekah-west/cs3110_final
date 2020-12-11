@@ -13,8 +13,21 @@ val remove_blanks : parsable -> string
     into a string that can be interpretted by the game *)
 val parse : parsable -> string 
 
-(** [string_catcher s] checks if strnig [s] can be transformed into an int *)
-val string_catcher : string -> int 
+(* [string_catcher s message] checks if strnig [s] can be transformed into an int. If
+   not, the user is prompted again with [message] *)
+val string_catcher : string -> string -> int 
+
+(* [for_int_output message] takes the message that is to be displayed to a 
+   player [message] and takes care of things like the help menu and quitting
+   in addition to parsing the user input. Used when the output is meant to 
+   be an int*)
+val for_int_output : string-> int
+
+(* [for_int_output message] takes the message that is to be displayed to a 
+   player [message] and takes care of things like the help menu and quitting
+   in addition to parsing the user input. Used when the output is meant to 
+   be a string*)
+val for_string_output : string -> string
 
 (** [pp_string s] pretty-prints string [s]. *)
 val pp_string : string -> string
@@ -28,3 +41,4 @@ val pp_list : ('a -> string) -> 'a list -> string
 
 (** [pp_array arr] pretty-prints the array [arr]. *)
 val pp_array : ('a -> string) -> 'a array -> string
+

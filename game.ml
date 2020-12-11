@@ -297,6 +297,7 @@ let reset_player_loc p = update_player_location p (0., 0.)
 (** [switch_holes g] updates the game to a the new game when it is time to 
     switch holes*)
 let switch_holes game = 
+
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
   let new_hole = course_arr.(update_ind) in
@@ -305,20 +306,19 @@ let switch_holes game =
     course = game.course;
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
-    current_turn = game.current_turn; 
+    current_turn = update_turn game new_rost new_hole; 
     holes_played = game.holes_played@[game.current_hole]; 
   }
 (* plays a hole to completion *)
 let rec play_hole game = 
   let still = someone_still_playing 
       game.roster game (Course.get_hole_loc game.course game.current_hole) in
-  if still 
-  then
-    play_hole (play_one_swing_of_hole game)
-  else 
+  if still then
+    play_hole (play_one_swing_of_hole game) else 
   if game.current_hole < Array.length (get_holes game.course) then 
-    let new_game = switch_holes game 
-    in play_hole (play_one_swing_of_hole new_game)
+    (* let new_game =  *)
+    switch_holes game 
+    (* in play_hole (play_one_swing_of_hole new_game) *)
   else game
 
 let play_game players course = 
