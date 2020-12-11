@@ -8,17 +8,17 @@
       "terrain": [
         {
           "name": "tree",
-          "location": "4,7",
+          "location": "200,145",
           "size": "small"
         },
         {
           "name": "tree",
-          "location": "6,7",
+          "location": "67, 92",
           "size": "small"
         },
         {
           "name": "lake",
-          "location": "60,30",
+          "location": "490, 490",
           "size": "large"
         }
       ]
@@ -31,17 +31,17 @@
       "terrain": [
         {
           "name": "tree",
-          "location": "4,7",
+          "location": "199,133",
           "size": "small"
         },
         {
           "name": "tree",
-          "location": "6,7",
+          "location": "350,150",
           "size": "small"
         },
         {
           "name": "lake",
-          "location": "60,30",
+          "location": "50, 480",
           "size": "large"
         }
       ]
@@ -49,22 +49,22 @@
     {
       "hole_number": 3,
       "par_number": 10,
-      "hole_location": "530,65",
+      "hole_location": "430,365",
       "description": "This hole is a long drive. Get ready to swing!",
       "terrain": [
         {
           "name": "sand",
-          "location": "4,7",
+          "location": "40, 80",
           "size": "medium"
         },
         {
           "name": "tree",
-          "location": "6,7",
+          "location": "450, 30",
           "size": "small"
         },
         {
           "name": "lake",
-          "location": "60,30",
+          "location": "280, 480",
           "size": "large"
         }
       ]

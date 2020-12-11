@@ -11,7 +11,7 @@ let normal_line = "|                                                  |"
 let player = "p"
 let hole = "h"
 let edge = "|"
-let width = 49
+let width = 51
 let global_rows = 14
 
 let get_row x_cord = Float.to_int (x_cord /. 33.33)
@@ -19,6 +19,7 @@ let get_col y_cord = let y = Float.to_int (y_cord /. 10.) in
   if y=50 then 49 else y
 let get_row_col char = function
   | (x,y) -> (get_row x, get_col y, char)
+let get_coords (x,y,c) = (get_row x, get_col y, c)
 
 (* [loc_sort loc loc] is a comparison function to be used in List.sort *)
 let loc_sort (x1, y1, c1) (x2, y2, c2) = 
@@ -44,8 +45,9 @@ let finish num str =
   str := !str  ^ "\n" ^ bottom;
   !str
 
-let finish_row num row = 
-  append num width row " ";
+let finish_row row = 
+  let start = String.length !row in 
+  append start width row " ";
   row := !row ^ edge;
   !row
 
@@ -58,12 +60,13 @@ let rec up_to_char list acc row = match list with
   | (x1,y1,c1)::(x2,y2,c2)::t -> begin
       append acc y1 row " ";
       row := !row ^ c1;
-      up_to_char ((x2,y2,c2)::t) (y1+1) row
+      let counter = String.length !row in
+      up_to_char ((x2,y2,c2)::t) counter row
     end
   | (x1,y1,c1)::t -> begin
       append acc y1 row " ";
       row := !row ^ c1;
-      row := finish_row y1 row;
+      row := finish_row row;
       !row
     end
 
@@ -99,10 +102,11 @@ let iter_locs locs num_completed_rows str =
   str := !str  ^ "\n" ^ bottom;
   !str
 
-let print_loc hole player = 
+let print_loc hole player obst = 
   let hole_loc = get_row_col "h" hole in 
   let player_loc = get_row_col "p" player in
-  let raw_locs =  hole_loc::[player_loc] in
+  let obstacle_locs = List.map get_coords obst in 
+  let raw_locs =  hole_loc::player_loc::obstacle_locs in
   let sorted_locs = (List.sort loc_sort raw_locs) in 
   let str = ref top in 
   str := (iter_locs sorted_locs 1 str);

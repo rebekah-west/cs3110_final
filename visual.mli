@@ -10,4 +10,5 @@
 
 (** [print_loc] prints a visual of the hole, obstacles, and player 
     location to the terminal *)
-val print_loc: (float*float) -> (float*float) -> unit
+val print_loc: (float*float) -> (float*float) -> (float*float*string) list 
+  -> unit
