@@ -1,45 +1,23 @@
 open Course
 open Game
 open Player
+open Parse
 open Scorecard
 
-(** [pp_string s] pretty-prints string [s]. *)
-let pp_string s = "\"" ^ s ^ "\""
-
-(** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt]
-    to pretty-print each element of [lst]. *)
-let pp_list pp_elt lst =
-  let pp_elts lst =
-    let rec loop n acc = function
-      | [] -> acc
-      | [h] -> acc ^ pp_elt h
-      | h1 :: (h2 :: t as t') ->
-        if n = 100 then acc ^ "..."  (* stop printing long list *)
-        else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
-    in loop 0 "" lst
-  in "[" ^ pp_elts lst ^ "]"
-
-(** [play_game f] starts the adventure in file [f]. *)
 let play_game f =
   let course = Course.from_json(Yojson.Basic.from_file(f)) in
   let players = Player.init_players () in
-  let game = (Game.init_game players course) in
-  scorecard_printer game course;
-  let rec hole game hole_num = 
-    let valid = (hole_num ) <= (Course.num_holes course) in
-    match valid with
-    | false -> Printf.printf "Congratulations! You have completed the course.";
-    | true -> hole (Game.play_hole game) (hole_num+1)
-  in hole game 1;
-  (* for i=0 to Array.length (Course.get_holes course)-1 do 
-     game := (Game.play_hole !game)
-     done; *)
+  let game = ref (Game.init_game players course) in
+  scorecard_printer !game course;
+  for i=0 to Array.length (Course.get_holes course)-1 do 
+    game := (Game.play_hole !game)
+  done;
   let winners = Array.to_list 
-      (Array.map Player.get_player_name (Game.winner_of_game game)) in
+      (Array.map Player.get_player_name (Game.winner_of_game !game)) in
   Printf.printf "The winner is %s" (pp_list pp_string winners);
   print_string "\n";
   print_string "The complete scorecard is: " ;
-  scorecard_printer game course;
+  scorecard_printer !game course;
   Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."
 
 
