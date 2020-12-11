@@ -143,6 +143,12 @@ let winner_of_hole game hole =
   let scorecard = game.scores.(hole) in 
   winner_add winner_array scorecard lowest_score
 
+(* sum_score_helper to make sure loop isn't too nested *)
+let sum_score_helper cur_sc player sums= 
+  if get_player_name(cur_sc.player) = get_player_name player then
+    let update_sc = !sums+ cur_sc.hole_score
+    in sums := update_sc 
+
 (* returns the total score for a player for all holes played so far *)
 let sum_scores game player = 
   let sc = game.scores in 
@@ -151,10 +157,8 @@ let sum_scores game player =
     let sc_per_hole = sc.(i) in 
     for j = 0 to (Array.length sc_per_hole)-1 do 
       let cur_sc = sc_per_hole.(j) in
-      if get_player_name(cur_sc.player) = get_player_name player then
-        let update_sc = !sums+ cur_sc.hole_score
-        in sums := update_sc 
-    done;
+      sum_score_helper cur_sc player sums
+    done; 
   done;
   !sums
 
