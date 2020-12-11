@@ -171,9 +171,11 @@ let get_hole_score game player hole =
   !hole.hole_score
 
 (* returns an array of all the current total scores of the player *)
-let scores_list g p = Array.to_list (Array.map (sum_scores g) p )
+let scores_list g p = 
+  Array.to_list (Array.map (sum_scores g) p )
 
-let winning_score_game score_lst= List.fold_left min 180 score_lst
+let winning_score_game score_lst= 
+  List.fold_left min 180 score_lst
 
 (* returns a list of winners  *)
 let winner_of_game game = 
