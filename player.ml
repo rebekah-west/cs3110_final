@@ -107,13 +107,6 @@ let rec parse_name (name : string) =
   end
   else parsed_name
 
-(* for the help cmo *)
-let rec string_catcher str = 
-  try int_of_string str
-  with Failure _ -> begin
-      Printf.printf "Your input was not recognized, please try again> ";
-      read_line () |> parse |> string_catcher
-    end
 
 (* [create_player entry] prompts user for input, parses it, and 
    returns type Player.t *)
@@ -125,13 +118,16 @@ let create_player entry =
   Printf.printf "How strong are you? (below average, average, above average)\n";
   let pow_mult = read_line () |> parse_pow_mult in
   Printf.printf "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n";
-  let handicap = read_line () |> Parse.string_catcher in
+  let handicap = read_line () |> parse |> string_catcher in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
-  {player_name = name; 
-   power_multiplier = pow_mult; 
-   accuracy_multiplier = acc_mult;
-   handicap = handicap;
-   location = (0., 0.);}
+  let x = 
+    { 
+      player_name = name; 
+      power_multiplier = pow_mult; 
+      accuracy_multiplier = acc_mult;
+      handicap = handicap;
+      location = (0., 0.);
+    } in x
 
 let init_players () =
   Printf.printf "How many players will be participating today? Enter an int \n";

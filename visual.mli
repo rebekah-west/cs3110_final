@@ -10,10 +10,13 @@
 
 (** [print_loc] prints a visual of the hole, obstacles, and player 
     location to the terminal *)
-val print_loc: (float*float) -> (float*float) -> (float*float*string) list 
+val print_loc: (float*float) -> (float*float) (*-> (float*float*string) list *)
   -> unit
 
+
+(*
 (** [print_all] prints a visual of the hole, all obstacles, and all player 
     locations to the terminal *)
 val print_all: (float*float) -> Player.t list -> (float*float*string) list  
   -> unit
+  *)
