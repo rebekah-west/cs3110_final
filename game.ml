@@ -269,7 +269,8 @@ let get_player_score p game =
   done;
   !score
 
-(** [someone_still_playing roster] *)
+(** [someone_still_playing roster game hole_loc returns true if someone is 
+    still playing that hole and false if not] *)
 let rec someone_still_playing roster game hol_loc =
   match Array.to_list roster with 
   | [] -> false
@@ -311,12 +312,13 @@ let play_hole game =
       game.roster game (Course.get_hole_loc game.course game.current_hole)
   then
     play_one_swing_of_hole game
-  else switch_holes game
+  else let new_game = switch_holes game in play_one_swing_of_hole new_game
 
 let play_game players course = 
   let game = init_game players course in 
   let game_update = ref game in 
   for i = 0 to (Array.length (get_holes course))-1 do
-    game_update := (play_hole game)
+    game_update := (play_hole !game_update);
+    print_string "1 hole played"
   done;
   !game_update
