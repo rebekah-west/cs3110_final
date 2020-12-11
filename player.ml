@@ -314,7 +314,8 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   else if dist_from_hole hol_loc new_loc < 30.0 then 
     hol_loc else new_loc
 
-
-
+let pp_player pl = 
+  let name = get_player_name pl in 
+  Parse.pp_string name
 
 
