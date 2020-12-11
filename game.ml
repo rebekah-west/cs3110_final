@@ -151,7 +151,7 @@ let sum_scores game player =
     let sc_per_hole = sc.(i) in 
     for j = 0 to (Array.length sc_per_hole)-1 do 
       let cur_sc = sc_per_hole.(j) in
-      if cur_sc.player = player then
+      if get_player_name(cur_sc.player) = get_player_name player then
         let update_sc = !sums+ cur_sc.hole_score
         in sums := update_sc 
     done;
