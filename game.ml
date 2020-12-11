@@ -84,7 +84,7 @@ let update_score game =
   let sc = game.scores.(game.current_hole - 1) in 
   let current_player = game.current_turn in 
   for i = 0 to (Array.length sc)-1 do 
-    if sc.(i).player == current_player
+    if get_player_name (sc.(i).player) == get_player_name (current_player)
     then let new_hole_score = {
         hole = game.current_hole;
         player = current_player; 
