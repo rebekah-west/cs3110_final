@@ -8,17 +8,17 @@
       "terrain": [
         {
           "name": "tree",
-          "location": "4,7",
+          "location": "30,470",
           "size": "small"
         },
         {
           "name": "tree",
-          "location": "6,7",
+          "location": "400,400",
           "size": "small"
         },
         {
           "name": "lake",
-          "location": "60,30",
+          "location": "360,30",
           "size": "large"
         }
       ]
@@ -31,12 +31,12 @@
       "terrain": [
         {
           "name": "sand",
-          "location": "4,7",
+          "location": "450,90",
           "size": "medium"
         },
         {
           "name": "tree",
-          "location": "6,7",
+          "location": "10,250",
           "size": "small"
         },
         {
