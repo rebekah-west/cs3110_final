@@ -80,7 +80,6 @@ let game_roster game = game.roster
 
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
-  print_string "updating score";
   let sc = game.scores.(game.current_hole - 1) in 
   let current_player = game.current_turn in 
   for i = 0 to (Array.length sc)-1 do 
@@ -311,18 +310,19 @@ let switch_holes game =
     holes_played = game.holes_played@[game.current_hole]; }
 
 (* plays a hole to completion *)
-let play_hole game = 
-  if someone_still_playing 
-      game.roster game (Course.get_hole_loc game.course game.current_hole)
+let rec play_hole game = 
+  let still = someone_still_playing 
+      game.roster game (Course.get_hole_loc game.course game.current_hole) in
+  if still 
   then
-    play_one_swing_of_hole game
-  else let new_game = switch_holes game in play_one_swing_of_hole new_game
+    play_hole (play_one_swing_of_hole game)
+  else let new_game = switch_holes game 
+    in play_hole (play_one_swing_of_hole new_game)
 
 let play_game players course = 
   let game = init_game players course in 
   let game_update = ref game in 
   for i = 0 to (Array.length (get_holes course))-1 do
     game_update := (play_hole !game_update);
-    print_string "1 hole played"
   done;
   !game_update
