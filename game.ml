@@ -264,7 +264,7 @@ let play_one_swing_of_hole game =
 (* [get_player_score] p game gets the current score for a player on the current
    hole *) 
 let get_player_score p game = 
-  let hole_sc = game.scores.(game.current_hole) in 
+  let hole_sc = game.scores.(game.current_hole-1) in 
   let score = ref 0 in 
   for i =0 to (Array.length hole_sc)-1 do 
     if hole_sc.(i).player == p
@@ -316,8 +316,11 @@ let rec play_hole game =
   if still 
   then
     play_hole (play_one_swing_of_hole game)
-  else let new_game = switch_holes game 
+  else 
+  if game.current_hole < Array.length (get_holes game.course) then 
+    let new_game = switch_holes game 
     in play_hole (play_one_swing_of_hole new_game)
+  else game
 
 let play_game players course = 
   let game = init_game players course in 
