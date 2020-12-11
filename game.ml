@@ -5,7 +5,6 @@ open Course
 open Player
 open Command
 open Parse
-open Str
 open Visual
 
 
@@ -239,8 +238,8 @@ let print_init_locs game =
   (* let obstacle_locs = Course.get_obstacle_locs game.course hole_num in *)
   print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
   print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
-  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
-(* Visual.print_loc hole_loc pl_loc obstacle_locs *)
+  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n");
+  Visual.print_loc hole_loc pl_loc
 
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
@@ -307,8 +306,8 @@ let switch_holes game =
     scores = game.scores; 
     current_hole = get_hole_number new_hole;
     current_turn = game.current_turn; 
-    holes_played = game.holes_played@[game.current_hole]; }
-
+    holes_played = game.holes_played@[game.current_hole]; 
+  }
 (* plays a hole to completion *)
 let rec play_hole game = 
   let still = someone_still_playing 

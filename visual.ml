@@ -12,31 +12,25 @@ let player = "p"
 let hole = "h"
 let edge = "|"
 let width = 49
+let global_rows = 14
 
-let get_char (x, y, c) = c
 let get_row x_cord = Float.to_int (x_cord /. 33.33)
 let get_col y_cord = let y = Float.to_int (y_cord /. 10.) in 
   if y=50 then 49 else y
 let get_row_col char = function
-  | (x,y) -> (get_row y, get_col x, char)
-let get_coords (x,y,c) = (get_row y, get_col x, c)
-let same_row (x1, y1, c1) (x2, y2, c2) = if x1=x2 then true else false
+  | (x,y) -> (get_row x, get_col y, char)
 
 (* [loc_sort loc loc] is a comparison function to be used in List.sort *)
 let loc_sort (x1, y1, c1) (x2, y2, c2) = 
   if x1<x2 then ~-1
-  else if x1>x2 then 1
-  else 0
+  else begin 
+    if x1>x2 then 1
+    else 0 end
 let y_sort (x1, y1, c1) (x2, y2, c2) = 
   if y1<y2 then ~-1
-  else if y1>y2 then 1
-  else 0
-
-let get (x,y,c) find = 
-  match find with
-  | "row" -> x
-  | "col" -> y
-  | _ -> raise (Invalid_argument find)
+  else begin 
+    if y1>y2 then 1
+    else 0 end
 
 let append start stop ref character =
   for i=(start+1) to stop do 
@@ -45,34 +39,19 @@ let append start stop ref character =
 
 (* adds empty lines to [string] until the bottom of the hole 
    [num] lines have already been completed *)
-let finish num string = 
-  append num 14 string ("\n" ^ normal_line);
-  string := !string  ^ "\n" ^ bottom;
-  !string
+let finish num str = 
+  append num 14 str ("\n" ^ normal_line);
+  str := !str  ^ "\n" ^ bottom;
+  !str
 
 let finish_row num row = 
   append num width row " ";
   row := !row ^ edge;
   !row
 
-(* [construct_row (x,y,c)] constructs a row with the character c at y 
-   coordinate y and adds it to the string stored in ref [string].
-   Returns the new string stored in ref [string]  *)
-let construct_row string (x,y,c) = 
-  let row = ref edge in 
-  append 0 y row " ";
-  row := !row ^ c;
-  row := finish_row y row;
-  string := !string ^ "\n" ^ !row;
-  !string
-
-let rec find_rowmates (x1,y1,c1) list acc = match list with 
-  | [] -> acc, list
-  | (x2,y2,c2)::t -> begin 
-      if x1=x2 
-      then find_rowmates (x2,y2,c2) t ((x2,y2,c2)::acc)
-      else acc, list
-    end
+let add_normal str = 
+  str := !str ^ "\n" ^ normal_line;
+  str
 
 let rec up_to_char list acc row = match list with
   | [] -> failwith "impossible" 
@@ -88,71 +67,43 @@ let rec up_to_char list acc row = match list with
       !row
     end
 
-
-let row_with_multiple list string = 
+let row_with_multiple list str = 
   let row = ref edge in 
   row := up_to_char list 0 row;
-  string := !string ^ "\n" ^ !row;
-  !string
+  str := !str ^ "\n" ^ !row;
+  !str
 
-let check_next (x1,y1,c1) list = match list with 
-  | [] -> false
-  | (x2,y2,c2)::t -> if x1=x2 then true else false
+let row_equal a (x,y,s) = if a=x then true else false 
+let list_has_row_equal a lst = List.exists (row_equal a) lst
 
-let add_normal string = 
-  string := !string ^ "\n" ^ normal_line;
-  string
+let add_row locs i str = 
+  let rowmates = List.find_all (row_equal i) locs in begin
+    match rowmates with 
+    | [] -> failwith "impossible"
+    | (x1,y1,c1)::t -> begin
+        let sorted_mates = (List.sort y_sort rowmates) in
+        str := (row_with_multiple sorted_mates str)
+      end
+  end;
+  !str
 
 (* [iter_locs l a s] iterates through the rows of the grid and prints a line 
    with a marker each time the first element in locations has the same 
    row number as the current row of the grid. *)
-let rec iter_locs locs num_completed_rows string = match locs with 
-  | [] -> finish num_completed_rows string
-  | (x1,y1,c1)::t -> begin
-      if x1=num_completed_rows 
-      then add_row (x1,y1,c1) t num_completed_rows string
-      else iter_locs locs (num_completed_rows+1) (add_normal string)
-    end
+let iter_locs locs num_completed_rows str =
+  for i = 0 to global_rows do 
+    if list_has_row_equal i locs 
+    then str := add_row locs i str
+    else str := !(add_normal str)
+  done;
+  str := !str  ^ "\n" ^ bottom;
+  !str
 
-and add_row elem t num_comp string = 
-  let rowmates, rest = find_rowmates elem t [] in begin
-    match rowmates with 
-    | [] -> string := construct_row string elem
-    | (x1,y1,c1)::t -> begin
-        let sorted_mates = (List.sort y_sort (elem::rowmates)) in
-        string := (row_with_multiple (sorted_mates) string)
-      end
-  end;
-  iter_locs rest (num_comp + 1) string
-
-
-let print_loc hole player obstacles = 
+let print_loc hole player = 
   let hole_loc = get_row_col "h" hole in 
   let player_loc = get_row_col "p" player in
-  let obstacle_locs = List.map get_coords obstacles in 
-  let raw_locs =  hole_loc::player_loc::obstacle_locs in
+  let raw_locs =  hole_loc::[player_loc] in
   let sorted_locs = (List.sort loc_sort raw_locs) in 
-  let string = ref top in 
-  string := (iter_locs sorted_locs 1 string);
-  print_string !string
-
-
-
-let get_player_loc player = 
-  let loc = Player.get_player_location player in 
-  let str = Char.escaped (String.get (Player.get_player_name player) 0) in
-  get_row_col str loc
-
-let print_all hole player_list obstacles = 
-  let hole_loc = get_row_col "h" hole in 
-  let player_locs = List.map get_player_loc player_list in
-  let obstacle_locs = List.map get_coords obstacles in  
-  let raw_locs =  hole_loc::player_locs@obstacle_locs in
-  let sorted_locs = (List.sort loc_sort raw_locs) in 
-  let string = ref top in 
-  string := (iter_locs sorted_locs 1 string);
-  print_string !string
-
-(** Examples:
-    print_loc (400.,300.) (450.,300.) ([(200.,300.,"w"); (500.,150., "t"); (450., 250., "r"); (500., 300., "e")]);;
-    print_loc (300.,300.) (400.,300.);;*)
+  let str = ref top in 
+  str := (iter_locs sorted_locs 1 str);
+  print_string !str

@@ -9,12 +9,6 @@ let play_game f =
   let players = Player.init_players () in
   let game = ref (Game.init_game players course) in
   scorecard_printer !game course;
-  (* let rec hole game hole_num = 
-     let valid = (hole_num ) <= (Course.num_holes course) in
-     match valid with
-     | false -> Printf.printf "Congratulations! You have completed the course.";
-     | true -> hole (Game.play_hole game) (hole_num+1)
-     in hole game 1; *)
   for i=0 to Array.length (Course.get_holes course)-1 do 
     game := (Game.play_hole !game)
   done;

@@ -16,7 +16,6 @@ val parse : parsable -> string
 (** [string_catcher s] checks if strnig [s] can be transformed into an int *)
 val string_catcher : string -> int 
 
-
 (** [pp_string s] pretty-prints string [s]. *)
 val pp_string : string -> string
 
