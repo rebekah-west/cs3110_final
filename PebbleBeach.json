@@ -2,7 +2,7 @@
   "holes": [
     {
       "hole_number": 1,
-      "par_number": 5,
+      "par_number": 3,
       "hole_location": "430,45",
       "description": "Welcome to Pebble Beach.",
       "terrain": [
@@ -25,9 +25,9 @@
     },
     {
       "hole_number": 2,
-      "par_number": 5,
+      "par_number": 2,
       "hole_location": "480,430",
-      "description": "Avoid the ocean on this beautiful hole!",
+      "description": "This hole is a long drive. Get ready to swing!",
       "terrain": [
         {
           "name": "tree",
@@ -48,9 +48,9 @@
     },
     {
       "hole_number": 3,
-      "par_number": 10,
+      "par_number": 3,
       "hole_location": "430,365",
-      "description": "This hole is a long drive. Get ready to swing!",
+      "description": "Last hole! You're almost there!",
       "terrain": [
         {
           "name": "sand",
