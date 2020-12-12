@@ -13,12 +13,12 @@
         },
         {
           "name": "tree",
-          "location": "67, 92",
+          "location": "67,92",
           "size": "small"
         },
         {
           "name": "lake",
-          "location": "490, 490",
+          "location": "490,490",
           "size": "large"
         }
       ]
@@ -41,7 +41,7 @@
         },
         {
           "name": "lake",
-          "location": "50, 480",
+          "location": "50,480",
           "size": "large"
         }
       ]
@@ -54,17 +54,17 @@
       "terrain": [
         {
           "name": "sand",
-          "location": "40, 80",
+          "location": "40,80",
           "size": "medium"
         },
         {
           "name": "tree",
-          "location": "450, 30",
+          "location": "450,30",
           "size": "small"
         },
         {
           "name": "lake",
-          "location": "280, 480",
+          "location": "280,480",
           "size": "large"
         }
       ]
