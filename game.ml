@@ -216,14 +216,16 @@ let winner_of_game2 game =
 
 (* [print_post_location name pl_loc hole_loc] prints a text message about the 
    location of the player after they have swung *)
-let print_post_location pl_name player_loc hole_loc = print_string 
-    (pl_name ^ "\'s new location is " ^ (pp_tup (player_loc) ^ "\n"))
+let print_post_location pl_name player_loc hole_loc = 
+  let name = String.capitalize_ascii pl_name in print_string 
+    (name ^ "\'s new location is " ^ (pp_tup (player_loc) ^ "\n"))
 
 (* [print_pre_location name pl_loc hole_loc] prints text messages about the 
    location of the player and the hole before a swing *)
 let print_pre_location pl_name player_loc hole_loc = 
-  print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
-  print_string (pl_name ^ "\'s location is " ^ (pp_tup (player_loc)) ^ "\n");
+  let name = String.capitalize_ascii pl_name in  
+  print_string ("\nIt is now " ^ name ^ "'s turn. \n");
+  print_string (name ^ "\'s location is " ^ (pp_tup (player_loc)) ^ "\n");
   print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
 
 let print_location game player func = 

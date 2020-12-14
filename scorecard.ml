@@ -17,7 +17,10 @@ open Course
 *)
 (*********************************************************************)
 
-let player_name_str player = Player.get_player_name player 
+let player_name_str player = 
+  let name = Player.get_player_name player in 
+  if String.length name < 14 then name else
+    String.sub name 0 13
 
 let make_zero i = if i < 0 then 0 else i
 
