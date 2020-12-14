@@ -233,7 +233,6 @@ let course_tests =
    module *)
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
 let first_player = test_players.(0)
-let test_player_input = Player.init_players ()
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
 let jenna = test_players.(0)
@@ -316,9 +315,6 @@ let winner_of_hole_test(name : string)(input_game : Game.t)
 let winner_of_game_test(name : string)(input_game : Game.t)
     (expected_output : Player.t array) : test = 
   name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
-(* let swing2_game = play_one_swing_of_hole swing1_game *)
-(* let hole_one_complete_game = play_hole initialized_game
-   let hole_two_complete_game = play_hole hole_one_complete_game *)
 
 let initial_game_tests =
   [
@@ -331,15 +327,16 @@ let initial_game_tests =
       initialized_game (game_roster initialized_game);
     played_test "Ensure the game starts with no holes played" 
       initialized_game [];
-    (* played_test "Hole 1 added to holes_played after play_hole called once"
-       hole_one_complete_game [1];
-       played_test "Hole 2 added to holes_played after play_hole called twice"
-       hole_two_complete_game [1;2];  *)
   ]
 
-let swing1_game = play_one_swing_of_hole initialized_game
 
-let swing1_game_tests = [
+(* The following tests can be uncommented and run, but require user input *)
+
+(*let test_player_input = Player.init_players ()
+  let swing1_game = play_one_swing_of_hole initialized_game
+
+
+  let swing1_game_tests = [
   current_hole_test "The game stays at hole 1" swing1_game 1;
   current_turn_test "Game moves to next player in lineup"
     swing1_game (get_player_name test_players.(1));
@@ -348,11 +345,11 @@ let swing1_game_tests = [
     (game_roster swing1_game);
   played_test "played should still be empty after one swing" 
     swing1_game [];
-]
+  ]
 
-let swing2_game = play_one_swing_of_hole swing1_game
+  let swing2_game = play_one_swing_of_hole swing1_game
 
-let swing2_game_tests = [ 
+  let swing2_game_tests = [ 
 
   current_hole_test "Second swing: The game stays at hole 1" swing2_game 1;
   current_turn_test "Second swing: Game moves to next player in lineup"
@@ -362,7 +359,8 @@ let swing2_game_tests = [
     (game_roster swing2_game);
   played_test "Second swing: played should still be empty" 
     swing2_game [];
-]
+  ]
+*)
 
 let suite =
   "test suite for final project"  >::: List.flatten [
@@ -370,8 +368,8 @@ let suite =
     course_tests;
     player_tests;
     initial_game_tests;
-    swing1_game_tests;
-    swing2_game_tests;
+    (*swing1_game_tests;
+      swing2_game_tests;*)
   ]
 
 let _ = run_test_tt_main suite
