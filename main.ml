@@ -12,6 +12,7 @@ let play_game f =
   let counter = ref 0 in 
   for i=0 to Array.length (Course.get_holes course)-1 do 
     let cur_hole = get_hole_number ((Course.get_holes course).(i)) in 
+    print_string "\n";
     print_string ("Hole " ^ (string_of_int cur_hole ) ^ "\n" );
     print_string (description course cur_hole);
     game := (Game.play_hole !game);
@@ -21,9 +22,11 @@ let play_game f =
   done;
   let winners = Array.to_list 
       (Array.map Player.get_player_name (Game.winner_of_game !game)) in
-  Printf.printf "The winner is %s" (pp_list pp_string winners);
+  (* Printf.printf "The winner is %s" (pp_list pp_string winners); *)
+  winner_printer winners;
   print_string "\n";
   print_string "The complete scorecard is: " ;
+  print_string "\n";
   scorecard_printer !game course;
   Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."
 
@@ -34,12 +37,28 @@ let course_options =
   holes and is easy. You can also upload your own course file. Instructions 
   on how to construct your own course json can be found in the help menu. \n"
 
+let rec course_menu_init () = 
+  Printf.printf "Please select the number next to the course you would like to play! \n";
+  Printf.printf "1) Robert Trent \n";
+  Printf.printf "2) Pebble Beach \n";
+  Printf.printf "3) Self-Uploaded \n";
+  print_string  "> ";
+  match read_line () with
+  | "1" -> print_string "Thank you for selecting the Robert Trent golf course, enjoy your game!\n"; 
+    play_game "RobertTrent.json"
+  | "2" -> print_string "Thank you for selecting the Pebble Beach golf course, enjoy your game!\n"; 
+    play_game "PebbleBeach.json"
+  | "3" -> failwith "unimplemented"
+  | _ -> print_string "Your input was not recognized, please try again\n"; 
+    course_menu_init()
+
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   ANSITerminal.(print_string [red]
                   "\n\nWelcome to your remote golf game.\n");
-  print_endline "Please enter the name of the game file you want to load.\n";
+  (* print_endline "Please enter the name of the game file you want to load.\n"; *)
   print_string course_options;
+  course_menu_init();
   print_string  "> ";
   match read_line () with
   | exception End_of_file -> ()

@@ -246,7 +246,6 @@ let update_roster roster player =
   done;
   new_roster
 
-
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
 let play_one_swing_of_hole game =
