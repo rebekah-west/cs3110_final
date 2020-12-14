@@ -216,8 +216,10 @@ let winner_of_game2 game =
 
 (** [print_location player] prints the current location of the player *)
 let print_location player = print_string 
-    (Player.get_player_name player ^ "\'s new location is " ^
-     (pp_tup (Player.get_player_location player)) ^ "\n")
+    (String.capitalize_ascii (Player.get_player_name player 
+                              ^ "\'s new location is " ^
+                              (pp_tup (Player.get_player_location player))
+                              ^ "\n"))
 
 (** [update_roster roster p] takes in a roster and the new player to update
     with and returns that updated roster *)
