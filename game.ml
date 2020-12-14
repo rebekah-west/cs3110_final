@@ -214,12 +214,26 @@ let winner_of_game2 game =
   find_winner (List.tl scores) (List.tl players) [(curr_min, curr_winner)]
 
 
-(** [print_location player] prints the current location of the player *)
-let print_location player = print_string 
-    (String.capitalize_ascii (Player.get_player_name player 
-                              ^ "\'s new location is " ^
-                              (pp_tup (Player.get_player_location player))
-                              ^ "\n"))
+(* [print_post_location name pl_loc hole_loc] prints a text message about the 
+   location of the player after they have swung *)
+let print_post_location pl_name player_loc hole_loc = print_string 
+    (pl_name ^ "\'s new location is " ^ (pp_tup (player_loc) ^ "\n"))
+
+(* [print_pre_location name pl_loc hole_loc] prints text messages about the 
+   location of the player and the hole before a swing *)
+let print_pre_location pl_name player_loc hole_loc = 
+  print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
+  print_string (pl_name ^ "\'s location is " ^ (pp_tup (player_loc)) ^ "\n");
+  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
+
+let print_location game player func = 
+  let hole_num = current_hole game in 
+  let hole_loc = Course.get_hole_loc game.course hole_num in 
+  let pl_loc = Player.get_player_location player in
+  let pl_name = Player.get_player_name game.current_turn in 
+  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
+  func pl_name pl_loc hole_loc;
+  Visual.print_loc hole_loc pl_loc obstacle_locs
 
 (** [update_roster roster p] takes in a roster and the new player to update
     with and returns that updated roster *)
@@ -232,30 +246,16 @@ let update_roster roster player =
   done;
   new_roster
 
-(* [print_init_loc g] prints the location of the player who is about to swing 
-   along with the location of the hole *)
-let print_init_locs game = 
-  let hole_num = current_hole game in 
-  let hole_loc = Course.get_hole_loc game.course hole_num in 
-  let pl_loc = Player.get_player_location game.current_turn in
-  let pl_name = String. capitalize_ascii
-      (Player.get_player_name game.current_turn) in 
-  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
-  print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
-  print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
-  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n");
-  Visual.print_loc hole_loc pl_loc obstacle_locs
-
 (** [play_one_swing_of_hole g] takes in the current game and iterates the game
     to its newest version, returning the updated game*)
 let play_one_swing_of_hole game =
-  print_init_locs game;
+  print_location game game.current_turn print_pre_location;
   let command = parse_swing () in 
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 
   let new_score = update_score game in 
   let updated_player = update_player_location game.current_turn new_loc in
-  print_location updated_player;
+  print_location game updated_player print_post_location;
   let updated_roster = update_roster game.roster updated_player in
   {roster = updated_roster; 
    course = game.course;
