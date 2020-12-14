@@ -79,7 +79,7 @@ let scorecard_per_player game player course =
   let space = " " in
   let hole3_5 = "___|" in
   let holes = get_holes course in 
-  let player_name = player_name_str player in
+  let player_name = String.capitalize_ascii (player_name_str player) in
   let player_name_len = String.length player_name in 
   let spacing = 13 - player_name_len in 
   let space_before = if spacing mod 2 = 0 then spacing/2 else (spacing-1)/2 in
@@ -115,3 +115,17 @@ let scorecard_printer game (course:Course.t) =
     let cur_player = roster.(i) in 
     scorecard_per_player game cur_player course
   done;
+;;
+
+let winner_printer (winners:string list) = 
+  let mult = (List.length winners) > 1 in 
+  let print_out = if mult then 
+      ref "The winners are " else ref "The winner is " in
+  let winner_array = Array.of_list winners in
+  for i=0 to Array.length winner_array - 1 do 
+    if i = Array.length winner_array - 1 then 
+      print_out := !print_out ^ String.capitalize_ascii winner_array.(i)
+    else print_out := !print_out ^ 
+                      String.capitalize_ascii winner_array.(i) ^ ", "
+  done; 
+  print_string !print_out
