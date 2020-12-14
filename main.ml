@@ -4,6 +4,8 @@ open Player
 open Parse
 open Scorecard
 
+exception End of string
+
 let play_game f =
   let course = Course.from_json(Yojson.Basic.from_file(f)) in
   let players = Player.init_players () in
@@ -22,13 +24,13 @@ let play_game f =
   done;
   let winners = Array.to_list 
       (Array.map Player.get_player_name (Game.winner_of_game !game)) in
-  (* Printf.printf "The winner is %s" (pp_list pp_string winners); *)
   winner_printer winners;
   print_string "\n";
   print_string "The complete scorecard is: " ;
   print_string "\n";
   scorecard_printer !game course;
-  Printf.printf "Thank you for visiting Golf, Inc. We hope you come back soon."
+  raise (End "Thank you for visiting Golf, Inc. We hope you come back soon.")
+
 
 
 let course_options = 
@@ -56,13 +58,8 @@ let rec course_menu_init () =
 let main () =
   ANSITerminal.(print_string [red]
                   "\n\nWelcome to your remote golf game.\n");
-  (* print_endline "Please enter the name of the game file you want to load.\n"; *)
   print_string course_options;
-  course_menu_init();
-  print_string  "> ";
-  match read_line () with
-  | exception End_of_file -> ()
-  | file_name -> play_game file_name
+  course_menu_init ()
 
 (* Execute the game engine. *)
 let () = main ()
