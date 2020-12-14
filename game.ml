@@ -235,7 +235,7 @@ let print_location game player func =
   func pl_name pl_loc hole_loc;
   Visual.print_loc hole_loc pl_loc obstacle_locs
 
-(** [update_roster roster p] takes in a roster and the new player to update
+(* [update_roster roster p] takes in a roster and the new player to update
     with and returns that updated roster *)
 let update_roster roster player = 
   let new_roster = Array.make (Array.length roster) roster.(0) in
@@ -246,8 +246,8 @@ let update_roster roster player =
   done;
   new_roster
 
-(** [play_one_swing_of_hole g] takes in the current game and iterates the game
-    to its newest version, returning the updated game*)
+(* [play_one_swing_of_hole g] takes in the current game and iterates the game
+    to its newest version, returning the updated game *)
 let play_one_swing_of_hole game =
   print_location game game.current_turn print_pre_location;
   let command = parse_swing () in 
@@ -276,7 +276,7 @@ let get_player_score p game =
   done;
   !score
 
-(** [someone_still_playing roster game hole_loc returns true if someone is 
+(* [someone_still_playing roster game hole_loc returns true if someone is 
     still playing that hole and false if not] *)
 let rec someone_still_playing roster game hol_loc =
   match Array.to_list roster with 
@@ -299,10 +299,9 @@ let print_scorecard (game:t) =
 
 let reset_player_loc p = update_player_location p (0., 0.)
 
-(** [switch_holes g] updates the game to a the new game when it is time to 
-    switch holes*)
+(* [switch_holes g] updates the game to a the new game when it is time to 
+    switch holes *)
 let switch_holes game = 
-
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
   let new_hole = course_arr.(update_ind) in
@@ -314,6 +313,7 @@ let switch_holes game =
     current_turn = update_turn game new_rost new_hole; 
     holes_played = game.holes_played@[game.current_hole]; 
   }
+
 (* plays a hole to completion *)
 let rec play_hole game = 
   let still = someone_still_playing 
@@ -321,9 +321,7 @@ let rec play_hole game =
   if still then
     play_hole (play_one_swing_of_hole game) else 
   if game.current_hole < Array.length (get_holes game.course) then 
-    (* let new_game =  *)
     switch_holes game 
-    (* in play_hole (play_one_swing_of_hole new_game) *)
   else game
 
 let play_game players course = 
