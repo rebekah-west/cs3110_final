@@ -14,9 +14,10 @@ let edge = "|"
 let width = 51
 let global_rows = 14
 
-let get_row x_cord = Float.to_int (x_cord /. 33.33)
+let get_row x_cord = let x = Float.to_int (x_cord /. 33.33) in 
+  if x = (global_rows+1) then global_rows else x
 let get_col y_cord = let y = Float.to_int (y_cord /. 10.) in 
-  if y=50 then 49 else y
+  if y=(width-1) then (width-2) else y
 let get_row_col char = function
   | (x,y) -> (get_row x, get_col y, char)
 let get_coords (x,y,c) = (get_row x, get_col y, c)
@@ -41,7 +42,7 @@ let append start stop ref character =
 (* adds empty lines to [string] until the bottom of the hole 
    [num] lines have already been completed *)
 let finish num str = 
-  append num 14 str ("\n" ^ normal_line);
+  append num global_rows str ("\n" ^ normal_line);
   str := !str  ^ "\n" ^ bottom;
   !str
 
