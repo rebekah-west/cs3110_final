@@ -14,8 +14,7 @@ let play_game f =
   let counter = ref 0 in 
   for i=0 to Array.length (Course.get_holes course)-1 do 
     let cur_hole = get_hole_number ((Course.get_holes course).(i)) in 
-    print_string "\n";
-    print_string ("Hole " ^ (string_of_int cur_hole ) ^ "\n" );
+    print_string ("\nHole " ^ (string_of_int cur_hole ) ^ "\n" );
     print_string (description course cur_hole);
     game := (Game.play_hole !game);
     if !counter < Array.length (Course.get_holes course)-1 then
@@ -25,9 +24,7 @@ let play_game f =
   let winners = Array.to_list 
       (Array.map Player.get_player_name (Game.winner_of_game !game)) in
   winner_printer winners;
-  print_string "\n";
-  print_string "The complete scorecard is: " ;
-  print_string "\n";
+  print_string "\nThe complete scorecard is: \n" ;
   scorecard_printer !game course;
   raise (End "Thank you for visiting Golf, Inc. We hope you come back soon.")
 
