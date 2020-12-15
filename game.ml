@@ -80,14 +80,17 @@ let game_roster game = game.roster
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
   let sc = game.scores.(game.current_hole - 1) in 
-  let current_player = game.current_turn in 
+  let current_player = game.current_turn in
   for i = 0 to (Array.length sc)-1 do 
     if get_player_name (sc.(i).player) == get_player_name (current_player)
     then let new_hole_score = {
         hole = game.current_hole;
         player = current_player; 
-        hole_score = sc.(i).hole_score + 1;}
-      in game.scores.(game.current_hole - 1).(i) <- new_hole_score
+        hole_score = if 9 > sc.(i).hole_score + 1 then 
+            sc.(i).hole_score + 1 else 9;}
+      in game.scores.(game.current_hole - 1).(i) <- new_hole_score;
+      if new_hole_score.hole_score = 9 then 
+        print_string "You have maxed out swings for this hole"
   done;
   game.scores
 
@@ -256,7 +259,11 @@ let play_one_swing_of_hole game =
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 
   let new_score = update_score game in 
-  let updated_player = update_player_location game.current_turn new_loc in
+  let hole_score = get_hole_score game game.current_turn game.current_hole in
+  let updated_player = 
+    if hole_score < 10 then update_player_location game.current_turn new_loc
+    else update_player_location game.current_turn 
+        (get_hole_loc game.course game.current_hole) in
   print_location game updated_player print_post_location;
   let updated_roster = update_roster game.roster updated_player in
   {roster = updated_roster; 
