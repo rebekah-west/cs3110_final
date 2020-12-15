@@ -216,13 +216,14 @@ let winner_of_game2 game =
 
 (* [print_post_location name pl_loc hole_loc] prints a text message about the 
    location of the player after they have swung *)
-let print_post_location pl_name player_loc hole_loc = print_string 
+let print_post_location pl_name player_loc hole_loc hole_score = print_string 
     (pl_name ^ "\'s new location is " ^ (pp_tup (player_loc) ^ "\n"))
 
 (* [print_pre_location name pl_loc hole_loc] prints text messages about the 
    location of the player and the hole before a swing *)
-let print_pre_location pl_name player_loc hole_loc = 
+let print_pre_location pl_name player_loc hole_loc hole_score = 
   print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
+  print_string (pl_name ^ " is on swing " ^ (string_of_int hole_score) ^ "\n");
   print_string (pl_name ^ "\'s location is " ^ (pp_tup (player_loc)) ^ "\n");
   print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
 
@@ -232,9 +233,10 @@ let print_location game player func =
   let pl_loc = Player.get_player_location player in
   let pl_name = Player.get_player_name game.current_turn in 
   let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
+  let hole_score = get_hole_score game player hole_num in
   if pl_loc = hole_loc then Visual.congrats ()
   else begin
-    func pl_name pl_loc hole_loc;
+    func pl_name pl_loc hole_loc (hole_score+1);
     Visual.print_loc hole_loc pl_loc obstacle_locs
   end
 
