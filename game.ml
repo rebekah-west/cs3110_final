@@ -232,8 +232,11 @@ let print_location game player func =
   let pl_loc = Player.get_player_location player in
   let pl_name = Player.get_player_name game.current_turn in 
   let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
-  func pl_name pl_loc hole_loc;
-  Visual.print_loc hole_loc pl_loc obstacle_locs
+  if pl_loc = hole_loc then Visual.congrats ()
+  else begin
+    func pl_name pl_loc hole_loc;
+    Visual.print_loc hole_loc pl_loc obstacle_locs
+  end
 
 (* [update_roster roster p] takes in a roster and the new player to update
     with and returns that updated roster *)

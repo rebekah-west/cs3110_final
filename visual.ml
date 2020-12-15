@@ -12,6 +12,18 @@ let player = "p"
 let hole = "h"
 let edge = "|"
 
+(* congratulatory message when you enter the hole *)
+let congrats () = print_string
+    "You made it in the hole :) 
+╔═══╗             ╔╗   ╔╗   ╔╗
+║╔═╗║            ╔╝╚╗  ║║  ╔╝╚╗
+║║ ╚╬══╦═╗╔══╦═╦═╩╗╔╬╗╔╣║╔═╩╗╔╬╦══╦═╗╔══╗
+║║ ╔╣╔╗║╔╗╣╔╗║╔╣╔╗║║║║║║║║╔╗║║╠╣╔╗║╔╗╣══╣
+║╚═╝║╚╝║║║║╚╝║║║╔╗║╚╣╚╝║╚╣╔╗║╚╣║╚╝║║║╠══║
+╚═══╩══╩╝╚╩═╗╠╝╚╝╚╩═╩══╩═╩╝╚╩═╩╩══╩╝╚╩══╝
+          ╔═╝║
+          ╚══╝\n"
+
 (* strings for the legend *)
 let l1 = "         ___________________\n"
 let l2 = "        |       LEGEND      |\n"

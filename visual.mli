@@ -12,3 +12,6 @@
     location to the terminal *)
 val print_loc: (float*float) -> (float*float) -> (float*float*string) list 
   -> unit
+
+(** [congrats ()] prints a congratulatory message when you enter the hole *)
+val congrats: unit -> unit
