@@ -234,12 +234,13 @@ let print_location game player func =
   let hole_num = current_hole game in 
   let hole_loc = Course.get_hole_loc game.course hole_num in 
   let pl_loc = Player.get_player_location player in
-  let pl_name = String.capitalize_ascii (Player.get_player_name game.current_turn) in 
+  let pl_name = Player.get_player_name game.current_turn in 
+  let name = String.capitalize_ascii pl_name in
   let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
   let hole_score = get_hole_score game player hole_num in
   if pl_loc = hole_loc then Visual.congrats ()
   else begin
-    func pl_name pl_loc hole_loc (hole_score+1);
+    func name pl_loc hole_loc (hole_score+1);
     Visual.print_loc hole_loc pl_loc obstacle_locs
   end
 
