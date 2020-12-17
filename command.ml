@@ -15,6 +15,11 @@ type club =
   | Putter
   | PitchingWedge
   | SandWedge
+  | ThreeWood
+  | FourHybrid
+  | FiveHybrid
+  | SixIron
+  | SevenIron
 
 type power = int
 type angle = int
@@ -42,6 +47,11 @@ let rec parse_club (clb : string) =
   | "putter" -> Putter
   | "pitchingwedge" -> PitchingWedge
   | "sandwedge" -> SandWedge
+  | "threewood" -> ThreeWood
+  | "fourhybrid" -> FourHybrid
+  | "fivehybrid" -> FiveHybrid
+  | "sixiron" -> SixIron
+  | "seveniron" -> SevenIron
   | _ -> Printf.printf "The text you entered does not represent a valid club, please check your spelling and try again. \n"; 
     read_line() |> Parse.parse |> parse_club
 
@@ -88,7 +98,8 @@ let rec parse_alignment (degrees : int) =
     parse_alignment (for_int_output pos_align_message)
 
 let parse_swing () =
-  let club_message =  "Which club would you like to use? (Driver, Nine Iron, Eight Iron, Putter, Pitching Wedge, Sand Wedge) > \n" in
+  let club_message =  "Which club would you like to use? (Driver, Nine Iron, Eight Iron, Putter, Pitching Wedge, Sand Wedge, Three Wood, 
+  Four Hybrid, Five Hybrid, Six Iron, or Seven Iron) > \n" in
   let club = (for_string_output club_message)|> parse_club in
   let power_message = "How hard would you like to hit the ball? Enter an int between 0 and 100. > \n" in
   let power = (for_int_output power_message)|> parse_power in 
@@ -119,4 +130,9 @@ let get_club_adjustments (clb : club) =
   | Putter -> (0.5,1.3)
   | PitchingWedge -> (0.7, 1.5)
   | SandWedge -> (0.8,1.1)
+  | ThreeWood -> (1.3, 0.85)
+  | FourHybrid -> (1.2,0.9)
+  | FiveHybrid -> (1.1,0.95)
+  | SixIron -> (1., 1.05)
+  | SevenIron -> (0.95, 1.075)
 
