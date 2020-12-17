@@ -45,7 +45,11 @@ let rec course_menu_init () =
     play_game "RobertTrent.json"
   | "2" -> print_string "Thank you for selecting the Pebble Beach golf course, enjoy your game!\n"; 
     play_game "PebbleBeach.json"
-  | "3" -> failwith "unimplemented"
+  | "3" ->  print_string "You selected that you wanted to play your own uploaded course, please enter the name of your json file in the format 'file_name.json'.\n"; begin
+      match read_line () with
+      | exception End_of_file -> ()
+      | file_name -> play_game file_name 
+    end
   | _ -> print_string "Your input was not recognized, please try again\n"; 
     course_menu_init()
 
@@ -55,11 +59,7 @@ let main () =
                   "\n\nWelcome to your remote golf game.\n");
   (* print_endline "Please enter the name of the game file you want to load.\n"; *)
   print_string course_options;
-  course_menu_init();
-  print_string  "> ";
-  match read_line () with
-  | exception End_of_file -> ()
-  | file_name -> play_game file_name
+  course_menu_init()
 
 (* Execute the game engine. *)
 let () = main ()
