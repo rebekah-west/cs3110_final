@@ -55,7 +55,7 @@ let get_col y_cord = let y = Float.to_int (y_cord /. 10.) in
   if y=(width-1) then (width-2) else y
 let get_row_col char = function
   | (x,y) -> (get_row x, get_col y, char)
-let get_coords (x,y,c) = (get_row x, get_col y, c)
+let get_coords (x,y,c,_) = (get_row x, get_col y, c)
 
 (* [loc_sort loc loc] is a comparison function to be used in List.sort *)
 let loc_sort (x1, y1, c1) (x2, y2, c2) = 
@@ -155,7 +155,7 @@ let iter_locs locs num_completed_rows str =
 let print_loc hole player obst = 
   let hole_loc = get_row_col "h" hole in 
   let player_loc = get_row_col "p" player in
-  let obstacle_locs = List.map get_coords obst in 
+  let obstacle_locs = (List.map get_coords obst) in 
   let raw_locs =  hole_loc::player_loc::obstacle_locs in
   let sorted_locs = (List.sort loc_sort raw_locs) in 
   let str = ref top in 

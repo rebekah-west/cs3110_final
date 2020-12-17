@@ -13,6 +13,11 @@ type club =
   | Putter
   | PitchingWedge
   | SandWedge
+  | ThreeWood
+  | FourHybrid
+  | FiveHybrid
+  | SixIron
+  | SevenIron
 
 (** The type [power] represents how hard the golf ball is hit. 
     Requires: Must be an int between 0 and 100 *)

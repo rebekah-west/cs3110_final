@@ -110,6 +110,20 @@ let sand_wedge_explanation =
 let pitching_wedge_explanation = 
   "The pitching wedge will decrease your power by 30% but increase your 
   accuracy by 50%. It is best used for short to mid-ranged shots.\n"
+let three_wood_explanation = "Similar to the driver, the three wood will 
+  increase your power (by 30%) but with less of an impact on accurcy (only l
+  osing 15% accuracy). It is best used for longer range shots.\n"
+let four_hybrid_explanation = "The four hybrid will increase your power by
+  20% but decrease your accuracy by 10%. It is best used for longer-medium 
+  ranged shots\n"
+let five_hybrid_explanation = "The five hybrid increases your power by 10%
+  and decreases your accuracy by 5%. The five hybrid is a great 'in-between' 
+  club for long and mid-range shots.\n"
+let six_iron_explanation = "The six iron has no effect on your power but 
+  will increase your accuracy by 5%. It is best used for mid-range shots."
+let seven_iron_explanation = "The seven iron will decrease your power 
+  by 5% but increase your accuracy by 7.5%. It is best used on mid-range shots
+  where a high degree of precision is needed."
 
 (* for player input help menu*)
 let power_explanation = 
@@ -175,6 +189,7 @@ let scoring_menu_parser selection =
 
   | 6 -> Printf.printf "Going back to the main menu... \n";
     ()
+
   | _ -> Printf.printf "Unknown selection, please enter another selection> ";
     ()
 
@@ -222,7 +237,27 @@ let club_menu_parser selection =
            sand_wedge_explanation;
     Printf.printf "\n Please enter another selection from the club menu >";
 
-  | 7 -> Printf.printf "Going back to the swing input menu... \n";
+  | 7 -> Printf.printf "Showing an explanation of Three Wood... \n %s" 
+           three_wood_explanation;
+    Printf.printf "\n Please enter another selection from the club menu >";
+
+  | 8 -> Printf.printf "Showing an explanation of Four Hybrid... \n %s" 
+           four_hybrid_explanation;
+    Printf.printf "\n Please enter another selection from the club menu >";
+
+  | 9 -> Printf.printf "Showing an explanation of Five Hybrid... \n %s" 
+           five_hybrid_explanation;
+    Printf.printf "\n Please enter another selection from the club menu >";
+
+  | 10 -> Printf.printf "Showing an explanation of Six Iron... \n %s" 
+            six_iron_explanation;
+    Printf.printf "\n Please enter another selection from the club menu >";
+
+  | 11 -> Printf.printf "Showing an explanation of Seven Iron... \n %s" 
+            seven_iron_explanation;
+    Printf.printf "\n Please enter another selection from the club menu >";
+
+  | 12 -> Printf.printf "Going back to the swing input menu... \n";
     ()
 
   | _ -> Printf.printf "Unknown selection, please enter another selection> ";
@@ -240,7 +275,12 @@ let club_menu () =
   Printf.printf "4) Putter \n";
   Printf.printf "5) Pitching Wedge \n";
   Printf.printf "6) Sand Wedge \n";
-  Printf.printf "7) Go back to the swing input menu \n";
+  Printf.printf "7) Three Wood \n";
+  Printf.printf "8) Four Hybrid \n";
+  Printf.printf "9) Five Hybrid \n";
+  Printf.printf "10) Six Iron \n";
+  Printf.printf "11) Seven Iron\n";
+  Printf.printf "12) Go back to the swing input menu \n";
   Printf.printf "Enter Number > ";
   let selection = ref (read_line() |> parse |> string_catcher)in 
   while (!selection != 7) do 

@@ -127,6 +127,7 @@ let create_player entry =
   let handicap = for_int_output handicap_message in
 
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" (String. capitalize_ascii name);
+
   { 
     player_name = name; 
     power_multiplier = pow_mult; 
@@ -248,8 +249,6 @@ let float_abs flt =
 let float_mod flt mod_num = 
   ((flt /. mod_num) -. 1.) *. flt
 
-
-
 let rec bound_loc (pos : float * float)=
   match pos with 
   | (x , y) when x <= 500. && y <= 500. && x >= 0. && y >= 0. -> pos
@@ -259,22 +258,76 @@ let rec bound_loc (pos : float * float)=
   | (x , y) when y < 0. -> bound_loc (x, 0.)
   | _ -> failwith "unknown location"
 
-let update_loc direction horiz_dist_yd current_loc = 
-  ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd 
-    +. fst current_loc ,  
-    ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd 
-      +. snd current_loc) ) 
+let obs_center obstacle = 
+  match obstacle with 
+  |x,y,_,_ -> print_float x;
+    print_float y;
+    (x,y)
+
+let captured obstacle loc = 
+  let center = obs_center obstacle in
+  let distance =   sqrt( pow (fst loc -. fst center) 2. 
+                         +. pow (snd loc -. snd center) 2. ) in 
+  print_string("this is the distance");
+  print_float(distance);
+  match obstacle with 
+  | _,_,"l","s" -> if distance < 10. then (0.,0.,"l") else (0.,0.,"n")
+  | _,_,"l","m" -> if distance < 25. then (0.,0.,"l") else (0.,0.,"n")
+  | _,_,"l","l" -> print_string "in large lake";
+    if distance < 80. then (0.,0.,"l") else (0.,0.,"n")
+  | _,_,"t","s" ->  if distance < 5. then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
+  | _,_,"t","m" -> if distance < 10. then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
+  | _,_,"t","l" -> if distance < 15. then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
+  | _,_,"s","s" -> if distance < 8. then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
+  | _,_,"s","m" -> if distance < 20. then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
+  | _,_,"s","l" -> if distance < 40. then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
+  | _ -> failwith "impossible"
+
+let rec go_through_obstacles init_loc obstacles = 
+  match obstacles with
+  | [] -> (0.,0.,"n")
+  | h :: t -> begin
+      let obs_result = captured h init_loc in 
+      match obs_result with 
+      | (_,_,"l")  -> obs_result
+      | ( _,_,"t")  -> obs_result
+      |(_,_,"s") -> obs_result
+      | (_,_,"n") -> go_through_obstacles init_loc t
+      |_ -> failwith "impossible"
+    end
+
+(*returns the final adjustment in terms of x, y, and the type of terrain hit*)
+let obstacle_check init_loc cours hol_num = 
+  let obs = get_obstacle_locs cours hol_num in
+  let final_adj = go_through_obstacles init_loc obs in final_adj
+
+let update_loc direction horiz_dist_yd current_loc cours hol_num= 
+  let before_obstacle = ( (direction |> rad_from_deg |> cos) *. horiz_dist_yd 
+                          +. fst current_loc ,  
+                          ( (direction |> rad_from_deg |> sin) *. horiz_dist_yd 
+                            +. snd current_loc) ) in 
+  let obs_adjustment = obstacle_check before_obstacle cours hol_num in 
+  match obs_adjustment with 
+  | _,_,"l" -> print_string "You landed in a lake, you return to your previous position\n";
+    current_loc
+  | _,_,"n" -> print_string "You hit no obstacles \n"; before_obstacle
+  | x,y,"s" -> print_string "You landed in some sand\n";
+    (fst before_obstacle +. x , snd before_obstacle +. y)
+  | x,y,"t" -> print_string "You bounced off a tree\n";
+    (fst before_obstacle +. x , snd before_obstacle +. y)
+  | _ -> failwith "impossible"
 
 (* Calculate the final location on the ball based on the current location 
    of a player and whether it was a normal swing or a putt *)
-let get_final_loc current_loc hol_loc chosen_ang adj_pow direction horiz_dist_yd = 
-  let upd_loc = update_loc direction horiz_dist_yd current_loc
+let get_final_loc current_loc hol_loc chosen_ang adj_pow dir 
+    horiz_dist_yd cours hol_num= 
+  let upd_loc = update_loc dir horiz_dist_yd current_loc cours hol_num
   in 
   let new_loc = bound_loc upd_loc in 
   (*the case of rolling*)
   if chosen_ang = 0. then 
     let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
-    let new_loc =  update_loc direction horiz_dist_yd current_loc
+    let new_loc =  update_loc dir horiz_dist_yd current_loc cours hol_num
     in 
     if dist_from_hole hol_loc new_loc < 30.0 then 
       hol_loc else new_loc
@@ -310,7 +363,7 @@ let calculate_location t (swing : Command.t)( hol_num : Course.hole_number)
   let init_velocity = power_to_ms adj_pow in
   let horiz_dist_yd = horizontal_distance_yd theta init_velocity in 
   let hol_loc = get_hole_loc cours hol_num in 
-  let direction = get_direction current_loc hol_loc +. final_align in 
-  get_final_loc current_loc hol_loc chosen_ang adj_pow direction horiz_dist_yd
+  let direction = get_direction current_loc hol_loc -. final_align in 
+  get_final_loc current_loc hol_loc chosen_ang adj_pow direction horiz_dist_yd cours hol_num
 
 
