@@ -211,12 +211,12 @@ let course_tests =
     num_holes_test "Pebble Beach num_holes is 3" pebble 3;
     hole_loc_test "Robert Trent hole 1 at 230,45" robert_trent 1 (230.,45.); 
     hole_loc_test "Pebble Beach hole 1 located at 430,45" pebble 1 (430.,45.);
-    hole_loc_test "Pebble Beach hole 3 located at 530,65" pebble 3 (530.,65.);
+    hole_loc_test "Pebble Beach hole 3 located at 430,365" pebble 3 (430.,365.);
     holes_array_test "Pebble has 3 holes" pebble 3;
     holes_array_test "Trent has 2 holes" robert_trent 2;
     par_test "Trent hole 1 has par 3" robert_trent 1 3;
     par_test "Trent hole 2 has par 4" robert_trent 2 4;
-    par_test "Pebble hole 1 has par 5" pebble 1 5;
+    par_test "Pebble hole 1 has par 3" pebble 1 3;
     difficulty_test "Robert Trend difficulty" robert_trent "easy";
     difficulty_test "Pebble Beach difficulty is hard" pebble "hard";
     description_test "Robert Trend hole 1 desc" robert_trent 1 
@@ -224,7 +224,7 @@ let course_tests =
     description_test "Robert Trend hole 2 desc" robert_trent 2 
       "This hole is a long drive. Get ready to swing!";
     description_test "Pebble hole 2 desc" pebble 2 
-      "Avoid the ocean on this beautiful hole!";
+      "This hole is a long drive. Get ready to swing!";
     description_exceptions_test "Robert Trent not there" robert_trent
       76 (UnknownHole 76);
   ]
@@ -233,7 +233,6 @@ let course_tests =
    module *)
 let test_players = Yojson.Basic.from_file "Players.json" |> read_players 
 let first_player = test_players.(0)
-let test_player_input = Player.init_players ()
 let test_course = Yojson.Basic.from_file "RobertTrent.json" |> from_json
 let initialized_game = init_game test_players test_course
 let jenna = test_players.(0)
@@ -316,9 +315,6 @@ let winner_of_hole_test(name : string)(input_game : Game.t)
 let winner_of_game_test(name : string)(input_game : Game.t)
     (expected_output : Player.t array) : test = 
   name >:: (fun _ -> assert_equal expected_output (winner_of_game input_game))
-(* let swing2_game = play_one_swing_of_hole swing1_game *)
-(* let hole_one_complete_game = play_hole initialized_game
-   let hole_two_complete_game = play_hole hole_one_complete_game *)
 
 let initial_game_tests =
   [
@@ -331,15 +327,16 @@ let initial_game_tests =
       initialized_game (game_roster initialized_game);
     played_test "Ensure the game starts with no holes played" 
       initialized_game [];
-    (* played_test "Hole 1 added to holes_played after play_hole called once"
-       hole_one_complete_game [1];
-       played_test "Hole 2 added to holes_played after play_hole called twice"
-       hole_two_complete_game [1;2];  *)
   ]
 
-let swing1_game = play_one_swing_of_hole initialized_game
 
-let swing1_game_tests = [
+(* The following tests can be uncommented and run, but require user input *)
+
+(*let test_player_input = Player.init_players ()
+  let swing1_game = play_one_swing_of_hole initialized_game
+
+
+  let swing1_game_tests = [
   current_hole_test "The game stays at hole 1" swing1_game 1;
   current_turn_test "Game moves to next player in lineup"
     swing1_game (get_player_name test_players.(1));
@@ -348,11 +345,11 @@ let swing1_game_tests = [
     (game_roster swing1_game);
   played_test "played should still be empty after one swing" 
     swing1_game [];
-]
+  ]
 
-let swing2_game = play_one_swing_of_hole swing1_game
+  let swing2_game = play_one_swing_of_hole swing1_game
 
-let swing2_game_tests = [ 
+  let swing2_game_tests = [ 
 
   current_hole_test "Second swing: The game stays at hole 1" swing2_game 1;
   current_turn_test "Second swing: Game moves to next player in lineup"
@@ -362,7 +359,8 @@ let swing2_game_tests = [
     (game_roster swing2_game);
   played_test "Second swing: played should still be empty" 
     swing2_game [];
-]
+  ]
+*)
 
 let suite =
   "test suite for final project"  >::: List.flatten [
@@ -370,8 +368,8 @@ let suite =
     course_tests;
     player_tests;
     initial_game_tests;
-    swing1_game_tests;
-    swing2_game_tests;
+    (*swing1_game_tests;
+      swing2_game_tests;*)
   ]
 
 let _ = run_test_tt_main suite

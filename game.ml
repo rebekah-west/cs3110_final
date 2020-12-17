@@ -80,14 +80,17 @@ let game_roster game = game.roster
 (* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
   let sc = game.scores.(game.current_hole - 1) in 
-  let current_player = game.current_turn in 
+  let current_player = game.current_turn in
   for i = 0 to (Array.length sc)-1 do 
     if get_player_name (sc.(i).player) == get_player_name (current_player)
     then let new_hole_score = {
         hole = game.current_hole;
         player = current_player; 
-        hole_score = sc.(i).hole_score + 1;}
-      in game.scores.(game.current_hole - 1).(i) <- new_hole_score
+        hole_score = if 9 > sc.(i).hole_score + 1 then 
+            sc.(i).hole_score + 1 else 9;}
+      in game.scores.(game.current_hole - 1).(i) <- new_hole_score;
+      if new_hole_score.hole_score = 9 then 
+        print_string "You have maxed out swings for this hole"
   done;
   game.scores
 
@@ -214,12 +217,34 @@ let winner_of_game2 game =
   find_winner (List.tl scores) (List.tl players) [(curr_min, curr_winner)]
 
 
-(** [print_location player] prints the current location of the player *)
-let print_location player = print_string 
-    (Player.get_player_name player ^ "\'s new location is " ^
-     (pp_tup (Player.get_player_location player)) ^ "\n")
+(* [print_post_location name pl_loc hole_loc] prints a text message about the 
+   location of the player after they have swung *)
+let print_post_location name player_loc hole_loc hole_score = 
+  print_string (name ^ "\'s new location is " ^ (pp_tup (player_loc) ^ "\n"))
 
-(** [update_roster roster p] takes in a roster and the new player to update
+(* [print_pre_location name pl_loc hole_loc] prints text messages about the 
+   location of the player and the hole before a swing *)
+let print_pre_location name player_loc hole_loc hole_score =  
+  print_string ("\nIt is now " ^ name ^ "'s turn. \n");
+  print_string (name ^ " is on swing " ^ (string_of_int hole_score) ^ "\n");
+  print_string (name ^ "\'s location is " ^ (pp_tup (player_loc)) ^ "\n");
+  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n")
+
+let print_location game player func = 
+  let hole_num = current_hole game in 
+  let hole_loc = Course.get_hole_loc game.course hole_num in 
+  let pl_loc = Player.get_player_location player in
+  let pl_name = Player.get_player_name game.current_turn in 
+  let name = String.capitalize_ascii pl_name in
+  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
+  let hole_score = get_hole_score game player hole_num in
+  if pl_loc = hole_loc then Visual.congrats ()
+  else begin
+    func name pl_loc hole_loc (hole_score+1);
+    Visual.print_loc hole_loc pl_loc obstacle_locs
+  end
+
+(* [update_roster roster p] takes in a roster and the new player to update
     with and returns that updated roster *)
 let update_roster roster player = 
   let new_roster = Array.make (Array.length roster) roster.(0) in
@@ -230,29 +255,20 @@ let update_roster roster player =
   done;
   new_roster
 
-(* [print_init_loc g] prints the location of the player who is about to swing 
-   along with the location of the hole *)
-let print_init_locs game = 
-  let hole_num = current_hole game in 
-  let hole_loc = Course.get_hole_loc game.course hole_num in 
-  let pl_loc = Player.get_player_location game.current_turn in
-  let pl_name = Player.get_player_name game.current_turn in 
-  let obstacle_locs = Course.get_obstacle_locs game.course hole_num in
-  print_string ("\nIt is now " ^ pl_name ^ "'s turn. \n");
-  print_string (pl_name ^ "\'s location is " ^ (pp_tup (pl_loc)) ^ "\n");
-  print_string ("The hole's location is " ^ (pp_tup (hole_loc)) ^ "\n");
-  Visual.print_loc hole_loc pl_loc obstacle_locs
-
-(** [play_one_swing_of_hole g] takes in the current game and iterates the game
-    to its newest version, returning the updated game*)
+(* [play_one_swing_of_hole g] takes in the current game and iterates the game
+    to its newest version, returning the updated game *)
 let play_one_swing_of_hole game =
-  print_init_locs game;
+  print_location game game.current_turn print_pre_location;
   let command = parse_swing () in 
   let new_loc = calculate_location game.current_turn command 
       game.current_hole game.course in 
   let new_score = update_score game in 
-  let updated_player = update_player_location game.current_turn new_loc in
-  print_location updated_player;
+  let hole_score = get_hole_score game game.current_turn game.current_hole in
+  let updated_player = 
+    if hole_score < 10 then update_player_location game.current_turn new_loc
+    else update_player_location game.current_turn 
+        (get_hole_loc game.course game.current_hole) in
+  print_location game updated_player print_post_location;
   let updated_roster = update_roster game.roster updated_player in
   {roster = updated_roster; 
    course = game.course;
@@ -273,7 +289,7 @@ let get_player_score p game =
   done;
   !score
 
-(** [someone_still_playing roster game hole_loc returns true if someone is 
+(* [someone_still_playing roster game hole_loc returns true if someone is 
     still playing that hole and false if not] *)
 let rec someone_still_playing roster game hol_loc =
   match Array.to_list roster with 
@@ -296,10 +312,9 @@ let print_scorecard (game:t) =
 
 let reset_player_loc p = update_player_location p (0., 0.)
 
-(** [switch_holes g] updates the game to a the new game when it is time to 
-    switch holes*)
+(* [switch_holes g] updates the game to a the new game when it is time to 
+    switch holes *)
 let switch_holes game = 
-
   let update_ind = game.current_hole in
   let course_arr = get_holes game.course in 
   let new_hole = course_arr.(update_ind) in
@@ -311,6 +326,7 @@ let switch_holes game =
     current_turn = update_turn game new_rost new_hole; 
     holes_played = game.holes_played@[game.current_hole]; 
   }
+
 (* plays a hole to completion *)
 let rec play_hole game = 
   let still = someone_still_playing 
@@ -318,9 +334,7 @@ let rec play_hole game =
   if still then
     play_hole (play_one_swing_of_hole game) else 
   if game.current_hole < Array.length (get_holes game.course) then 
-    (* let new_game =  *)
     switch_holes game 
-    (* in play_hole (play_one_swing_of_hole new_game) *)
   else game
 
 let play_game players course = 

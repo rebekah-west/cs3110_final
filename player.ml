@@ -126,7 +126,8 @@ let create_player entry =
   let handicap_message = "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n"; in 
   let handicap = for_int_output handicap_message in
 
-  Printf.printf "Thank you %s. We hope you enjoy the game.\n" name;
+  Printf.printf "Thank you %s. We hope you enjoy the game.\n" (String. capitalize_ascii name);
+
   { 
     player_name = name; 
     power_multiplier = pow_mult; 
