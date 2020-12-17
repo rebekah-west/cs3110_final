@@ -3,7 +3,7 @@ open Player
 open Course
 
 (*********************************************************************)
-(*  Example Representation of one players scorecard
+(*  Example Representation of a game's scorecard
 
     _____________________________________________
     | Hole Number | 1 | 2 | 3 | 4 | Total | Par | 

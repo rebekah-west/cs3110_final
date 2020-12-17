@@ -98,8 +98,8 @@ let rec parse_alignment (degrees : int) =
     parse_alignment (for_int_output pos_align_message)
 
 let parse_swing () =
-  let club_message =  "Which club would you like to use? (Driver, Nine Iron, Eight Iron, Putter, Pitching Wedge, Sand Wedge, Three Wood, 
-  Four Hybrid, Five Hybrid, Six Iron, or Seven Iron) > \n" in
+  let club_message =  "Which club would you like to use? (Driver, Three Wood, Four Hybrid, Five Hybrid, Six Iron, Seven Iron,
+  Eight Iron, Nine Iron, Pitching Wedge, Sand Wedge, or Putter) > \n" in
   let club = (for_string_output club_message)|> parse_club in
   let power_message = "How hard would you like to hit the ball? Enter an int between 0 and 100. > \n" in
   let power = (for_int_output power_message)|> parse_power in 
