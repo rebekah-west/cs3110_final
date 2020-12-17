@@ -26,7 +26,8 @@ let play_game f =
   winner_printer winners;
   print_string "\nThe complete scorecard is: \n" ;
   scorecard_printer !game course;
-  raise (End "Thank you for visiting Golf, Inc. We hope you come back soon.")
+  (* raise (End "Thank you for visiting Golf, Inc. We hope you come back soon.") *)
+  print_string "\nThank you for visiting Golf, Inc. We hope you come back soon.\n"
 
 
 
