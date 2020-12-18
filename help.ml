@@ -283,11 +283,11 @@ let club_menu () =
   Printf.printf "12) Go back to the swing input menu \n";
   Printf.printf "Enter Number > ";
   let selection = ref (read_line() |> parse |> string_catcher)in 
-  while (!selection != 7) do 
+  while (!selection != 12) do 
     club_menu_parser (!selection);
     selection := (read_line() |> parse |> string_catcher)
   done;
-  club_menu_parser 7
+  club_menu_parser 12
 
 let swing_input_menu_parser selection =
   match selection with 

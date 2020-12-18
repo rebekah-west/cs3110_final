@@ -108,21 +108,11 @@ let extract_char_loc terrain =
   let size = String.get terrain.size 0 in 
   (Float.of_int a, Float.of_int b, Char.escaped char, Char.escaped size)
 
+(* Returns an array of the locations of obstacles from a given course [course]
+   on a given hole [hole_number] *)
 let get_obstacle_locs course hole_number = 
   let hole = get_hole course hole_number in 
   let obstacles = hole.terrain in 
   List.map extract_char_loc obstacles 
-
-(* let direction_array = Array.of_list ["North";"East";"South";"West"]
-
-   let rand_direc dirs = 
-   let rand_ind = Random.int 4 in 
-   let dir = dirs.(rand_ind) in 
-   dir
-
-   let wind () = 
-   let direction = rand_direc direction_array in 
-   let strength = Random.int(20) in 
-   (strength, direction) *)
 
 let get_hole_number hole = hole.hole_number

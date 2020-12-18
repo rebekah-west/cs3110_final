@@ -77,7 +77,6 @@ let current_score game = game.scores
 
 let game_roster game = game.roster
 
-(* will update the scorecard in game, NEEDS TESTING*)
 let update_score game = 
   let sc = game.scores.(game.current_hole - 1) in 
   let current_player = game.current_turn in

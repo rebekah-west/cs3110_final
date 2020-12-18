@@ -260,27 +260,28 @@ let rec bound_loc (pos : float * float)=
 
 let obs_center obstacle = 
   match obstacle with 
-  |x,y,_,_ -> print_float x;
-    print_float y;
-    (x,y)
+  |x,y,_,_ -> (x,y)
 
 let captured obstacle loc = 
   let center = obs_center obstacle in
   let distance =   sqrt( pow (fst loc -. fst center) 2. 
                          +. pow (snd loc -. snd center) 2. ) in 
-  print_string("this is the distance");
-  print_float(distance);
   match obstacle with 
   | _,_,"l","s" -> if distance < 10. then (0.,0.,"l") else (0.,0.,"n")
   | _,_,"l","m" -> if distance < 25. then (0.,0.,"l") else (0.,0.,"n")
-  | _,_,"l","l" -> print_string "in large lake";
-    if distance < 80. then (0.,0.,"l") else (0.,0.,"n")
-  | _,_,"t","s" ->  if distance < 5. then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
-  | _,_,"t","m" -> if distance < 10. then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
-  | _,_,"t","l" -> if distance < 15. then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
-  | _,_,"s","s" -> if distance < 8. then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
-  | _,_,"s","m" -> if distance < 20. then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
-  | _,_,"s","l" -> if distance < 40. then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
+  | _,_,"l","l" -> if distance < 80. then (0.,0.,"l") else (0.,0.,"n")
+  | _,_,"t","s" -> if distance < 5. then 
+      (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
+  | _,_,"t","m" -> if distance < 10. 
+    then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
+  | _,_,"t","l" -> if distance < 15. 
+    then (Random.float(50.),Random.float(50.),"t") else (0.,0.,"n")
+  | _,_,"s","s" -> if distance < 8. 
+    then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
+  | _,_,"s","m" -> if distance < 20. 
+    then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
+  | _,_,"s","l" -> if distance < 40. 
+    then (Random.float(20.),Random.float(20.),"s") else (0.,0.,"n")
   | _ -> failwith "impossible"
 
 let rec go_through_obstacles init_loc obstacles = 

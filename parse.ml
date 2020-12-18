@@ -24,8 +24,6 @@ let parse parsbl =
   code, all hail the camels \n"; 
   parsed
 
-(* for the help cmo *)
-
 let rec for_int_output message = 
   print_string message;
   let input = read_line() in 
