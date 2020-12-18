@@ -68,49 +68,33 @@ let scorecard_player_init game course =
     s3 := !s3 ^ hole3_5; 
 
   done;
-  (* print_string ( "\n" ^ player_name ^ "\n") ; *)
   print_string (!s1 ^ tp1 ^ "\n"); 
   print_string (!s2 ^ tp2 ^"\n");
   print_string (!s3 ^ tp3 ^ "\n"); 
-  (* print_string (!s4 ^ tot ^ "\n"); *)
-  (* print_string (!s5 ^ par ^ "\n" ^ "\n") *)
 ;;
 
 let scorecard_per_player game player course = 
-  let s4 = ref "|" in
-  let s5 = ref "|_____________|" in
-  let space = " " in
-  let hole3_5 = "___|" in
-  let holes = get_holes course in 
+  let s4 = ref "|" in let s5 = ref "|_____________|" in let space = " " in 
+  let hole3_5 = "___|" in let holes = get_holes course in 
   let player_name = String.capitalize_ascii (player_name_str player) in
   let player_name_len = String.length player_name in 
   let spacing = 13 - player_name_len in 
   let space_before = if spacing mod 2 = 0 then spacing/2 else (spacing-1)/2 in
   let space_after = spacing - space_before in
-  for i = 0 to space_before - 1 do 
-    s4 := !s4 ^ space
-  done;
+  for i = 0 to space_before - 1 do s4 := !s4 ^ space done; 
   s4 := !s4 ^ player_name;
-  for i = 0 to space_after- 1 do 
-    s4 := !s4 ^ space
-  done;
-  s4 := !s4 ^ "|";
-  let tot = total_str game player course in
-  let par = par_str course in
+  for i = 0 to space_after- 1 do s4 := !s4 ^ space done; s4 := !s4 ^ "|";
+  let tot = total_str game player course in let par = par_str course in
   for i = 0 to Array.length holes -1 do 
     let hole_num = get_hole_number holes.(i) in 
     let add4 = hole_score_str game player hole_num in
-    s4 := !s4 ^ add4;
-    s5 := !s5 ^ hole3_5;
-  done;
-
-  let total4 = if String.length tot < 2 then "   " ^ tot ^ "   |" else "  " ^ tot ^ "   |" in 
-  let par4 = if String.length par < 2 then "  " ^ par ^ "  |" else "  " ^ par ^ " |" in 
-  let tp5 = "_______|_____|" in
-  print_string (!s4 ^ total4 ^ par4 ^ "\n"); 
-  print_string (!s5 ^ tp5 ^ "\n");
+    s4 := !s4 ^ add4; s5 := !s5 ^ hole3_5; done;
+  let total4 = if String.length tot < 2 then "   " ^ tot ^ "   |" 
+    else "  " ^ tot ^ "   |" in 
+  let par4 = if String.length par < 2 then "  " ^ par ^ "  |" 
+    else "  " ^ par ^ " |" in let tp5 = "_______|_____|" in
+  print_string (!s4 ^ total4 ^ par4 ^ "\n"); print_string (!s5 ^ tp5 ^ "\n");
 ;;
-
 
 let scorecard_printer game (course:Course.t) = 
   let roster = game_roster game in 
