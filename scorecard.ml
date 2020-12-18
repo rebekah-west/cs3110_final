@@ -103,8 +103,9 @@ let scorecard_per_player game player course =
     s4 := !s4 ^ add4;
     s5 := !s5 ^ hole3_5;
   done;
-  let total4 = "   " ^ tot ^ "   |" in 
-  let par4 = "  " ^ par ^ "  |" in 
+
+  let total4 = if String.length tot < 2 then "   " ^ tot ^ "   |" else "  " ^ tot ^ "   |" in 
+  let par4 = if String.length par < 2 then "  " ^ par ^ "  |" else "  " ^ par ^ " |" in 
   let tp5 = "_______|_____|" in
   print_string (!s4 ^ total4 ^ par4 ^ "\n"); 
   print_string (!s5 ^ tp5 ^ "\n");
