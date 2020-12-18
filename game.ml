@@ -193,29 +193,6 @@ let winner_of_game game =
   done;
   winner_arr
 
-(* [find_winner sw sl pl] returns a tuple containing the winning score and
-   the winning player from a list of scores and players
-   Requires: The list of scores [sl] and players [pl] are of the same length 
-   and their indexing corresponds to each other *)
-let rec find_winner scores_list players_list acc=
-  match scores_list with 
-  | [] -> acc
-  | h :: t -> begin
-      if h < fst (List.hd acc) 
-      then find_winner t (List.tl players_list) [(h, List.hd players_list)]
-      else if h > fst (List.hd acc)
-      then find_winner t (List.tl players_list) acc
-      else find_winner t (List.tl players_list) (acc @ [(h, List.hd players_list)])
-    end
-
-let winner_of_game2 game = 
-  let scores = scores_list game game.roster in 
-  let players = Array.to_list game.roster in 
-  let curr_min = List.hd scores - get_player_handicap (List.hd players) in
-  let curr_winner = List.hd players in 
-  find_winner (List.tl scores) (List.tl players) [(curr_min, curr_winner)]
-
-
 (* [print_post_location name pl_loc hole_loc] prints a text message about the 
    location of the player after they have swung *)
 let print_post_location name player_loc hole_loc hole_score = 
