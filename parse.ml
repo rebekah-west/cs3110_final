@@ -7,9 +7,6 @@ type parsable = string
 
 exception Quit of string
 
-
-
-
 let remove_blanks parsbl = 
   parsbl |> Str.global_replace (Str.regexp " ") ""
 
@@ -51,7 +48,6 @@ let rec for_string_output message =
   | "3110" -> Printf.printf "You entered the special code, all hail the camels \n"; for_string_output message
   | _ -> parsed
 
-
 let pp_string s = "\"" ^ s ^ "\""
 
 let pp_tup (k,v) = "(" ^ string_of_float k ^ ", " ^ string_of_float v ^ ")"
@@ -66,7 +62,6 @@ let pp_list pp_elt lst =
         else loop (n + 1) (acc ^ (pp_elt h1) ^ "; ") t'
     in loop 0 "" lst
   in "[" ^ pp_elts lst ^ "]"
-
 
 let pp_array func arr = pp_list func (Array.to_list arr)
 
