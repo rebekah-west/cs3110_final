@@ -38,7 +38,7 @@ let current_hole game = game.current_hole
 let init_hole_score hole player = {
   hole = hole;
   player = player;
-  hole_score = 0 - get_player_handicap player; }
+  hole_score = 0; }
 
 (* [init_scorecard players hole] initializes a 0 score for every player
     on hole [hole] *)
@@ -160,7 +160,7 @@ let sum_scores game player =
       sum_score_helper cur_sc player sums
     done; 
   done;
-  !sums
+  !sums - get_player_handicap player
 
 let get_hole_score game player hole = 
   let hole_list = game.scores.(hole-1) in 
