@@ -120,7 +120,7 @@ let rec parse_handicap (handicap: int)=
   if (handicap >= ~-9 && handicap <= 9) 
   then handicap
   else 
-    let hand_message = "Your power must be an integer between -9 and 9. > \n" 
+    let hand_message = "Your handicap must be an integer between -9 and 9. > \n" 
     in parse_handicap(for_int_output hand_message)
 
 (* [create_player entry] prompts user for input, parses it, and 
