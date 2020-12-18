@@ -60,6 +60,7 @@ let rec course_menu_init () =
 let main () =
   ANSITerminal.(print_string [red]
                   "\n\nWelcome to your remote golf game.\n");
+  print_string "Type \"help\" at any time to view instructions about the game.\n\n"; 
   print_string course_options;
   course_menu_init()
 

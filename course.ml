@@ -31,9 +31,6 @@ type t = {
   difficulty: string;
 }
 
-(** The type of wind representing the strength and direction *)
-type wind = int * string
-
 exception UnknownHole of hole_number
 
 (* [tuple_of_string string] creates an integer tuple from string [string] *)

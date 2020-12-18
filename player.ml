@@ -113,21 +113,28 @@ let rec parse_name (name : string) =
   end
   else parsed_name
 
+(*A recursive helper that either parses an int [pow] to it's corresponding 
+  power or asks the user to give another power along with a helpful message
+  if the value was outside the acceptable range*)
+let rec parse_handicap (handicap: int)=
+  if (handicap >= ~-9 && handicap <= 9) 
+  then handicap
+  else 
+    let hand_message = "Your handicap must be an integer between -9 and 9. > \n" 
+    in parse_handicap(for_int_output hand_message)
+
 (* [create_player entry] prompts user for input, parses it, and 
    returns type Player.t *)
 let create_player entry =
-
   let name_message = "\nWelcome new player. Please enter your name.\n" in 
   let name = (for_string_output name_message) |> parse_name in
   let level_message = "For golf, are you beginner, intermediate, or advanced?\n" in
   let acc_mult =  parse_acc_mult (for_string_output level_message) in
   let strength_message =  "How strong are you? (below average, average, above average)\n" in 
   let pow_mult = parse_pow_mult (for_string_output strength_message) in
-  let handicap_message = "If you would like a handicap, enter it here as an integer. Otherwise enter 0.\n"; in 
-  let handicap = for_int_output handicap_message in
-
+  let handicap_message = "If you would like a handicap, enter it here as an integer between -9 and 9. Otherwise enter 0.\n"; in 
+  let handicap = for_int_output handicap_message |> parse_handicap in
   Printf.printf "Thank you %s. We hope you enjoy the game.\n" (String. capitalize_ascii name);
-
   { 
     player_name = name; 
     power_multiplier = pow_mult; 
@@ -139,7 +146,6 @@ let create_player entry =
 let init_players () =
   let message = "How many players will be participating today? Enter an int \n"; in 
   let num_players = Parse.for_int_output message in 
-  (* let num_players = read_line () |> parse |> string_catcher in *)
   let player_array = Array.make num_players 0. in
   Array.map create_player player_array
 
