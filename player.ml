@@ -260,9 +260,7 @@ let rec bound_loc (pos : float * float)=
 
 let obs_center obstacle = 
   match obstacle with 
-  |x,y,_,_ -> print_float x;
-    print_float y;
-    (x,y)
+  |x,y,_,_ -> (x,y)
 
 let captured obstacle loc = 
   let center = obs_center obstacle in
