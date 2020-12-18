@@ -328,18 +328,18 @@ let update_loc direction horiz_dist_yd current_loc cours hol_num=
    of a player and whether it was a normal swing or a putt *)
 let get_final_loc current_loc hol_loc chosen_ang adj_pow dir 
     horiz_dist_yd cours hol_num= 
-  let upd_loc = update_loc dir horiz_dist_yd current_loc cours hol_num
-  in 
-  let new_loc = bound_loc upd_loc in 
   (*the case of rolling*)
   if chosen_ang = 0. then 
     let horiz_dist_yd = m_to_yd (adj_pow /. 2.) in 
-    let new_loc =  update_loc dir horiz_dist_yd current_loc cours hol_num
-    in 
+    let upd_loc = update_loc dir horiz_dist_yd current_loc cours hol_num in 
+    let new_loc = bound_loc upd_loc in 
     if dist_from_hole hol_loc new_loc < 30.0 then 
       hol_loc else new_loc
-  else if dist_from_hole hol_loc new_loc < 30.0 then 
-    hol_loc else new_loc
+  else
+    let upd_loc = update_loc dir horiz_dist_yd current_loc cours hol_num in 
+    let new_loc = bound_loc upd_loc in 
+    if dist_from_hole hol_loc new_loc < 30.0 then 
+      hol_loc else new_loc
 
 (* Calculate the horizontal distance travelled in the cartesian plane in 
    yards based on an initial velocity of the ball and and angle of direciton 

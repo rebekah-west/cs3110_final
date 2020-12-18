@@ -13,7 +13,6 @@ open Course
     |   Rebekah   | 2 | 5 | 4 | 4 |  15   | 14  | 
     |_____________|___|___|___|___|_______|_____|
 
-
 *)
 (*********************************************************************)
 
@@ -62,11 +61,9 @@ let scorecard_player_init game course =
 
   let holes = get_holes course in 
   for i = 0 to Array.length holes -1 do 
-
     let add2 = hole_num_str holes.(i) in 
     s1 := !s1 ^ hole1; s2 := !s2 ^ add2;
     s3 := !s3 ^ hole3_5; 
-
   done;
   print_string (!s1 ^ tp1 ^ "\n"); 
   print_string (!s2 ^ tp2 ^"\n");
