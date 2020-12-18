@@ -189,7 +189,8 @@ let winner_of_game game =
                                      winner_inds_unfiltered) in 
   let winner_arr =Array.make (Array.length winner_inds) game.roster.(0) in 
   for i = 0 to (Array.length(winner_inds))-1 do 
-    winner_arr.(i) <- game.roster.(i)
+    let winner_ind = winner_inds.(i) in
+    winner_arr.(i) <- game.roster.(winner_ind)
   done;
   winner_arr
 

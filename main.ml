@@ -43,7 +43,7 @@ let rec course_menu_init () =
   Printf.printf "2) Pebble Beach \n";
   Printf.printf "3) Self-Uploaded \n";
   print_string  "> ";
-  match read_line () with
+  match read_line () |> parse with
   | "1" -> print_string "Thank you for selecting the Robert Trent golf course, enjoy your game!\n"; 
     play_game "RobertTrent.json"
   | "2" -> print_string "Thank you for selecting the Pebble Beach golf course, enjoy your game!\n"; 
