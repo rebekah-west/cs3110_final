@@ -1,28 +1,24 @@
 Install.txt, golf game demo:
 
 Demo MS3
-
-
-
-
-Demo MS2
 Welcome to the demo, the following instructions will allow you to load our code 
-and demo the help menu and updating of locations. 
+and demo the final game. 
 
 1. Download and Unzip all files. This should be done preferably in Vscode. 
 
 2. After unzipping the file, run the “make build” command on the command line 
 in a terminal window within VScode
 
-3. Run make test
+3. Run make test to run our testing sweet. It should be noted that there are
+a series of commented out tests. This is becasue they actually require playing 
+of the game and user input to be tested. If one chooses to uncomment, make
+test will then prompt for input. 
 
-4. Play a hole by entering input as prompted and watch your new location be 
-printed on the screen
+4. Make docs can be used to get the documentation for our project. 
 
-4. When next prompted to enter something, instead type help. Navigate through 
-the help menu as you wish to learn more about the game and its functionality
-
-Thank you for joining us in this golf demo today!!
+5. Make play can be used to play the actual game. If you run make play, 
+it will initialize a game, you will choose the course you want to play, allow 
+you to input player information, then start playing the game. 
 
 
 
